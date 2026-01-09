@@ -1,0 +1,84 @@
+generator client {
+  provider   = "prisma-client-js"
+  engineType = "binary"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model QaQuestion {
+  id           String           @id @default(cuid())
+  slug         String           @unique
+  category     String           @default("Genel")
+  name         String?
+  phone        String?
+  email        String?
+  title        String
+  body         String
+  status       QaStatus         @default(PENDING)
+  isDeleted    Boolean          @default(false)
+  likeCount    Int              @default(0)
+  dislikeCount Int              @default(0)
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+  publishedAt  DateTime?
+  answers      QaAnswer[]
+  votes        QaQuestionVote[]
+
+  @@index([status])
+  @@index([category])
+  @@index([isDeleted])
+}
+
+model QaAnswer {
+  id           String         @id @default(cuid())
+  questionId   String
+  body         String
+  isAdmin      Boolean        @default(true)
+  displayName  String?
+  likeCount    Int            @default(0)
+  dislikeCount Int            @default(0)
+  createdAt    DateTime       @default(now())
+  question     QaQuestion     @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  votes        QaAnswerVote[]
+
+  @@index([questionId])
+}
+
+model QaQuestionVote {
+  id         String     @id @default(cuid())
+  questionId String
+  voterHash  String
+  value      VoteValue
+  createdAt  DateTime   @default(now())
+  question   QaQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@unique([questionId, voterHash])
+  @@index([questionId])
+  @@index([value])
+}
+
+model QaAnswerVote {
+  id        String    @id @default(cuid())
+  answerId  String
+  voterHash String
+  value     VoteValue
+  createdAt DateTime  @default(now())
+  answer    QaAnswer  @relation(fields: [answerId], references: [id], onDelete: Cascade)
+
+  @@unique([answerId, voterHash])
+  @@index([answerId])
+  @@index([value])
+}
+
+enum QaStatus {
+  PENDING
+  PUBLISHED
+  REJECTED
+}
+
+enum VoteValue {
+  LIKE
+  DISLIKE
+}
