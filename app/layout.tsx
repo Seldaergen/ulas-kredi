@@ -30,10 +30,48 @@ const manrope = Manrope({
 /* -------------------------------------------------------------------------- */
 
 export const metadata: Metadata = {
-  title: "Ulaş Kredi Danışmanlık | Kredi Notu ve Yüksek Limit Danışmanlığı",
+  title: {
+    default: "Ulaş Kredi Danışmanlık",
+    template: "%s | Ulaş Kredi",
+  },
   description:
     "15+ yıl deneyim, 25+ banka ağı ve ön ödemesiz danışmanlık ile kredi limitinizi ve finansal profilinizi güçlendiriyoruz.",
+
+  // ✅ OG / Social preview
+  metadataBase: new URL("https://ulaskredi.com"), // şimdilik böyle; domain değişirse güncelleriz
+  openGraph: {
+    title: "Ulaş Kredi Danışmanlık",
+    description:
+      "Ön ödemesiz kredi danışmanlığı. Kredi notu, limit artırma ve doğru başvuru stratejisi.",
+    url: "/",
+    siteName: "Ulaş Kredi Danışmanlık",
+    locale: "tr_TR",
+    type: "website",
+    images: [
+      {
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Ulaş Kredi Danışmanlık",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Ulaş Kredi Danışmanlık",
+    description:
+      "Ön ödemesiz kredi danışmanlığı. Kredi notu, limit artırma ve doğru başvuru.",
+    images: ["/og-image.jpg"],
+  },
+
+  // ✅ Favicon / App icons
+  icons: {
+    icon: "/logo.svg",
+    shortcut: "/logo.svg",
+    apple: "/logo.svg",
+  },
 };
+
 
 export const viewport: Viewport = {
   themeColor: "#f8fafc",
