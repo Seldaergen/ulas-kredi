@@ -18,7 +18,7 @@ export function FloatingAction() {
   const whatsappNumber = "905416061356";
   const phoneDisplay = "0 541 606 13 56";
   const phoneHref = "tel:+905416061356";
-  const mailHref = "mailto:ulaskredidanisman@gmail.com";
+  const mailHref = "mailto:info@ulaskredi.com.tr";
 
   React.useEffect(() => {
     const onScroll = () => setShowTop(window.scrollY > 320);

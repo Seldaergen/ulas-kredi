@@ -12,7 +12,7 @@ import { FaYoutube, FaInstagram, FaTiktok, FaWhatsapp } from "react-icons/fa";
 
 const PHONE_E164 = "905416061356";
 const PHONE_DISPLAY = "0 541 606 13 56";
-const EMAIL = "ulaskredidanisman@gmail.com";
+const EMAIL = "info@ulaskredi.com.tr";
 
 const WHATSAPP_HREF = `https://wa.me/${PHONE_E164}`;
 const TEL_HREF = `tel:+${PHONE_E164}`;

@@ -24,7 +24,7 @@ import { cn } from "@/lib/utils";
 
 const PHONE_E164 = "905416061356"; // ✅ tek kaynak
 const PHONE_DISPLAY = "0 541 606 13 56";
-const EMAIL = "ulaskredidanisman@gmail.com";
+const EMAIL = "info@ulaskredi.com.tr";
 
 const WHATSAPP_BASE = `https://wa.me/${PHONE_E164}`;
 const TEL_HREF = `tel:+${PHONE_E164}`;
