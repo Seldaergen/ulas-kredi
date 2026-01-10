@@ -35,7 +35,11 @@ const badges = [
   { icon: Target, text: "Yüksek limit odaklı strateji" },
 ];
 
-const trust = ["Ücretsiz ön analiz", "Hızlı geri dönüş", "Gizlilik & KVKK hassasiyeti"];
+const trust = [
+  "Ücretsiz ön analiz",
+  "Hızlı geri dönüş",
+  "Gizlilik & KVKK hassasiyeti",
+];
 
 /* ----------------------------- CONFIG ----------------------------- */
 
@@ -54,7 +58,13 @@ function StatPill({
 }) {
   return (
     <div className="text-center min-w-0">
-      <div className={cn("font-bold tracking-tight", tone, "text-xl sm:text-2xl md:text-3xl")}>
+      <div
+        className={cn(
+          "font-bold tracking-tight",
+          tone,
+          "text-xl sm:text-2xl md:text-3xl"
+        )}
+      >
         {value}
       </div>
       <div className="mt-1 text-[11px] sm:text-xs md:text-sm text-slate-600 leading-snug">
@@ -110,6 +120,13 @@ export default function HeroSections() {
   const [kvkkAccepted, setKvkkAccepted] = useState(false);
   const [busy, setBusy] = useState(false);
 
+  // ✅ NEW: UI feedback
+  const [success, setSuccess] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  // ✅ NEW: Honeypot (bot)
+  const [website, setWebsite] = useState("");
+
   const [phraseIndex, setPhraseIndex] = useState(0);
 
   const [isMobile, setIsMobile] = useState(false);
@@ -133,48 +150,71 @@ export default function HeroSections() {
     const nameOk = safeText(formData.name).length >= 2;
     const phoneOk = normalizePhone(formData.phone).length >= 10; // 10 hane (5xx...)
     const typeOk = safeText(formData.creditType).length > 0;
-    // note opsiyonel ama varsa çok kısa olmasın:
     const noteOk = formData.note ? safeText(formData.note).length >= 0 : true;
     return nameOk && phoneOk && typeOk && noteOk && kvkkAccepted && !busy;
   }, [formData, kvkkAccepted, busy]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // ✅ UPDATED: Send to /api/contact (email), keep WhatsApp as fallback button
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null);
+    setSuccess(null);
+
     if (!canSubmit) return;
     if (busy) return;
 
     setBusy(true);
 
-    const name = safeText(formData.name);
-    const phone = normalizePhone(formData.phone);
-    const creditType = safeText(formData.creditType);
-    const note = safeText(formData.note);
+    try {
+      const name = safeText(formData.name);
+      const phonePretty = formData.phone;
+      const phoneDigits = normalizePhone(formData.phone);
+      const creditType = safeText(formData.creditType);
+      const note = safeText(formData.note);
 
-    const typeLabel =
-      creditType === "ihtiyac"
-        ? "İhtiyaç Kredisi"
-        : creditType === "konut"
-        ? "Konut Kredisi"
-        : creditType === "tasit"
-        ? "Taşıt Kredisi"
-        : creditType === "esnaf"
-        ? "Esnaf / KOBİ Kredisi"
-        : creditType === "diger"
-        ? "Diğer"
-        : creditType;
+      const typeLabel =
+        creditType === "ihtiyac"
+          ? "İhtiyaç Kredisi"
+          : creditType === "konut"
+          ? "Konut Kredisi"
+          : creditType === "tasit"
+          ? "Taşıt Kredisi"
+          : creditType === "esnaf"
+          ? "Esnaf / KOBİ Kredisi"
+          : creditType === "diger"
+          ? "Diğer"
+          : creditType;
 
-    const text =
-      `Merhaba, ücretsiz ön analiz için bilgi bırakıyorum.\n\n` +
-      `Ad Soyad: ${name}\n` +
-      `Telefon: 0${phone}\n` +
-      `Kredi Türü: ${typeLabel}\n` +
-      (note ? `Not: ${note}\n` : "") +
-      `\nKVKK okudum ve kabul ediyorum.`;
+      const payload = {
+        name,
+        phone: phonePretty || `0${phoneDigits}`,
+        creditType: typeLabel,
+        note,
+        website, // honeypot
+      };
 
-    const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
 
-    openExternal(url);
-    setTimeout(() => setBusy(false), 700);
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok || !data?.ok) {
+        setError(data?.error || "Gönderim başarısız. Lütfen tekrar deneyin.");
+        return;
+      }
+
+      setSuccess("Başvurunuz alındı. En kısa sürede dönüş yapacağız.");
+      setFormData({ name: "", phone: "", creditType: "", note: "" });
+      setKvkkAccepted(false);
+      setWebsite("");
+    } catch {
+      setError("Gönderim sırasında hata oluştu. Lütfen tekrar deneyin.");
+    } finally {
+      setBusy(false);
+    }
   };
 
   return (
@@ -196,7 +236,10 @@ export default function HeroSections() {
       </div>
 
       {/* bottom transition */}
-      <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-16 sm:h-20">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-16 sm:h-20"
+      >
         <div className="absolute inset-0 bg-linear-to-b from-transparent via-white/80 to-white" />
         <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-sky-200/70 to-transparent" />
       </div>
@@ -216,8 +259,11 @@ export default function HeroSections() {
             </h1>
 
             <p className="mt-3 text-[15px] sm:text-base md:text-lg text-slate-600 leading-relaxed">
-              Kredi notu, limit, başvuru sırası ve risk kalemlerini birlikte analiz ediyor;{" "}
-              <span className="font-semibold text-slate-800">doğru adımlarla</span>{" "}
+              Kredi notu, limit, başvuru sırası ve risk kalemlerini birlikte
+              analiz ediyor;{" "}
+              <span className="font-semibold text-slate-800">
+                doğru adımlarla
+              </span>{" "}
               onay ihtimalinizi artırmaya odaklanıyoruz.
             </p>
 
@@ -253,8 +299,11 @@ export default function HeroSections() {
               </div>
 
               <p className="mt-2 sm:mt-3 text-[15px] sm:text-base md:text-lg text-slate-600 leading-relaxed">
-                <span className="font-semibold text-slate-800">15+ yıl deneyim</span> ve 25+ banka ağıyla, ön ödemesiz
-                şekilde süreci planlıyor ve yönetiyoruz.
+                <span className="font-semibold text-slate-800">
+                  15+ yıl deneyim
+                </span>{" "}
+                ve 25+ banka ağıyla, ön ödemesiz şekilde süreci planlıyor ve
+                yönetiyoruz.
               </p>
             </div>
 
@@ -289,15 +338,21 @@ export default function HeroSections() {
 
               <div className="mt-4 sm:mt-5 grid grid-cols-3 gap-3 sm:gap-4">
                 <StatPill value="12K+" label="Başvuru Analizi" />
-                <StatPill value="Yüksek" label="Doğru Planlama Etkisi*" tone="text-emerald-600" />
+                <StatPill
+                  value="Yüksek"
+                  label="Doğru Planlama Etkisi*"
+                  tone="text-emerald-600"
+                />
                 <StatPill value="15+" label="Yıllık Deneyim" tone="text-sky-600" />
               </div>
 
               <div className="mt-4 sm:mt-5 rounded-2xl border border-slate-200/70 bg-white/90 p-4 text-left">
-                <div className="text-sm font-semibold text-slate-700">Örnek senaryo</div>
+                <div className="text-sm font-semibold text-slate-700">
+                  Örnek senaryo
+                </div>
                 <div className="mt-1 text-sm leading-relaxed text-slate-600">
-                  Not/limit profili iyileştirme, doğru başvuru sırası ve temiz geçmiş ile onay ihtimali belirgin şekilde
-                  artabilir.
+                  Not/limit profili iyileştirme, doğru başvuru sırası ve temiz
+                  geçmiş ile onay ihtimali belirgin şekilde artabilir.
                 </div>
               </div>
 
@@ -358,9 +413,13 @@ export default function HeroSections() {
 
             {/* legal mini band */}
             <div className="mt-4 rounded-2xl border border-slate-200 bg-white/80 px-4 py-3 text-xs text-slate-600">
-              Kredi onayı/şartlar ilgili finans kuruluşlarına aittir. Bu alan danışmanlık & bilgilendirme kapsamındadır.
+              Kredi onayı/şartlar ilgili finans kuruluşlarına aittir. Bu alan
+              danışmanlık & bilgilendirme kapsamındadır.
               <span className="mx-2 text-slate-300">•</span>
-              <Link href="/kvkk" className="underline underline-offset-2 hover:text-slate-800">
+              <Link
+                href="/kvkk"
+                className="underline underline-offset-2 hover:text-slate-800"
+              >
                 KVKK
               </Link>
             </div>
@@ -384,12 +443,15 @@ export default function HeroSections() {
 
               <div className="absolute bottom-3 left-3 right-3">
                 <div className="rounded-2xl border border-white/40 bg-white/85 px-4 py-3 shadow-lg shadow-slate-900/10 backdrop-blur">
-                  <div className="text-xs font-medium text-slate-600">Örnek analiz özeti</div>
+                  <div className="text-xs font-medium text-slate-600">
+                    Örnek analiz özeti
+                  </div>
                   <div className="mt-1 text-sm font-semibold text-slate-900">
                     3 banka, 5 farklı oran, tek rapor.
                   </div>
                   <div className="mt-1 text-[11px] text-slate-500">
-                    Toplam maliyet, dosya masrafı ve sigorta kalemleri ayrı ayrı gösterilir.
+                    Toplam maliyet, dosya masrafı ve sigorta kalemleri ayrı ayrı
+                    gösterilir.
                   </div>
                 </div>
               </div>
@@ -398,9 +460,12 @@ export default function HeroSections() {
             {/* FORM */}
             <Card className="border-slate-200/80 bg-white/90 shadow-[0_18px_50px_rgba(15,23,42,0.10)] backdrop-blur">
               <CardHeader className="pb-4">
-                <CardTitle className="text-xl text-slate-900">Hızlı Ön Başvuru</CardTitle>
+                <CardTitle className="text-xl text-slate-900">
+                  Hızlı Ön Başvuru
+                </CardTitle>
                 <p className="text-sm text-slate-600">
-                  Bilgilerinizi bırakın, size en kısa sürede WhatsApp’tan dönüş yapalım.
+                  Bilgilerinizi bırakın, size en kısa sürede WhatsApp’tan dönüş
+                  yapalım.
                 </p>
 
                 <div className="mt-3 inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white/90 px-3 py-2 text-xs text-slate-600 backdrop-blur">
@@ -411,6 +476,16 @@ export default function HeroSections() {
 
               <CardContent>
                 <form onSubmit={handleSubmit} className="space-y-4">
+                  {/* ✅ Honeypot */}
+                  <input
+                    className="hidden"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    value={website}
+                    onChange={(e) => setWebsite(e.target.value)}
+                    name="website"
+                  />
+
                   <div className="space-y-2">
                     <Label htmlFor="name" className="text-sm">
                       Ad Soyad
@@ -419,7 +494,9 @@ export default function HeroSections() {
                       id="name"
                       placeholder="Adınız ve soyadınız"
                       value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, name: e.target.value })
+                      }
                       required
                       className="bg-white h-11 text-base"
                     />
@@ -437,12 +514,17 @@ export default function HeroSections() {
                       placeholder="05XX XXX XX XX"
                       value={formData.phone}
                       onChange={(e) =>
-                        setFormData({ ...formData, phone: formatTRPhone(e.target.value) })
+                        setFormData({
+                          ...formData,
+                          phone: formatTRPhone(e.target.value),
+                        })
                       }
                       required
                       className="bg-white h-11 text-base"
                     />
-                    <p className="text-[12px] text-slate-500">Örn: 0532 123 45 67</p>
+                    <p className="text-[12px] text-slate-500">
+                      Örn: 0532 123 45 67
+                    </p>
                   </div>
 
                   <div className="space-y-2">
@@ -452,7 +534,9 @@ export default function HeroSections() {
 
                     <Select
                       value={formData.creditType}
-                      onValueChange={(value) => setFormData({ ...formData, creditType: value })}
+                      onValueChange={(value) =>
+                        setFormData({ ...formData, creditType: value })
+                      }
                     >
                       <SelectTrigger
                         id="creditType"
@@ -475,10 +559,14 @@ export default function HeroSections() {
                           "shadow-[0_20px_60px_rgba(15,23,42,0.20)]"
                         )}
                       >
-                        <SelectItem value="ihtiyac">İhtiyaç Kredisi</SelectItem>
+                        <SelectItem value="ihtiyac">
+                          İhtiyaç Kredisi
+                        </SelectItem>
                         <SelectItem value="konut">Konut Kredisi</SelectItem>
                         <SelectItem value="tasit">Taşıt Kredisi</SelectItem>
-                        <SelectItem value="esnaf">Esnaf / KOBİ Kredisi</SelectItem>
+                        <SelectItem value="esnaf">
+                          Esnaf / KOBİ Kredisi
+                        </SelectItem>
                         <SelectItem value="diger">Diğer</SelectItem>
                       </SelectContent>
                     </Select>
@@ -493,7 +581,9 @@ export default function HeroSections() {
                       placeholder="Kısaca durumunuzu yazabilirsiniz..."
                       rows={3}
                       value={formData.note}
-                      onChange={(e) => setFormData({ ...formData, note: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, note: e.target.value })
+                      }
                       className="bg-white text-base"
                     />
                   </div>
@@ -509,10 +599,15 @@ export default function HeroSections() {
                         required
                       />
                       <span className="leading-relaxed">
-                        <Link href="/kvkk" target="_blank" className="font-semibold underline underline-offset-4">
+                        <Link
+                          href="/kvkk"
+                          target="_blank"
+                          className="font-semibold underline underline-offset-4"
+                        >
                           KVKK Aydınlatma Metni
                         </Link>
-                        ’ni okudum, anladım ve kişisel verilerimin danışmanlık süreci kapsamında işlenmesini kabul ediyorum.
+                        ’ni okudum, anladım ve kişisel verilerimin danışmanlık
+                        süreci kapsamında işlenmesini kabul ediyorum.
                       </span>
                     </label>
                   </div>
@@ -527,24 +622,47 @@ export default function HeroSections() {
                     )}
                     size="lg"
                   >
-                    {busy ? "Açılıyor…" : "Ücretsiz Ön Analiz Talep Et"}
+                    {busy ? "Gönderiliyor…" : "Ücretsiz Ön Analiz Talep Et"}
                   </Button>
+
+                  {/* ✅ Feedback */}
+                  {error ? (
+                    <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                      {error}
+                    </div>
+                  ) : null}
+
+                  {success ? (
+                    <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
+                      {success}
+                    </div>
+                  ) : null}
 
                   <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between text-[12px] text-slate-500">
                     <span className="leading-relaxed">
                       Göndererek iletişime geçilmesini kabul etmiş olursunuz.
                     </span>
-                    <Link href="/kvkk" className="underline underline-offset-2 hover:text-slate-700">
+                    <Link
+                      href="/kvkk"
+                      className="underline underline-offset-2 hover:text-slate-700"
+                    >
                       KVKK
                     </Link>
                   </div>
 
+                  {/* ✅ WhatsApp fallback stays */}
                   <button
                     type="button"
-                    onClick={() => openExternal(`https://wa.me/${WHATSAPP_NUMBER}`)}
+                    onClick={() =>
+                      openExternal(`https://wa.me/${WHATSAPP_NUMBER}`)
+                    }
                     className="flex items-center justify-center gap-2 text-base text-slate-600 transition-colors hover:text-slate-900"
                   >
-                    <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current" aria-hidden="true">
+                    <svg
+                      viewBox="0 0 24 24"
+                      className="h-4 w-4 fill-current"
+                      aria-hidden="true"
+                    >
                       <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
                     </svg>
                     ya da WhatsApp ile yazın
@@ -555,7 +673,8 @@ export default function HeroSections() {
 
             {/* tiny note */}
             <div className="text-[11px] text-slate-500 px-1">
-              Not: Kredi onayı ve şartlar finans kuruluşlarının değerlendirmesine bağlıdır. Bu form danışmanlık amaçlıdır.
+              Not: Kredi onayı ve şartlar finans kuruluşlarının değerlendirmesine
+              bağlıdır. Bu form danışmanlık amaçlıdır.
             </div>
           </div>
         </div>
