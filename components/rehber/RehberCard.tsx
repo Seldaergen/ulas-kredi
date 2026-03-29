@@ -29,17 +29,12 @@ function topicFallbackImage(topicId?: TopicId | null) {
       return "/rehber/fallback/kredi-karti.jpg";
     case "banka":
       return "/rehber/fallback/banka.jpg";
-    case "genel":
     default:
       return "/rehber/fallback/genel.jpg";
   }
 }
 
-// ✅ Topic bazlı “kapak” (public/content içinde bunları koyacağız)
-// Bu sayede slug ile dosya adı uyuşmasa bile rehber boş kalmaz.
 function topicCoverCandidates(topicId?: TopicId | null) {
-  // Senin mevcut içerik görsellerin içinde “kredi-notu, kredi-limiti…” gibi
-  // dosyalar yoksa, buraya sahip olduğun dosya isimlerini yazabiliriz.
   switch (topicId) {
     case "kredi-notu":
       return ["/content/credit-score-900.jpg", "/content/edevlet.jpg"];
@@ -56,10 +51,9 @@ function topicCoverCandidates(topicId?: TopicId | null) {
     case "borc-kapatma":
       return ["/content/borc-kapatma-kredisi-nedir.jpg", "/content/borc-gelir-orani-kac-olmali.jpg"];
     case "kredi-karti":
-      return ["/content/findeks-kredi-notu-nedir.jpg", "/content/findeks-kredi-notu-nedir.png"];
+      return ["/content/findeks-kredi-notu-nedir.jpg"];
     case "banka":
-      return ["/content/bankalar-kredi-verirken-neye-bakar.jpg", "/content/banka-degerlendirme-sureci-nasil-isler.jpg"];
-    case "genel":
+      return ["/content/bankalar-kredi-verirken-neye-bakar.jpg"];
     default:
       return ["/content/2025-en-hizli-basvuru-akisi.jpg"];
   }
@@ -82,25 +76,18 @@ export default function RehberCard({ post }: { post: any }) {
   const candidates = useMemo(() => {
     const list: string[] = [];
 
-    // 1) posts.ts coverImage varsa önce onu dene
     const cover = normalizeToAbsolutePublicPath(post?.coverImage);
     if (cover) list.push(cover);
 
-    // 2) slug tabanlı dene (bazı içeriklerde işe yarar)
     if (slug) {
       list.push(`/content/${slug}.jpg`);
-      list.push(`/content/${slug}.jpeg`);
       list.push(`/content/${slug}.png`);
       list.push(`/content/${slug}.webp`);
     }
 
-    // 3) topic bazlı “kapak” (senin mevcut dosya adlarına göre)
     list.push(...topicCoverCandidates(topicId));
-
-    // 4) en son: fallback
     list.push(topicFallbackImage(topicId));
 
-    // uniq + boş temizle
     return Array.from(new Set(list.map((x) => x.trim()).filter(Boolean)));
   }, [post?.coverImage, slug, topicId]);
 
@@ -109,48 +96,63 @@ export default function RehberCard({ post }: { post: any }) {
 
   return (
     <Link
-      href={`/rehber/${post.slug}`}
+      href={`/rehber/${slug}`}
       className="group overflow-hidden rounded-2xl border bg-white/70 shadow-sm transition hover:bg-white hover:shadow-md"
     >
+      {/* IMAGE */}
       <div className="relative aspect-video w-full overflow-hidden bg-slate-100">
         <Image
           src={img}
           alt={title || "Kredi rehberi görseli"}
           fill
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           className="object-cover transition duration-500 group-hover:scale-[1.03]"
-          onError={() => {
-            // sıradaki adayı dene
-            setIdx((v) => Math.min(v + 1, candidates.length - 1));
-          }}
+          onError={() => setIdx((v) => Math.min(v + 1, candidates.length - 1))}
         />
-        {/* ✅ Tailwind güvenli gradient */}
-        <div className="absolute inset-0 bg-linear-to-t from-black/30 via-black/0 to-black/0" />
+        <div className="absolute inset-0 bg-linear-to-t from-black/30 to-transparent" />
       </div>
 
+      {/* CONTENT */}
       <div className="p-4">
+        {/* TITLE */}
         <div className="text-base font-semibold text-slate-900 group-hover:text-cyan-800">
           {title}
         </div>
 
-        {excerpt ? (
-          <div className="mt-1 line-clamp-2 text-sm text-slate-600">{excerpt}</div>
-        ) : null}
+        {/* EXCERPT */}
+        {excerpt && (
+          <div className="mt-1 line-clamp-2 text-sm text-slate-600">
+            {excerpt}
+          </div>
+        )}
 
+        {/* 🔥 INTRO */}
+        {post?.intro && (
+          <div className="mt-2 line-clamp-2 text-xs text-slate-500">
+            {post.intro}
+          </div>
+        )}
+
+        {/* 🔥 CRITICAL HOOK */}
+        {post?.criticalPoints?.[0] && (
+          <div className="mt-2 text-xs font-semibold text-cyan-700">
+            {post.criticalPoints[0]}
+          </div>
+        )}
+
+        {/* META */}
         <div className="mt-3 flex flex-wrap items-center gap-2 text-xs text-slate-500">
-          {topic ? (
-            <span className="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 font-semibold text-slate-700">
+          {topic && (
+            <span className="rounded-full border px-2 py-0.5">
               {topic.title}
             </span>
-          ) : null}
+          )}
+          {post?.date && <span>{post.date}</span>}
+          {post?.readingTime && <span>• {post.readingTime}</span>}
+        </div>
 
-          {post?.date ? <span>{post.date}</span> : null}
-          {post?.readingTime ? (
-            <>
-              <span>•</span>
-              <span>{post.readingTime}</span>
-            </>
-          ) : null}
+        {/* 🔥 CTA */}
+        <div className="mt-3 text-xs font-semibold text-cyan-700 group-hover:underline">
+          Devamını oku →
         </div>
       </div>
     </Link>
