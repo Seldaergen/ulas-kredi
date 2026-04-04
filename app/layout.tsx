@@ -106,7 +106,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const jsonLd = {
+  const businessJsonLd = {
     "@context": "https://schema.org",
     "@type": "FinancialService",
     name: "Ulaş Kredi Danışmanlık",
@@ -134,9 +134,80 @@ export default function RootLayout({
     telephone: "+905416061356",
   };
 
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: [
+      {
+        "@type": "Question",
+        name: "Kredi notu kaç olmalı?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Kredi değerlendirmesinde tek ölçüt puan değildir. Kredi notunun yanında gelir durumu, mevcut borçlar, başvuru yoğunluğu ve banka politikaları da birlikte değerlendirilir.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Kredi notu nasıl yükseltilir?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Kredi notunu yükseltmek için düzenli ödeme alışkanlığı, kontrollü kart kullanımı, düşük borç-limit oranı ve doğru başvuru planı önemlidir.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Kredi başvurusu neden reddedilir?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Kredi başvuruları; düşük finansal uygunluk, yüksek mevcut borç, yetersiz gelir uyumu, yoğun başvuru geçmişi veya banka kriterlerine uyumsuzluk nedeniyle reddedilebilir.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Kredi kartı limiti nasıl artırılır?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Limit artışı için gelir durumu, ödeme düzeni, mevcut limit kullanımı ve bankanın iç değerlendirme kriterleri birlikte etkili olur.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Borç kapatma mı yapılandırma mı daha mantıklı?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Bu karar mevcut borç yüküne, aylık ödeme gücüne, toplam maliyete ve nakit akışına göre değişir. Her durum için tek bir doğru çözüm yoktur.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Kredi yapılandırma kredi notunu etkiler mi?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Yapılandırmanın etkisi kişinin ödeme düzenine, mevcut risk durumuna ve sonrasındaki finansal davranışına göre değişebilir.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Gelir belgesi olmadan kredi alınır mı?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Kredi değerlendirmesinde gelir beyanı ve gelir doğrulaması önemli bir unsurdur. Hangi belgelerin geçerli olduğu çalışma biçimine göre değişebilir.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Aynı anda kaç bankaya başvuru yapılmalı?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Kontrolsüz ve art arda yapılan çoklu başvurular olumsuz algı yaratabilir. Başvuru sürecinin planlı ve profilinize uygun yürütülmesi daha sağlıklıdır.",
+        },
+      },
+    ],
+  };
+
   return (
     <html lang="tr" suppressHydrationWarning className={manrope.variable}>
-      <head>
+      <body className="min-h-screen bg-slate-50 text-slate-900 font-sans antialiased">
         {/* Google Analytics */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-YQNQGKTLJ8"
@@ -151,95 +222,22 @@ export default function RootLayout({
           `}
         </Script>
 
-        {/* Structured Data / JSON-LD */}
+        {/* Structured Data / JSON-LD — Business */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify(jsonLd),
+            __html: JSON.stringify(businessJsonLd),
           }}
         />
 
-        {/* Structured Data / JSON-LD — FAQPage */}
-  <script
-    type="application/ld+json"
-    dangerouslySetInnerHTML={{
-      __html: JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        mainEntity: [
-          {
-            "@type": "Question",
-            name: "Kredi notu kaç olmalı?",
-            acceptedAnswer: {
-              "@type": "Answer",
-              text: "Kredi değerlendirmesinde tek ölçüt puan değildir. Kredi notunun yanında gelir durumu, mevcut borçlar, başvuru yoğunluğu ve banka politikaları da birlikte değerlendirilir.",
-            },
-          },
-          {
-            "@type": "Question",
-            name: "Kredi notu nasıl yükseltilir?",
-            acceptedAnswer: {
-              "@type": "Answer",
-              text: "Kredi notunu yükseltmek için düzenli ödeme alışkanlığı, kontrollü kart kullanımı, düşük borç-limit oranı ve doğru başvuru planı önemlidir.",
-            },
-          },
-          {
-            "@type": "Question",
-            name: "Kredi başvurusu neden reddedilir?",
-            acceptedAnswer: {
-              "@type": "Answer",
-              text: "Kredi başvuruları; düşük finansal uygunluk, yüksek mevcut borç, yetersiz gelir uyumu, yoğun başvuru geçmişi veya banka kriterlerine uyumsuzluk nedeniyle reddedilebilir.",
-            },
-          },
-          {
-            "@type": "Question",
-            name: "Kredi kartı limiti nasıl artırılır?",
-            acceptedAnswer: {
-              "@type": "Answer",
-              text: "Limit artışı için gelir durumu, ödeme düzeni, mevcut limit kullanımı ve bankanın iç değerlendirme kriterleri birlikte etkili olur.",
-            },
-          },
-          {
-            "@type": "Question",
-            name: "Borç kapatma mı yapılandırma mı daha mantıklı?",
-            acceptedAnswer: {
-              "@type": "Answer",
-              text: "Bu karar mevcut borç yüküne, aylık ödeme gücüne, toplam maliyete ve nakit akışına göre değişir. Her durum için tek bir doğru çözüm yoktur.",
-            },
-          },
-          {
-            "@type": "Question",
-            name: "Kredi yapılandırma kredi notunu etkiler mi?",
-            acceptedAnswer: {
-              "@type": "Answer",
-              text: "Yapılandırmanın etkisi kişinin ödeme düzenine, mevcut risk durumuna ve sonrasındaki finansal davranışına göre değişebilir.",
-            },
-          },
-          {
-            "@type": "Question",
-            name: "Gelir belgesi olmadan kredi alınır mı?",
-            acceptedAnswer: {
-              "@type": "Answer",
-              text: "Kredi değerlendirmesinde gelir beyanı ve gelir doğrulaması önemli bir unsurdur. Hangi belgelerin geçerli olduğu çalışma biçimine göre değişebilir.",
-            },
-          },
-          {
-            "@type": "Question",
-            name: "Aynı anda kaç bankaya başvuru yapılmalı?",
-            acceptedAnswer: {
-              "@type": "Answer",
-              text: "Kontrolsüz ve art arda yapılan çoklu başvurular olumsuz algı yaratabilir. Başvuru sürecinin planlı ve profilinize uygun yürütülmesi daha sağlıklıdır.",
-            },
-          },
-        ],
-      }),
-    }}
-  />
+        {/* Structured Data / JSON-LD — FAQ */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(faqJsonLd),
+          }}
+        />
 
-
-      </head>
-
-      <body className="min-h-screen bg-slate-50 text-slate-900 font-sans antialiased">
         <div className="relative min-h-screen overflow-x-hidden">
           {/* Ultra-soft global background */}
           <div
