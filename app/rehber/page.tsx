@@ -1,12 +1,31 @@
 // app/rehber/page.tsx
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Kredi Rehberi",
+  description:
+    "Kredi notu, limit artırma, başvuru reddi ve yapılandırma hakkında kapsamlı rehberler. Bankacılık sistemini anlayarak daha doğru adım atın.",
+  alternates: {
+    canonical: "https://ulaskredi.com.tr/rehber",
+  },
+  openGraph: {
+    title: "Kredi Rehberi | Ulaş Kredi",
+    description:
+      "Kredi notu, limit artırma, başvuru reddi ve yapılandırma hakkında kapsamlı rehberler.",
+    url: "https://ulaskredi.com.tr/rehber",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Kredi Rehberi | Ulaş Kredi",
+    description:
+      "Kredi notu ve başvuru süreci hakkında rehber içerikler.",
+  },
+};
+
+
 import { Suspense } from "react";
 import RehberClient from "./rehber-client";
-
-export const metadata = {
-  title: "Kredi Rehberi | Ulaş Kredi Danışmanlık",
-  description:
-    "Kredi notu, limit, yapılandırma ve başvuru süreci hakkında güncel rehberler.",
-};
 
 export default function RehberPage() {
   return (

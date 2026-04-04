@@ -1,3 +1,27 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Soru & Cevap",
+  description:
+    "Kredi notu, limit artırma, başvuru süreci ve bankacılık değerlendirmeleri hakkında sık sorulan sorular ve net cevaplar.",
+  alternates: {
+    canonical: "https://ulaskredi.com.tr/soru-cevap",
+  },
+  openGraph: {
+    title: "Soru & Cevap | Ulaş Kredi",
+    description:
+      "Kredi süreci hakkında sık sorulan sorular ve net cevaplar.",
+    url: "https://ulaskredi.com.tr/soru-cevap",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Soru & Cevap | Ulaş Kredi",
+    description:
+      "Kredi notu, limit artırma ve başvuru süreci hakkında cevaplar.",
+  },
+};
+
 export const dynamic = "force-static";
 
 export default function QaSoon() {

@@ -1,4 +1,29 @@
 // components/home/VideoSection.tsx
+
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Videolar",
+  description:
+    "Kredi notu, limit artırma, başvuru stratejisi ve finansal profil yönetimi hakkında video içerikler.",
+  alternates: {
+    canonical: "https://ulaskredi.com.tr/videolar",
+  },
+  openGraph: {
+    title: "Videolar | Ulaş Kredi",
+    description:
+      "Kredi süreci ve başvuru stratejileri hakkında video içerikler.",
+    url: "https://ulaskredi.com.tr/videolar",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Videolar | Ulaş Kredi",
+    description:
+      "Kredi notu ve başvuru stratejileri hakkında videolar.",
+  },
+};
+
 import VideoSectionClient from "./VideoSectionClient";
 
 type ShortVideo = {

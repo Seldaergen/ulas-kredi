@@ -1,7 +1,7 @@
 import type React from "react";
 import type { Metadata, Viewport } from "next";
+import Script from "next/script";
 import { Manrope } from "next/font/google";
-import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 // Global shell bileşenleri
@@ -31,19 +31,38 @@ const manrope = Manrope({
 
 export const metadata: Metadata = {
   title: {
-    default: "Ulaş Kredi Danışmanlık",
+    default: "Ulaş Kredi Danışmanlık | Türkiye Geneli Kredi Danışmanlığı",
     template: "%s | Ulaş Kredi",
   },
-  description:
-    "15+ yıl deneyim, 25+ banka ağı ve ön ödemesiz danışmanlık ile kredi limitinizi ve finansal profilinizi güçlendiriyoruz.",
 
-  // ✅ OG / Social preview
-  metadataBase: new URL("https://ulaskredi.com"), // şimdilik böyle; domain değişirse güncelleriz
+  description:
+    "İstanbul merkezli, Türkiye genelinde kredi danışmanlığı. Kredi notu artırma, limit yükseltme ve doğru başvuru stratejisi. Ön ödemesiz hizmet.",
+
+  metadataBase: new URL("https://ulaskredi.com.tr"),
+
+  alternates: {
+    canonical: "https://ulaskredi.com.tr",
+    languages: {
+      "tr-TR": "https://ulaskredi.com.tr",
+    },
+  },
+
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+
   openGraph: {
-    title: "Ulaş Kredi Danışmanlık",
+    title: "Ulaş Kredi Danışmanlık | Türkiye Geneli Kredi Danışmanlığı",
     description:
-      "Ön ödemesiz kredi danışmanlığı. Kredi notu, limit artırma ve doğru başvuru stratejisi.",
-    url: "/",
+      "İstanbul merkezli Türkiye geneli kredi danışmanlığı. Limit artırma ve doğru başvuru stratejisi.",
+    url: "https://ulaskredi.com.tr",
     siteName: "Ulaş Kredi Danışmanlık",
     locale: "tr_TR",
     type: "website",
@@ -56,22 +75,21 @@ export const metadata: Metadata = {
       },
     ],
   },
+
   twitter: {
     card: "summary_large_image",
     title: "Ulaş Kredi Danışmanlık",
     description:
-      "Ön ödemesiz kredi danışmanlığı. Kredi notu, limit artırma ve doğru başvuru.",
+      "Türkiye geneli kredi danışmanlığı. Kredi notu ve limit artırma.",
     images: ["/og-image.jpg"],
   },
 
-  // ✅ Favicon / App icons
   icons: {
     icon: "/logo.svg",
     shortcut: "/logo.svg",
     apple: "/logo.svg",
   },
 };
-
 
 export const viewport: Viewport = {
   themeColor: "#f8fafc",
@@ -88,8 +106,139 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FinancialService",
+    name: "Ulaş Kredi Danışmanlık",
+    url: "https://ulaskredi.com.tr",
+    description:
+      "İstanbul merkezli, Türkiye genelinde kredi danışmanlığı hizmetleri.",
+    areaServed: {
+      "@type": "Country",
+      name: "Turkey",
+    },
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "İstanbul",
+      addressCountry: "TR",
+    },
+    contactPoint: {
+      "@type": "ContactPoint",
+      telephone: "+905416061356",
+      contactType: "customer service",
+      areaServed: "TR",
+      availableLanguage: ["Turkish"],
+      email: "info@ulaskredi.com.tr",
+    },
+    email: "info@ulaskredi.com.tr",
+    telephone: "+905416061356",
+  };
+
   return (
     <html lang="tr" suppressHydrationWarning className={manrope.variable}>
+      <head>
+        {/* Google Analytics */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-YQNQGKTLJ8"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-YQNQGKTLJ8');
+          `}
+        </Script>
+
+        {/* Structured Data / JSON-LD */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(jsonLd),
+          }}
+        />
+
+        {/* Structured Data / JSON-LD — FAQPage */}
+  <script
+    type="application/ld+json"
+    dangerouslySetInnerHTML={{
+      __html: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: [
+          {
+            "@type": "Question",
+            name: "Kredi notu kaç olmalı?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "Kredi değerlendirmesinde tek ölçüt puan değildir. Kredi notunun yanında gelir durumu, mevcut borçlar, başvuru yoğunluğu ve banka politikaları da birlikte değerlendirilir.",
+            },
+          },
+          {
+            "@type": "Question",
+            name: "Kredi notu nasıl yükseltilir?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "Kredi notunu yükseltmek için düzenli ödeme alışkanlığı, kontrollü kart kullanımı, düşük borç-limit oranı ve doğru başvuru planı önemlidir.",
+            },
+          },
+          {
+            "@type": "Question",
+            name: "Kredi başvurusu neden reddedilir?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "Kredi başvuruları; düşük finansal uygunluk, yüksek mevcut borç, yetersiz gelir uyumu, yoğun başvuru geçmişi veya banka kriterlerine uyumsuzluk nedeniyle reddedilebilir.",
+            },
+          },
+          {
+            "@type": "Question",
+            name: "Kredi kartı limiti nasıl artırılır?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "Limit artışı için gelir durumu, ödeme düzeni, mevcut limit kullanımı ve bankanın iç değerlendirme kriterleri birlikte etkili olur.",
+            },
+          },
+          {
+            "@type": "Question",
+            name: "Borç kapatma mı yapılandırma mı daha mantıklı?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "Bu karar mevcut borç yüküne, aylık ödeme gücüne, toplam maliyete ve nakit akışına göre değişir. Her durum için tek bir doğru çözüm yoktur.",
+            },
+          },
+          {
+            "@type": "Question",
+            name: "Kredi yapılandırma kredi notunu etkiler mi?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "Yapılandırmanın etkisi kişinin ödeme düzenine, mevcut risk durumuna ve sonrasındaki finansal davranışına göre değişebilir.",
+            },
+          },
+          {
+            "@type": "Question",
+            name: "Gelir belgesi olmadan kredi alınır mı?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "Kredi değerlendirmesinde gelir beyanı ve gelir doğrulaması önemli bir unsurdur. Hangi belgelerin geçerli olduğu çalışma biçimine göre değişebilir.",
+            },
+          },
+          {
+            "@type": "Question",
+            name: "Aynı anda kaç bankaya başvuru yapılmalı?",
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "Kontrolsüz ve art arda yapılan çoklu başvurular olumsuz algı yaratabilir. Başvuru sürecinin planlı ve profilinize uygun yürütülmesi daha sağlıklıdır.",
+            },
+          },
+        ],
+      }),
+    }}
+  />
+
+
+      </head>
+
       <body className="min-h-screen bg-slate-50 text-slate-900 font-sans antialiased">
         <div className="relative min-h-screen overflow-x-hidden">
           {/* Ultra-soft global background */}
@@ -119,9 +268,7 @@ export default function RootLayout({
           <FinanceBanner />
 
           {/* Page content */}
-          <main className="min-h-[calc(100vh-1px)]">
-            {children}
-          </main>
+          <main className="min-h-[calc(100vh-1px)]">{children}</main>
 
           {/* Footer */}
           <Footer />
@@ -129,11 +276,8 @@ export default function RootLayout({
           {/* Mobile bottom bar */}
           <MobileBottomBar />
 
-          {/* ✅ GLOBAL Floating Action (Scroll-to-top dahil) */}
+          {/* Floating action */}
           <FloatingAction />
-
-          {/* Analytics */}
-          <Analytics />
         </div>
       </body>
     </html>

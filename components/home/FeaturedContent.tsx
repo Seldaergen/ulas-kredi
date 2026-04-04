@@ -98,7 +98,7 @@ function DesktopCard({ item, isNew }: any) {
             setImgIndex((v) => Math.min(v + 1, candidates.length - 1))
           }
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-t from-black/40 to-transparent" />
 
         <div className="absolute left-4 top-4 flex gap-2">
           <span className="rounded-full bg-white/90 px-3 py-1 text-xs font-semibold">
