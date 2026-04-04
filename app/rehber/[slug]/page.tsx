@@ -132,13 +132,8 @@ function RenderContent({ post }: { post: Post }) {
 
         if (b.type === "callout") {
           return (
-            <div
-              key={idx}
-              className="my-6 rounded-2xl border bg-slate-50 p-4"
-            >
-              <div className="text-sm font-bold text-slate-900">
-                {b.title}
-              </div>
+            <div key={idx} className="my-6 rounded-2xl border bg-slate-50 p-4">
+              <div className="text-sm font-bold text-slate-900">{b.title}</div>
               <div className="text-sm text-slate-700">{b.text}</div>
             </div>
           );
@@ -217,7 +212,7 @@ export default async function RehberDetayPage({
 
   const topic = getTopicById(post.topicId);
   const related = POSTS.filter(
-    (p) => p.slug !== post.slug && p.topicId === post.topicId
+    (p) => p.slug !== post.slug && p.topicId === post.topicId,
   ).slice(0, 4);
 
   return (
@@ -346,9 +341,7 @@ export default async function RehberDetayPage({
               >
                 <div className="font-semibold text-slate-900">{p.title}</div>
                 {p.excerpt && (
-                  <div className="mt-1 text-sm text-slate-600">
-                    {p.excerpt}
-                  </div>
+                  <div className="mt-1 text-sm text-slate-600">{p.excerpt}</div>
                 )}
               </Link>
             ))}
