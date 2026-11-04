@@ -3,13 +3,14 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Ulaş Kredi Danışmanlık | Türkiye Geneli Kredi Danışmanlığı",
+  title: { absolute: "Ulaş Kredi Danışmanlık | Türkiye Geneli Kredi Danışmanlığı" },
   description:
-    "İstanbul merkezli, Türkiye genelinde kredi danışmanlığı. Kredi notu artırma, limit yükseltme ve doğru başvuru stratejisi. Ön ödemesiz hizmet.",
+    "Kredi başvurusu öncesi kredi notu, borç ve bütçe planlaması için danışmanlık. Taksitinizi hesaplayın, rehberleri inceleyin; telefon veya WhatsApp ile görüşün.",
   alternates: {
     canonical: "https://ulaskredi.com.tr",
   },
   openGraph: {
+    images: [{ url: "https://ulaskredi.com.tr/electric-finance-og.png", width: 1200, height: 630 }],
     title: "Ulaş Kredi Danışmanlık | Türkiye Geneli Kredi Danışmanlığı",
     description:
       "İstanbul merkezli, Türkiye genelinde kredi danışmanlığı hizmetleri.",
@@ -17,10 +18,11 @@ export const metadata: Metadata = {
     type: "website",
   },
   twitter: {
+    images: ["https://ulaskredi.com.tr/electric-finance-og.png"],
     card: "summary_large_image",
     title: "Ulaş Kredi Danışmanlık",
     description:
-      "Kredi notu, limit artırma ve doğru başvuru stratejisi.",
+      "Kredi notu, bütçe ve başvuru hazırlığı için danışmanlık.",
   },
 };
 import HeroSection from "@/components/home/HeroSection";
@@ -32,7 +34,6 @@ import CalculatorsSection from "@/components/home/CalculatorsSection";
 import TrustSection from "@/components/home/TrustSection";
 import FaqOptimized from "@/components/home/FaqOptimized";
 import { Contact } from "@/components/contact";
-import { FloatingAction } from "@/components/floating-contact";
 
 export default function Home() {
   return (
@@ -46,7 +47,6 @@ export default function Home() {
       <TrustSection />
       <FaqOptimized />
       <Contact />
-      <FloatingAction />
     </main>
   );
 }

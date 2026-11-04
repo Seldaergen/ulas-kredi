@@ -4,7 +4,7 @@ export const krediNotuSorgulamaSikligiZararliMi: Post = {
   slug: "kredi-notu-sorgulama-sikligi-zararli-mi",
   title: "Kredi Notu Sorgulama Sıklığı Zararlı mı? (Gerçek Cevap)",
   excerpt:
-    "Kredi notunu sorgulamak ile kredi başvurusu aynı şey değildir. Zararlı olan notu görmek değil, 1300 altı seviyede plansız başvuru yapmaktır.",
+    "Findeks açıklamasına göre kredi notunu görüntülemek ve kredi başvurusu yapmak tek başına notu düşürmez. Yeni borç kullanımı ile bilgi sorgulamasını ayırın.",
 
   category: "Bilgilendirme",
   topicId: "kredi-notu",
@@ -15,13 +15,13 @@ export const krediNotuSorgulamaSikligiZararliMi: Post = {
   views: 0,
 
   intro:
-    "Kısa cevap: Hayır, kredi notunu sorgulamak tek başına zararlı değildir. Risk oluşturan şey notu görmek değil, özellikle 1300 altı seviyede panikle yapılan plansız kredi başvurularıdır.",
+    "Kısa cevap: Findeks, kişinin kendi notunu bir veya birden fazla kez görüntülemesinin notu düşürmediğini belirtir. Başvuru yapmak da tek başına notu düşüren bir işlem değildir.",
 
   criticalPoints: [
     "Kredi notu sorgulamak puanı düşürmez",
     "Kredi başvurusu ile sorgulama aynı şey değildir",
-    "Asıl risk kısa sürede çok sayıda başvuru yapmaktır",
-    "1300 altı seviyede başvuru disiplini daha kritik hale gelir",
+    "Başvuru ile yeni bir kredili ürün kullanmak aynı şey değildir",
+    "Bankanın kredi kararı ile Findeks Kredi Notu ayrılmalıdır",
   ],
 
   highlight:
@@ -93,22 +93,22 @@ export const krediNotuSorgulamaSikligiZararliMi: Post = {
       type: "callout",
       title: "Yaygın yanlış inanış",
       text:
-        "“Notuma baktım, puanım düştü” düşüncesi çoğu zaman aynı dönemde yapılan kredi başvurularıyla karıştırılır.",
+        "Bir not değişimini yalnızca sorgulama veya başvuruya bağlamak doğru değildir. Ödeme, borç ve ürün kullanım bilgilerindeki değişiklikler ayrıca değerlendirilmelidir.",
     },
 
     {
       type: "h2",
-      text: "1300 barajı bu konuda neden önemli?",
+      text: "Herkes için geçerli bir başvuru barajı var mı?",
     },
     {
       type: "p",
       text:
-        "Güncel değerlendirme mantığında 1300 altı kredi notu kritik eşik olarak görülmeye başladığı için, bu seviyede sorgulama sonrası yapılacak başvurular daha dikkatli planlanmalıdır.",
+        "Bu rehber, tüm bankalarda geçerli bir puan eşiği tanımlamaz. Findeks notu, bankaların kendi değerlendirmelerinde kullandığı girdilerden biridir.",
     },
     {
       type: "p",
       text:
-        "Yani notu görmekte sorun yoktur; ama not 1300 altındaysa amaç kredi aramak değil, önce dosyayı güçlendirmek olmalıdır.",
+        "Başvuru kararında ödeme gücünü, mevcut borçlarını ve ürün koşullarını birlikte incele. Bir kredi notundan kesin onay ya da ret sonucu çıkarılamaz.",
     },
 
     {
@@ -123,7 +123,7 @@ export const krediNotuSorgulamaSikligiZararliMi: Post = {
     {
       type: "ul",
       items: [
-        "Ayda 1 kez → genel takip için yeterli",
+        "Takip aralığını ihtiyacına ve rapordaki güncelleme tarihlerine göre belirle",
         "Ödeme düzeni değiştiğinde → etkisini izlemek için faydalı",
         "Başvuru öncesi → durum analizi için mantıklı",
       ],
@@ -138,7 +138,7 @@ export const krediNotuSorgulamaSikligiZararliMi: Post = {
       items: [
         "Ön analiz yap: gelir, borç ve kullanım oranlarını kontrol et",
         "Kredi notunu görüntüle ve trendi değerlendir",
-        "Not 1300 altındaysa önce toparlanma planı kur",
+        "Gecikme veya hatalı kayıt varsa ilgili kurumla görüş",
         "Uygun ürünü seç ve tek bankayla başla",
       ],
     },
@@ -158,7 +158,7 @@ export const krediNotuSorgulamaSikligiZararliMi: Post = {
       items: [
         "Son 30 günde kaç kredi başvurusu yaptım?",
         "Red aldıktan sonra hemen yeni başvuru yaptım mı?",
-        "Notum 1300 altında mı üstünde mi?",
+        "Not değişimini rapordaki ödeme ve borç bilgileriyle birlikte değerlendirdim mi?",
         "Başvurduğum ürün gelir ve profilime uygun muydu?",
       ],
     },
@@ -167,7 +167,7 @@ export const krediNotuSorgulamaSikligiZararliMi: Post = {
       type: "callout",
       title: "Özet",
       text:
-        "Kredi notu sorgulama sıklığı zararlı değildir. Risk yaratan şey; özellikle 1300 altı seviyede, kısa sürede çok sayıda kredi başvurusu yapmak ve bunu plansız biçimde tekrarlamaktır.",
+        "Notunu görüntülemek veya başvuru yapmak tek başına Findeks Kredi Notu’nu düşürmez. Yeni borç kullanımı, ödeme alışkanlıkları ve bankanın başvuruyu nasıl değerlendirdiği farklı konulardır.",
     },
   ],
 };

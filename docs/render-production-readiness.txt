@@ -1,0 +1,164 @@
+ULAŞ KREDİ — RENDER PRODUCTION READINESS / 2026-11-01
+GÜNCELLEME: Kullanıcı Starter/Frankfurt/main/5a76973 ve DB/worker/cron yokluğunu
+doğruladı. Güncel karar ve iletişim odaklı yayın planı render-prelaunch-final.txt
+içindedir. Aşağıdaki önceki bilinmeyenler ve auto-deploy önerileri tarihsel kayıttır.
+Karar: NO-GO. Yerel hazırlık; mevcut Render servisine müdahale yok.
+
+Mevcut durum ve kanıt sınırı
+Kullanıcı hosting sağlayıcısını Render olarak doğruladı. Önceki salt okunur
+DNS kontrolünde www -> ulas-kredi.onrender.com; canlı / ve /api/health 200,
+/api/application-policy ve /robots.txt 404 idi. Bu oturumda tekrar sorgulanmadı.
+Bu işe başlanırken repoda render.yaml, Dockerfile veya deployment workflow'u
+yoktu. package.json build=next build, start=next start; Node 24.22.1 sabit.
+Paneldeki servis ID, plan, bölge, repo/branch/root directory, mevcut build/start
+komutları ve otomatik deploy yöntemi doğrulanmadı; repo komutları panel kanıtı
+değildir. Render bağlantısı henüz kurulmadı. API anahtarı veya environment
+değerleri okunmadı. Mevcut DB/SMTP/cron varlığı bilinmiyor; yok kabul edilmedi.
+
+Hazırlanan dosyalar ve komutlar
+deploy/render/service-settings.example.json: panel için yerel ayar taslağı.
+Render Blueprint değildir; otomatik kaynak oluşturmaz veya mevcut servisi
+yenisiyle eşleştirdiğini iddia etmez. Bilinmeyen bölge/plan/branch korunur.
+scripts/render-build.mjs web: Node sürümünü kontrol eder; servis sırlarını
+çocuk işlemlere geçirmeden npm ci --include=dev, açık uygulama config'i ile
+Prisma generate, sosyal PNG üretimi ve next build çalıştırmak üzere hazırlanır.
+scripts/render-build.mjs jobs: yalnız bağımlılıklar ve Prisma client üretir;
+Next build, migration veya kayıt/bildirim işlemi çalıştırmaz.
+Web start: npm start -- --hostname 0.0.0.0 --port $PORT
+Health: /api/health (yalnız liveness; DB/SMTP readiness değildir).
+PRISMA_SKIP_POSTINSTALL_GENERATE=true ile legacy Prisma config'inin kurulumda
+otomatik seçilmesi önlenir. generate açıkça prisma.applications.config.ts kullanır.
+Job komutları tests/register.cjs üzerinden TypeScript transpile ettiğinden
+typescript runtime'da gerekir; jobs için devDependencies prune edilmemeli.
+Build script'i henüz Render üzerinde denenmedi; platform paketi/Node sürümünün
+bulunabilirliği ve staging build ayrıca doğrulanmalı. Yerel Node 22.22.1, pin
+24.22.1 ile uyuşmadığı için tam build başlatılmadı; dependency sürümleri değişmedi.
+
+Sosyal görsel
+public/electric-finance-og.png eksikti; metadata bu dosyaya işaret ediyordu.
+Mevcut SVG'den Next'in Sharp bağımlılığı ile 1200x630 PNG üretimi eklendi.
+Tek native thread, cache kapalı; Chromium/ağ yok. Next'in optional Sharp
+paketi atlanırsa build başarısız olur; --omit=optional kullanılmamalı.
+
+Gerçek başvuru kabul kapısı
+Yeni APPLICATION_ACCEPTING_SUBMISSIONS varsayılan kapalıdır. Yalnız tam 'true'
+değeri üretimde politikayı ve geçerli başvuruların kayıt adımını açar.
+DB/anahtar/hukuki ayarların bulunması tek başına formu açmaz. Worker/purge
+bu bayrak kapalıyken çalışabilir. Bu bayrak doğrulama yerine geçmez; açılışı
+yetkili operatör onayıdır. APPLICATION_ALLOW_LOCAL=true yalnız sentetik yerel
+test içindir; üretimde false kalır. Gerçek başvuru açılmadan önce aşağıdaki
+DB/TLS/anahtar/SMTP/saklama/hukuki ve staging kanıtları tamamlanmalıdır.
+
+Yeniden kullanım önceliği
+1. Aynı web servisinin ID/domain/repo/branch/root ve mevcut planını koru.
+2. Mevcut PostgreSQL varsa süre sonu, kapasite, backup/restore, bölge, erişim
+   ve rollerini doğrula; uygulamaya ayrılmış database/rollerle yeniden kullan.
+   Legacy DATABASE_URL otomatik olarak APPLICATION_DATABASE_URL yapılmaz.
+3. Mevcut SMTP hesabı ve yetkili operasyon posta kutusu varsa doğrulanmış
+   gönderici, teslimat, TLS ve SPF/DKIM/DMARC ile kullan; gelen posta MX'i
+   giden SMTP hesabını kanıtlamaz. Ad/telefon/not e-postalanmaz, referans taşınır.
+4. Var olan onaylı scheduler varsa yalnız bu proje için yeniden kullan;
+   aksi halde küçük hacimde iki Render cron, sürekli worker'dan daha ekonomik
+   olabilir. Redis/Key Value gerekmez; outbox ve lease PostgreSQL'dedir.
+Worker komutu tek parti sonrası çıkar, sürekli Background Worker servisine
+doğrudan start command olarak bağlanmamalı; yeniden başlama döngüsü oluşturabilir.
+
+Önerilen işler (henüz kurulmadı)
+Bildirim cron: npm run applications:worker -- 10
+Öneri: */5 * * * * UTC. En fazla 10 iş/çağrı; kuyruk gecikmesi/DEAD alarmı,
+SMTP zaman aşımı ve beklenen hacme göre aralık/kapasite gözden geçirilmeli.
+Saklama cron: npm run applications:admin -- purge-expired --confirm-expiry-policy
+Öneri: 0 * * * * UTC. Her çağrı en fazla 100 kayıt; moreMayRemain=true ise
+ek partiler işletilmeli ve backlog alarmı olmalı. Hukuki süreye ek silme gecikmesi
+ve yedek imhası ayrıca onaylanır. Sınırsız döngü/otomatik gerçek silme eklenmedi.
+İşler aynı bölge ve onaylı en-az-yetkili kimliklerle çalıştırılmalı.
+
+Değişken adları / servis kapsamı (değerler yok)
+Build/platform: NODE_VERSION, NODE_ENV, NEXT_TELEMETRY_DISABLED; Render PORT
+değerini sağlar. NODE_VERSION .nvmrc/package.json ile aynı seçilmelidir.
+Web + worker + purge:
+APPLICATION_DATABASE_URL (her rolün ayrı bağlantısı), APPLICATION_ENCRYPTION_KEY,
+APPLICATION_ABUSE_KEY, APPLICATION_DATA_OWNER, APPLICATION_RETENTION_DAYS,
+APPLICATION_ALLOW_LOCAL.
+Web: APPLICATION_ACCEPTING_SUBMISSIONS, APPLICATION_TRUSTED_PROXY_HOPS.
+Worker: APPLICATION_SMTP_HOST, APPLICATION_SMTP_PORT, APPLICATION_SMTP_USER,
+APPLICATION_SMTP_PASS, APPLICATION_NOTIFICATION_TO, APPLICATION_NOTIFICATION_FROM.
+Purge ve yetkili CLI: APPLICATION_OPERATOR_ID; kimlik doğrulamanın yerini tutmaz.
+Anahtarlar iki ayrı kriptografik rastgele 32 bayt/64 hex değer olmalı; Render
+generateValue base64 ürettiğinden bu alanlarda doğrudan kullanılmamalı.
+Değerler yalnız secret yönetimine girilir, chat/Git/loga yazılmaz. Bildirim SMTP
+sırları web'e verilmez. Worker/purge yalnız gerek duydukları role sahip olmalı.
+Şifreleme anahtarı eski verileri düşünmeden değiştirilmez; kurtarma kanıtı gerekir.
+
+DB/TLS için açık karar
+Mevcut preflight sslmode=verify-full gerektirir. Render dokümanında internal
+URL TLS'i self-signed; verify-ca/verify-full desteklemediği yazıyor. Bu yüzden
+internal URL'yi otomatik ekleyen fromDatabase Blueprint hazırlanmadı ve kontrol
+gevşetilmedi. Seçenek: onaylı external tam hostname/sertifika doğrulamalı bağlantı,
+dar ağ allowlist ve staging kanıtı; veya private ağ/TLS politikasını ayrıca
+değerlendirip test ederek açıkça değiştirmek. NODE_TLS_REJECT_UNAUTHORIZED=0
+ve rejectUnauthorized=false ile bypass yapılmaz. TLS ve least-privilege gerçek
+bağlantıda doğrulanmadan üretim açılmaz. Aynı bölge private ağ maliyeti düşürür,
+ancak mevcut güçlü sertifika doğrulama kriteriyle uyumu çözülmeden varsayılmaz.
+
+Ücretsiz/düşük maliyet değerlendirmesi (2026-11-01, USD)
+Ücretsiz web boşta uyur ve 25/465/587 SMTP çıkışı kapalıdır; tüm Render
+servislerinde 25 kapalıdır. Bu uygulamada SMTP web'den değil job'dan gider;
+ücretli cron'da sağlayıcının 465/587 erişimi ayrıca denenmeli. API tabanlı mail
+alternatifi mevcut outbox'a kendiliğinden entegre değildir; bu işte eklenmedi.
+Ücretsiz Render PostgreSQL 30 günde biter ve 1 GB sınırı vardır; kalıcı gerçek
+başvuru kaydı için uygun seçenek olarak kabul edilmez.
+Resmî Render örneğinde küçük web/worker Starter yaklaşık $7/ay, küçük Basic
+Postgres $6/ay. Cron başına minimum $1/ay; kullanım süreleri ek maliyet doğurabilir.
+Yeni küçük DB + iki cron taban tahmini >=$8/ay + DB disk/SMTP/kullanım ekleri;
+web mevcut onaylı ücretli planda yeniden kullanılırsa ek web ücreti yok varsayılır.
+Web için de yeni/ücretli küçük plan gerekirse toplam taban >=$15/ay + ekler.
+Mevcut DB/scheduler/SMTP yeniden kullanılabilirse artış daha düşük olabilir.
+Bunlar satın alma teklifi/kapasite garantisi değil; panelde plan/storage, workspace,
+bandwidth/build ve vergiler doğrulanmalı. Ücretsiz SMTP kotası ancak mevcut
+sağlayıcının şartları, teslimatı ve hukuki koşulları onaylanırsa kullanılabilir.
+
+Somut yayın sırası
+1. Render hesabına salt okunur bağlantı kur veya gizli değer içermeyen servis
+   ID/tür/plan/bölge, linked repo/branch/root, komut ve auto-deploy bilgilerini
+   yetkili kaynaktan doğrula. Secret değerleri getiren uçları çağırma.
+2. Mevcut servisi ve DB/SMTP/scheduler envanterini eşleştir; maliyet, bölge ve
+   hukuki gerçek unvan/saklama/gönderici/alıcı kararlarını al. 57 rehberi kapalı tut.
+3. Otomatik deploy tetiklerini ve Blueprint senkronizasyonunu gözden geçir;
+   bu taslağı import etmek bile ilk deploy/ücret doğurabilir. Şimdilik uygulama.
+4. İzole staging + sentetik veri: pinli Node, kurulum/generate/build, PNG,
+   HTTP güvenlik başlıkları ve sayfalar. Secrets build loguna taşınmamalı.
+5. DB backup/restore ve eklemeli uygulama migration incelemesi. Sadece
+   npm run applications:migrate, yalnız yetkili bakım adımında; build/start'a
+   migration eklenmedi. Legacy prisma/migrations zinciri kullanılmaz.
+6. Ayrı runtime sırları, worker/purge, alarm ve anahtar kurtarmayı doğrula.
+7. Sentetik Hizmet -> Hesaplayıcı -> Başvuru -> transaction/ref -> yalnız
+   referanslı operasyon e-postasının alıcıya teslimi, retry ve silme kanıtlarını al.
+8. Gerçek controller/metin/saklama/aktarımı onayla; ancak bundan sonra açık
+   yetkiyle APPLICATION_ACCEPTING_SUBMISSIONS=true ve ayrı yayın kararı.
+
+Yerel doğrulama
+Yeni intake kapısı için mock storage ile test: kapalıyken storage 0 çağrı;
+yalnız true ile açılır; sentetik local mod korunur; politika kapalıyken 503.
+application-intake, contact, application-validation, production-preflight:
+dört test dosyası sıralı PASS. ESLint değişen config/API/build/test dosyalarında
+PASS. Ağır build/Chromium/tam SEO veya gerçek DB/SMTP testi başlatılmadı.
+Son kontrol: JSON taslağı parse ve 1200x630 PNG boyutları PASS; görsel üretimi,
+build betiği dahil ESLint ve git diff --check PASS. Oturum sonunda kullanılabilir
+RAM yaklaşık 569–751 MiB, PSI some avg10 yaklaşık %7'ye yükseldi. Ek test/build
+başlatılmadı; bellek baskısının kaynağı sandbox süreç görünürlüğüyle belirlenmedi.
+Önceki Paket 1–5 kanıtları korundu; yeni üretim doğrulaması sayılmadı.
+
+Kaynaklar
+https://render.com/docs/deploy-nextjs-app
+https://render.com/docs/web-services
+https://render.com/docs/free
+https://render.com/docs/cronjobs
+https://render.com/docs/postgresql-creating-connecting
+https://render.com/docs/blueprint-spec
+https://render.com/docs/configure-environment-variables
+https://render.com/pricing
+https://github.com/render-examples/sim-on-render (resmî örnek maliyet tablosu)
+
+Commit/push/deploy, Render değişikliği, WSL restart veya başka proje/süreç
+müdahalesi yok. Gerçek kişisel veri ve gerçek e-posta gönderimi kullanılmadı.

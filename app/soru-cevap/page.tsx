@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 
 export const metadata: Metadata = {
+  robots: { index: false, follow: true },
   title: "Soru & Cevap",
   description:
     "Kredi notu, limit artırma, başvuru süreci ve bankacılık değerlendirmeleri hakkında sık sorulan sorular ve net cevaplar.",
@@ -34,12 +36,12 @@ export default function QaSoon() {
       </p>
 
       <div className="mt-6">
-        <a
+        <Link
           href="/rehber"
           className="inline-flex items-center rounded-lg px-4 py-2 border"
         >
           Kredi Rehberi’ne git →
-        </a>
+        </Link>
       </div>
     </main>
   );

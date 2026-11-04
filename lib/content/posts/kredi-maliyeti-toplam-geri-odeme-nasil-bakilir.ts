@@ -13,7 +13,7 @@ export const krediMaliyetiToplamGeriOdemeNasilBakilir: Post = {
   icon: "info",
 
   intro:
-    "Kısa cevap: Bir kredinin gerçek maliyeti faiz oranı değil, toplam geri ödeme tutarıdır. Doğru karar için tüm kalemler birlikte değerlendirilmelidir.",
+    "Kısa cevap: Aynı tutar ve vade için toplam geri ödemeyi, yıllık maliyet oranını ve sözleşme öncesi bilgi formundaki kalemleri birlikte karşılaştırın. Tek bir faiz oranı bütün maliyeti açıklamaz.",
 
   criticalPoints: [
     "Faiz oranı tek başına yeterli değildir",
@@ -71,9 +71,9 @@ export const krediMaliyetiToplamGeriOdemeNasilBakilir: Post = {
       items: [
         "Faiz oranı",
         "Vade süresi",
-        "Dosya masrafı ve tahsis ücretleri",
+        "Mevzuata uygun kredi tahsis ücreti",
         "Hayat sigortası ve diğer sigortalar",
-        "Ek komisyon ve hizmet ücretleri",
+        "Bilgi formunda gösterilen, hukuken alınabilecek diğer maliyet kalemleri",
       ],
     },
 
@@ -89,7 +89,7 @@ export const krediMaliyetiToplamGeriOdemeNasilBakilir: Post = {
     {
       type: "p",
       text:
-        "Uzun vadeli kredilerde taksit düşer ama toplam maliyet artar.",
+        "Diğer koşullar aynı kaldığında vadenin uzaması taksiti düşürebilir ve toplam faiz yükünü artırabilir. Farklı teklifler aynı tutar ve vade üzerinden karşılaştırılmalıdır.",
     },
 
     {
@@ -113,7 +113,7 @@ export const krediMaliyetiToplamGeriOdemeNasilBakilir: Post = {
     {
       type: "p",
       text:
-        "Bazı kredilerde erken kapama veya ara ödeme durumunda ek maliyet oluşabilir.",
+        "Erken ödeme kuralları ürün türüne göre ayrılır. Ticaret Bakanlığı, tüketici kredilerinde erken ödeme halinde ilgili faiz ve maliyet unsurlarında gerekli indirimin yapılacağını açıklar; konut finansmanı ayrı kurallara tabidir.",
     },
     {
       type: "p",

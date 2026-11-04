@@ -10,12 +10,15 @@ export type RateData = {
 };
 
 const FALLBACK_RATES: RateData[] = [
-  { name: "USD/TRY", value: "34.52", change: 0, symbol: "₺" },
-  { name: "EUR/TRY", value: "36.18", change: 0, symbol: "₺" },
-  { name: "ALTIN", value: "2350.00", change: 0, symbol: "₺" },
+  { name: "USD/TRY", value: "—", change: 0, symbol: "" },
+  { name: "EUR/TRY", value: "—", change: 0, symbol: "" },
+  { name: "ALTIN", value: "—", change: 0, symbol: "" },
 ];
 
-function safeRates(json: any): RateData[] | null {
+export function safeRates(json: any): RateData[] | null {
+  // Legacy fallback prices have no verified observation date/source.
+  if (typeof json?.asOf !== "string" || !Number.isFinite(Date.parse(json.asOf)) ||
+      typeof json?.sourceUrl !== "string" || !/^https:\/\/(www\.)?(tcmb\.gov\.tr|borsaistanbul\.com)\//.test(json.sourceUrl)) return null;
   const arr = json?.rates;
   if (!Array.isArray(arr)) return null;
 
@@ -74,6 +77,7 @@ export default function FinanceBanner({
     let alive = true;
 
     async function load() {
+      try {
       const { ok, json } = await fetchJson(endpoint, 5500);
       const parsed = safeRates(json);
 
@@ -81,6 +85,7 @@ export default function FinanceBanner({
 
       if (ok && parsed) setRates(parsed);
       else setRates(FALLBACK_RATES);
+      } catch { if (alive) setRates(FALLBACK_RATES); }
     }
 
     load();
@@ -92,6 +97,7 @@ export default function FinanceBanner({
   }, [endpoint, refreshMs]);
 
   const items = useMemo(() => rates, [rates]);
+  if (items === FALLBACK_RATES) return <div className="ef-market-notice"><span>ŞEFFAF BİLGİLENDİRME</span>Canlı piyasa verisi yayınlanmıyor. Hesaplayıcılardaki oranlar varsayımsaldır.</div>;
 
   return (
     <div className="w-full border-b bg-white/60 backdrop-blur">
@@ -104,7 +110,7 @@ export default function FinanceBanner({
                 PİYASA
               </span>
               <span className="hidden text-[11px] text-slate-500 sm:inline">
-                Güncel veriler
+                Kaynak ve veri tarihi doğrulanmadan fiyat yayımlanmaz
               </span>
             </div>
 

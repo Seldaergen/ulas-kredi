@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Gizlilik Politikası | Ulaş Kredi Danışmanlık",
+  ...pageMetadata("Gizlilik Politikası", "Veri işleme, güvenlik, üçüncü taraf bağlantılar ve iletişim hakkında gizlilik politikası.", "/gizlilik"),
+  title: { absolute: "Gizlilik Politikası | Ulaş Kredi" },
   description:
     "Gizlilik politikası: veri işleme, güvenlik, üçüncü taraf bağlantılar ve iletişim.",
 };

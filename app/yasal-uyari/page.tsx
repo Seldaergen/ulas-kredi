@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Yasal Uyarı | Ulaş Kredi Danışmanlık",
+  ...pageMetadata("Yasal Uyarı", "Bilgilendirme niteliği, kredi onayı garantisi verilmemesi ve sorumluluk sınırları.", "/yasal-uyari"),
+  title: { absolute: "Yasal Uyarı | Ulaş Kredi" },
   description:
     "Yasal uyarı: bilgilendirme niteliği, garanti verilmemesi ve sorumluluk sınırı.",
 };

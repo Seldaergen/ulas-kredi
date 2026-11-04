@@ -1,8 +1,9 @@
 // components/videos/VideosClient.tsx
 "use client";
 
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState } from "react";
 import Image from "next/image";
+import { PageHeader } from "@/components/inner-page";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
@@ -50,7 +51,7 @@ export default function VideosClient({ initialVideos }: { initialVideos: VideoIt
   const router = useRouter();
   const sp = useSearchParams();
 
-  const videos = Array.isArray(initialVideos) ? initialVideos : [];
+  const videos = useMemo(() => (Array.isArray(initialVideos) ? initialVideos : []), [initialVideos]);
 
   // URL paramları
   const urlTopic = sp.get("topic");
@@ -61,6 +62,15 @@ export default function VideosClient({ initialVideos }: { initialVideos: VideoIt
   const [q, setQ] = useState(urlQ);
   const [topic, setTopic] = useState<TopicId | null>(isTopicId(urlTopic) ? urlTopic : null);
   const [onlyShorts, setOnlyShorts] = useState<boolean>(urlShorts);
+  const [previousUrl, setPreviousUrl] = useState({ topic: urlTopic, q: urlQ, shorts: urlShorts });
+
+  // Reconcile only changed URL fields, preserving optimistic local edits.
+  if (previousUrl.topic !== urlTopic || previousUrl.q !== urlQ || previousUrl.shorts !== urlShorts) {
+    setPreviousUrl({ topic: urlTopic, q: urlQ, shorts: urlShorts });
+    if (previousUrl.topic !== urlTopic) setTopic(isTopicId(urlTopic) ? urlTopic : null);
+    if (previousUrl.q !== urlQ) setQ(urlQ);
+    if (previousUrl.shorts !== urlShorts) setOnlyShorts(urlShorts);
+  }
 
   // Gelişmiş (opsiyonel)
   const [advancedOpen, setAdvancedOpen] = useState(false);
@@ -71,13 +81,6 @@ export default function VideosClient({ initialVideos }: { initialVideos: VideoIt
   const openVideo = useMemo(() => videos.find((v) => v.id === openId) ?? null, [videos, openId]);
 
   const TAGS = useMemo(() => buildTags(videos), [videos]);
-
-  useEffect(() => {
-    setTopic(isTopicId(urlTopic) ? urlTopic : null);
-  }, [urlTopic]);
-
-  useEffect(() => setQ(urlQ), [urlQ]);
-  useEffect(() => setOnlyShorts(urlShorts), [urlShorts]);
 
   function setParam(key: string, value?: string) {
     const params = new URLSearchParams(sp.toString());
@@ -129,28 +132,19 @@ export default function VideosClient({ initialVideos }: { initialVideos: VideoIt
   const showcase = useMemo(() => filtered.slice(0, 6), [filtered]);
 
   return (
-    <section className="mx-auto w-full max-w-6xl px-4 py-8 md:py-10">
+    <section className="ef-inner ef-videos-page ef-wrap">
+      <PageHeader eyebrow="VİDEO ARŞİVİ" title="Kredi sürecini izleyerek öğrenin." description="Başvuru ve finansal değerlendirme konularını video anlatımlarla keşfedin. Anlatımlar genel bilgilendirmedir; kişisel kredi sonucu veya güncel teklif değildir." action="Sorunuzu danışmana iletin" />
+      {initialVideos.length === 0 && <div className="ef-empty"><h2>Video arşivi şu anda yüklenemiyor.</h2><p>Bu sırada kaynakları belirtilen yazılı rehberleri okuyabilir veya kanalımızı ziyaret edebilirsiniz.</p><Link className="ef-text-link" href="/rehber">Yazılı rehberleri inceleyin →</Link><a className="ef-text-link" href="https://www.youtube.com/@danismanerdiergen" target="_blank" rel="noreferrer">YouTube kanalını açın ↗</a></div>}
       {/* ✅ TEK HERO (Kısa) */}
-      <div className="relative overflow-hidden rounded-3xl border bg-white/75 p-6 shadow-sm backdrop-blur md:p-8">
+      <div hidden={initialVideos.length === 0} className="ef-video-controls relative overflow-hidden rounded-3xl border bg-white/75 p-6 shadow-sm backdrop-blur md:p-8">
         <div className="pointer-events-none absolute inset-0">
           <div className="absolute -top-24 -right-24 h-72 w-72 rounded-full bg-sky-400/10 blur-3xl" />
           <div className="absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-primary/10 blur-3xl" />
         </div>
 
         <div className="relative">
-          <div className="text-xs font-semibold tracking-wide text-slate-500">
-            VİDEOLAR
-          </div>
-
           <div className="mt-1 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
             <div className="min-w-0">
-              <h1 className="text-2xl font-extrabold tracking-tight text-slate-900 md:text-3xl">
-                Kredi Videoları
-              </h1>
-              <p className="mt-1 max-w-2xl text-sm text-slate-600">
-                Kısa, net ve pratik anlatım. İstersen sitede izle, istersen YouTube’da aç.
-              </p>
-
               {activeTopicObj ? (
                 <p className="mt-2 text-sm text-slate-600">
                   Seçili konu: <b>{activeTopicObj.title}</b> — {activeTopicObj.summary}
@@ -196,12 +190,13 @@ export default function VideosClient({ initialVideos }: { initialVideos: VideoIt
                   setQ(val);
                   setParam("q", val.trim() ? val : "");
                 }}
+                aria-label="Videolarda ara"
                 placeholder="Video ara (ör: kredi notu, limit, başvuru...)"
                 className="h-11 w-full rounded-2xl border border-slate-200 bg-white pl-10 pr-3 text-sm text-slate-900 outline-none placeholder:text-slate-400 focus:ring-2 focus:ring-slate-200"
               />
             </div>
 
-            <select
+            <select aria-label="Video konusu"
               value={topic ?? ""}
               onChange={(e) => {
                 const v = e.target.value || "";
@@ -270,7 +265,7 @@ export default function VideosClient({ initialVideos }: { initialVideos: VideoIt
       </div>
 
       {/* ✅ Vitrin (ana sayfa gibi): ilk 6 video */}
-      <div className="mt-6">
+      <div className="mt-6" hidden={showcase.length === 0}>
         <div className="mb-3 flex items-end justify-between gap-3">
           <div>
             <div className="text-xs font-semibold tracking-wide text-slate-500">VİTRİN</div>
@@ -332,7 +327,7 @@ export default function VideosClient({ initialVideos }: { initialVideos: VideoIt
       </div>
 
       {/* ✅ Arşiv listesi (hero ile çakışmasın diye sade) */}
-      <div className="mt-8">
+      <div className="mt-8" hidden={initialVideos.length === 0}>
         <div className="mb-3 flex items-end justify-between gap-3">
           <div>
             <div className="text-xs font-semibold tracking-wide text-slate-500">ARŞİV</div>

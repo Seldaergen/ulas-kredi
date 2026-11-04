@@ -3,10 +3,10 @@ import { BadgeCheck, Fingerprint, ShieldCheck, Zap } from "lucide-react";
 
 const WHY_US_ITEMS = [
   {
-    title: "13+ yıllık kredi deneyimi",
+    title: "Kredi sürecinde rehberlik",
     description:
-      "İhtiyaç, konut, taşıt ve ticari kredilerde binlerce dosya analizi. Düşük puan, red geçmişi ve yüksek limit taleplerine odaklı gerçek saha tecrübesi.",
-    meta: "Binlerce dosya • Çoklu kredi türü",
+      "İhtiyaç, konut ve taşıt kredisi taleplerinde dosya hazırlığı ve süreç hakkında bilgilendirme. Sonuç ilgili finans kuruluşunun değerlendirmesine bağlıdır.",
+    meta: "Dosya hazırlığı • Süreç rehberliği",
     icon: BadgeCheck,
   },
   {
@@ -26,8 +26,8 @@ const WHY_US_ITEMS = [
   {
     title: "Hızlı ön analiz ve süreç takibi",
     description:
-      "Form sonrası aynı gün içinde ön değerlendirme yaparak geri dönüş sağlıyoruz. Banka başvurusu öncesi ve sonrası adımları birlikte takip ediyoruz.",
-    meta: "Aynı gün dönüş • Adım adım takip",
+      "Form sonrası talebinizin kapsamına göre iletişim kurulur. Banka başvurusu öncesi ve sonrası adımları birlikte değerlendirebiliriz; kesin süre taahhüt edilmez.",
+    meta: "İletişim • Adım adım takip",
     icon: Zap,
   },
 ] as const;

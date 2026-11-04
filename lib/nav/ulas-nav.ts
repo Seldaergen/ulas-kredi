@@ -11,7 +11,7 @@ export const NAV_LINKS: NavLink[] = [
   { href: "/", label: "Ana Sayfa" },
   { href: "/rehber", label: "Kredi Rehberi" },
   { href: "/hizmetler", label: "Hizmetlerimiz" },
-  { href: "/#videolar", label: "Videolar" },
+  { href: "/videolar", label: "Videolar" },
   { href: "/iletisim", label: "İletişim" },
 ];
 
@@ -19,20 +19,20 @@ export const DESKTOP_MAIN = [
   { href: "/", label: "Ana Sayfa", type: "link" as const },
   { href: "/rehber", label: "Kredi Rehberi", type: "dropdown" as const },
   { href: "/hizmetler", label: "Hizmetlerimiz", type: "link" as const },
-  { href: "/#videolar", label: "Videolar", type: "link" as const },
+  { href: "/videolar", label: "Videolar", type: "link" as const },
   { href: "/iletisim", label: "İletişim", type: "link" as const },
 ];
 
 export const REHBER_DROPDOWN: RehberItem[] = [
   { href: "/rehber", label: "Kredi Rehberi Ana Sayfa", desc: "Tüm konuların merkezi" },
-  { href: "/rehber#kredi-notu", label: "Kredi Notu", desc: "Not, yükseltme, süre" },
-  { href: "/rehber#kredi-kartlari", label: "Kredi Kartları", desc: "Limit, borç, strateji" },
-  { href: "/rehber#ihtiyac-kredisi", label: "İhtiyaç Kredisi", desc: "Vade, taksit, başvuru" },
-  { href: "/rehber#konut-kredisi", label: "Konut Kredisi", desc: "Faiz, süreç, evraklar" },
-  { href: "/rehber#tasit-kredisi", label: "Taşıt Kredisi", desc: "Taşıt finansmanı rehberi" },
-  { href: "/rehber#yapilandirma", label: "Yapılandırma", desc: "Borç planı, taksit" },
-  { href: "/rehber#sicil-kara-liste", label: "Sicil / Kara Liste", desc: "Süreç, etkiler, doğru adımlar" },
-  { href: "/rehber#banka-politikalari", label: "Banka Politikaları", desc: "Değerlendirme mantığı" },
+  { href: "/rehber?topic=kredi-notu", label: "Kredi Notu", desc: "Not ve değerlendirme" },
+  { href: "/rehber?topic=kredi-karti", label: "Kredi Kartları", desc: "Kart ve borç yönetimi" },
+  { href: "/rehber?topic=kredi-basvurusu", label: "İhtiyaç Kredisi", desc: "Başvuru hazırlığı" },
+  { href: "/hizmetler", label: "Konut Kredisi", desc: "Danışmanlık hizmetleri" },
+  { href: "/hizmetler", label: "Taşıt Kredisi", desc: "Danışmanlık hizmetleri" },
+  { href: "/rehber?topic=yapilandirma", label: "Yapılandırma", desc: "Borç planı ve hazırlık" },
+  { href: "/rehber?topic=kirmizi-kalem", label: "Sicil / Kara Liste", desc: "Risk değerlendirmesi" },
+  { href: "/rehber?topic=banka", label: "Banka Politikaları", desc: "Değerlendirme mantığı" },
   { href: "/nasil-calisir", label: "Süreç & Yol Haritası", desc: "Nasıl ilerliyoruz?" },
 ];
 
@@ -72,5 +72,5 @@ export const MOBILE_BOTTOM_ITEMS: {
   { href: "/", label: "Ana Sayfa", icon: Home },
   { href: "/rehber", label: "Rehber", icon: BookOpen },
   { href: "/nasil-calisir", label: "Süreç", icon: Route },
-  { href: "/iletisim", label: "İletişim", icon: PhoneCall },
+  { href: "/iletisim", label: "Başvuru", icon: PhoneCall },
 ];

@@ -82,3 +82,105 @@ enum VoteValue {
   LIKE
   DISLIKE
 }
+
+enum ApplicationStatus {
+  NEW
+  CONTACT_PENDING
+  CONTACTED
+  IN_REVIEW
+  CLOSED
+}
+
+enum SubmissionChannel {
+  HERO_FORM
+  CONTACT_FORM
+}
+
+enum NotificationState {
+  PENDING
+  SENDING
+  RETRY
+  SENT
+  DEAD
+  CANCELLED
+}
+
+enum NotificationAttemptStatus {
+  STARTED
+  SUCCEEDED
+  FAILED
+  UNKNOWN
+}
+
+model Application {
+  id                String             @id @default(uuid())
+  reference         String             @unique
+  status            ApplicationStatus  @default(NEW)
+  channel           SubmissionChannel
+  topic             String
+  encryptedPayload  String?
+  idempotencyHash   String?            @unique
+  payloadHash       String?
+  privacyVersion    String
+  acknowledgedAt    DateTime
+  retentionUntil    DateTime
+  erasedAt          DateTime?
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  events            ApplicationEvent[]
+  notification      ApplicationNotification?
+
+  @@index([status, createdAt])
+  @@index([retentionUntil, erasedAt])
+}
+
+model ApplicationEvent {
+  id              String      @id @default(uuid())
+  applicationId   String
+  kind            String
+  actor           String
+  fromStatus      ApplicationStatus?
+  toStatus        ApplicationStatus?
+  createdAt       DateTime    @default(now())
+  application     Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+
+  @@index([applicationId, createdAt])
+}
+
+model ApplicationNotification {
+  id              String              @id @default(uuid())
+  applicationId   String              @unique
+  state           NotificationState   @default(PENDING)
+  attemptCount    Int                 @default(0)
+  maxAttempts     Int                 @default(5)
+  nextAttemptAt   DateTime            @default(now())
+  leaseUntil      DateTime?
+  leaseToken      String?
+  sentAt          DateTime?
+  application     Application         @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  attempts        NotificationAttempt[]
+
+  @@index([state, nextAttemptAt])
+}
+
+model NotificationAttempt {
+  id                String                    @id @default(uuid())
+  notificationId    String
+  number            Int
+  status            NotificationAttemptStatus @default(STARTED)
+  errorCode         String?
+  messageId         String
+  startedAt         DateTime                  @default(now())
+  finishedAt        DateTime?
+  notification      ApplicationNotification   @relation(fields: [notificationId], references: [id], onDelete: Cascade)
+
+  @@unique([notificationId, number])
+}
+
+model SubmissionRateBucket {
+  key         String   @id
+  count       Int      @default(1)
+  expiresAt   DateTime
+
+  @@index([expiresAt])
+}

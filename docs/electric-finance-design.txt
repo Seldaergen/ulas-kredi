@@ -1,0 +1,69 @@
+ELECTRIC FINANCE — PAKET 4
+
+Görsel sistem
+Light: açık beyaz/mavi yüzeyler, #1759e8 ana eylem rengi, koyu lacivert metin.
+Dark: #070d18 zemin, #101c2e yüzey, #edf4ff ana metin, #b0c1db yardımcı metin,
+elektrik mavisi ve camgöbeği vurgular. Renkler app/globals.css içinde semantik
+CSS değişkenleri ve Tailwind @theme inline üzerinden bütün rotalarda paylaşılır.
+Mevcut sabit renkli servis/rehber bileşenleri için dark uyumluluk kuralları vardır.
+Tema: next-themes, data-theme, varsayılan sistem; tercih localStorage üzerinden
+korunur. Ön içerik script'i ilk boyamadan önce temayı belirler. Düğme hydration
+durumu useSyncExternalStore ile eşitlenir. Üç ayrı klavye erişilebilir seçim vardır.
+
+Ana sayfa
+Tipografik hero, statik kontrollü ışık/yörünge ve tek geçişli SVG çizgisi.
+Kampanya/Bugün şeridi statik rehber bağlantısıyla değiştirildi. Doğrulanmış
+piyasa verisi olmadığında dönen boş fiyatlar yerine açık bir veri yok açıklaması
+gösterilir; ağ hatası da bu güvenli görünüme döner.
+Görsel bir finansal performans verisi değildir; süreç şeması olduğu açıklanır.
+Başvuru ve hesaplama çağrıları, açıklanan süreç ve mevcut rehber bağlantısı korunur.
+Hero başvuru formu mevcut HERO_FORM kanalını ve Paket 3 kayıt akışını kullanır.
+İletişim formu aynı ortak bileşeni kullanır; yeni API veya veri modeli getirilmedi.
+Başarı yalnız sunucunun doğruladığı kayıt/referans sonucunda gösterilir.
+
+Hesaplayıcılar
+Sabit aylık faizli eşit taksit formülü:
+P * r / (1 - (1+r)^(-n)); sıfır faiz için P/n.
+Küçük faizlerde hassasiyet için log1p/expm1 kullanılır. Vergi, sigorta ve ücretler
+hariçtir; varsayımsal oran güncel piyasa verisi veya banka teklifi değildir.
+Girdi sınırları: tutar 1..10.000.000 TL, aylık oran 0..20%, vade tam sayı 1..360.
+Boş, sonlu olmayan, negatif veya sınır dışı girdiler sonuç üretmez.
+Bütçe aracı gelir eksi borç ve borç/gelir oranını gösterir; negatif kalan görünür.
+Eski doğrulanmamış 10/12/14 kredi limiti katsayıları kaldırılmıştır.
+Girdiler sunucuya gönderilmez. Sonuçtan mevcut iletişim başvurusuna bağlantı vardır.
+
+Editoryal bölüm
+Yalnız PUBLISHED_POSTS kullanılır; altı rehber yatay kaydırmalı alanda gösterilir.
+Başlık/özet/tarih kaynak kaydından, kaynak adları mevcut publication() modelinden
+alınır. Yeni haber, fiyat, tarih veya başarı iddiası üretilmez. Bölüm canlı haber
+akışı olmadığını açıkça belirtir. 57 rehberin yayın durumu değiştirilmemiştir.
+
+Erişilebilirlik ve mobil
+360, 390, 430 px ve 1440 px gerçek Chromium kontrolleri hazırlanmıştır.
+Görünüm düğmeleri, mobil menü Escape davranışı, kalıcı Başvuru alt bağlantısı,
+klavye ile tema seçimi, yatay taşma, hesaplayıcı etiketleri/sınırları kontrol edilir.
+Mobil tema düğmelerinin her biri en az 44 x 44 piksel dokunma alanına sahiptir.
+Reduced-motion CSS animasyonlarını kapatır; video vitrininin otomatik ilerlemesi
+de durur. Varsayılan video etkileşimleri Paket 1 regresyon testleriyle korunur.
+Tekrarlanan ana sayfa FloatingAction kaldırıldı; bileşen ve masaüstü erişimi
+korundu. Mobilde sabit alt menü varken yüzen kontrol gösterilmez.
+
+Doğrulama
+npm run typecheck
+npm run lint
+npm test
+npm run build
+npm run test:applications
+npm run verify:routes
+npm run verify:seo
+test:applications gerçek izole PostgreSQL ve yerel SMTP üzerinden mevcut kayıt
+testlerini, ardından scripts/verify-appearance.mjs görsel kontrollerini çalıştırır.
+Ekran görüntüleri artifacts/package4/screenshots altında oluşur; görünen veri
+sorumlusu ve saklama süresi sentetik test konfigürasyonudur, üretim ayarı değildir.
+Son kabul sonuçları artifacts/package4 altında saklanır.
+
+Üretim sınırı
+Commit/push/deploy, üretim DB/SMTP, orijinal proje ve yedek değişikliği yoktur.
+Paket 3'ün üretim gizli değişkenleri, operasyon ve hukuki inceleme gereksinimleri
+devam eder. Search Console kanıtı olmadan 57 noindex sayfasını üretime taşıma
+onaylanmış sayılmaz. Chromium testi Safari/iOS fiziksel cihaz doğrulaması değildir.

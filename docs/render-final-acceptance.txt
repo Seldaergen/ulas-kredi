@@ -1,0 +1,42 @@
+ULAŞ KREDİ — SON YAYIN KABULÜ / 2026-11-01
+Karar: NO-GO. Yeni özellik veya üretim değişikliği yok.
+
+Önce salt okunur bellek/süreç kontrolü yapıldı; 15 saniye sonra tekrarlandı.
+Örnek 1: 1273 MiB kullanılabilir RAM, swap 1023/1024 MiB dolu;
+PSI some avg10=3.24, avg60=2.21; full avg10=3.12, avg60=2.14.
+Örnek 2: 1577 MiB kullanılabilir RAM, swap 1023/1024 MiB dolu;
+PSI some avg10=0.19, avg60=1.42; full avg10=0.17, avg60=1.35.
+Baskı azalsa da swap tamponu yok ve son dakika beklemeleri sürüyor.
+Bu koşullarda production build başlatılmadı; .next-staging/BUILD_ID yok.
+Süreç listesi yalnız sandbox içini gösteriyor; host/diğer proje süreçleri
+hakkında tam envanter iddia edilmez. Hiçbir süreç durdurulmadı.
+
+Önceki kanıtlar yeniden kullanıldı
+Paket 5 SEO logu: 18 sitemap URL, 65 rehber/8 yayımlanmış, 93 HTML rota,
+2420 bağlantı PASS; verifier peak RSS 309 MiB. Bu değer web sunucusunun
+RSS değeri veya Render Starter kapasite kanıtı değildir.
+Paket 5 build/test/entegrasyon çıkışları başarılı; sonraki kapalı başvuru API
+testleri, fallback testleri 2/2, content publication ve ESLint başarılıdır.
+Bu kayıtlar korunmuştur; son kaynakların production/staging kabulü sayılmadı.
+
+Bu oturumda çalıştırılmayanlar
+Güncel production build, staging HTTP/kapalı mod ve tel/WhatsApp taraması,
+mobil tarayıcı kontrolü, tam güncel SEO, runtime RSS/istek yükü ölçümü.
+Hiçbiri PASS olarak işaretlenmedi.
+
+Render Starter değerlendirmesi
+Mevcut taslak start komutunda V8 heap 256 MiB ile sınırlı. Bu, toplam RSS'nin
+512 MiB içinde kalacağını garanti etmez. Yeni sürümün web runtime peak/idle
+RSS'si ölçülmedi; Starter yeterliliği henüz doğrulanmadı.
+DB/worker/cron yok; gerçek başvuru kabulü kapalı kalmalıdır.
+
+Tek sonraki işlem
+Bellek baskısı ve swap durumu normale döndüğünde mevcut yerel staging planını
+tek sıralı kabul oturumunda çalıştır: production build -> staging -> kapalı
+başvuru/telefon/WhatsApp/SEO/mobil -> Starter runtime bellek ölçümü.
+Önce tekrar salt okunur bellek kontrolü yapılmalı; şimdi build zorlanmamalı.
+Komutlar ve izolasyon: docs/render-prelaunch-final.txt.
+Bu işlem production deploy veya main push izni değildir.
+
+Commit/push/deploy, Auto-Deploy değişikliği, WSL restart, başka projelere veya
+süreçlere müdahale yapılmadı. Mevcut Render hazırlıkları ve kod korundu.

@@ -14,7 +14,7 @@ export default function FeaturedVideoStrip({
   videos: VideoItem[];
   youtubeChannelUrl: string;
 }) {
-  const list = Array.isArray(videos) ? videos.filter(Boolean).slice(0, 12) : [];
+  const list = useMemo(() => (Array.isArray(videos) ? videos.filter(Boolean).slice(0, 12) : []), [videos]);
 
   // “Haber” hissi: mümkünse Shorts ağırlıklı, yoksa ilk video
   const featuredPool = useMemo(() => {
@@ -28,10 +28,9 @@ export default function FeaturedVideoStrip({
     return list.find((v) => v.id === activeId) ?? featuredPool[0] ?? list[0] ?? null;
   }, [activeId, list, featuredPool]);
 
-  const embedSrc = useMemo(() => {
-    if (!active?.id) return "";
-    return `https://www.youtube-nocookie.com/embed/${active.id}?autoplay=1&mute=1&playsinline=1&rel=0&modestbranding=1`;
-  }, [active?.id]);
+  const embedSrc = active?.id
+    ? `https://www.youtube-nocookie.com/embed/${active.id}?autoplay=1&mute=1&playsinline=1&rel=0&modestbranding=1`
+    : "";
 
   const nextList = useMemo(() => {
     const pool = featuredPool.length ? featuredPool : list;
@@ -185,7 +184,7 @@ export default function FeaturedVideoStrip({
 
               <div className="mt-4 grid grid-cols-2 gap-3">
                 <Link
-                  href="#liste"
+                  href="/videolar"
                   className="inline-flex h-11 items-center justify-center rounded-xl bg-slate-900 px-4 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800"
                 >
                   Video listesi

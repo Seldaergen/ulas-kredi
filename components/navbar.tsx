@@ -6,6 +6,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X, ChevronRight, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ThemeControls } from "@/components/theme-controls";
 import { cn } from "@/lib/utils";
 import { FaWhatsapp } from "react-icons/fa";
 
@@ -23,6 +24,12 @@ export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
 
   const [openDropdown, setOpenDropdown] = useState<null | "rehber">(null);
+  const [previousPathname, setPreviousPathname] = useState(pathname);
+  if (previousPathname !== pathname) {
+    setPreviousPathname(pathname);
+    setIsOpen(false);
+    setOpenDropdown(null);
+  }
   const dropdownCloseTimer = useRef<number | null>(null);
 
   useEffect(() => {
@@ -30,11 +37,6 @@ export function Navbar() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
-
-  useEffect(() => {
-    setIsOpen(false);
-    setOpenDropdown(null);
-  }, [pathname]);
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
@@ -125,7 +127,7 @@ export function Navbar() {
                       const active2 = isActivePath(pathname, it.href);
                       return (
                         <Link
-                          key={it.href}
+                          key={it.label}
                           href={it.href}
                           role="menuitem"
                           className={cn(
@@ -250,14 +252,15 @@ export function Navbar() {
             </div>
 
             {/* Desktop links (XL+) */}
-            <div className="hidden xl:flex xl:items-center xl:gap-1">
+            <div className="ef-desktop-links hidden xl:flex xl:items-center xl:gap-1 whitespace-nowrap">
               {desktopLinks}
             </div>
 
             {/* Right */}
             <div className="flex items-center gap-2 shrink-0">
+              <ThemeControls />
               {/* Social icons (XL+) */}
-              <div className="hidden xl:flex items-center gap-1.5 mr-1">
+              <div className="hidden 2xl:flex items-center gap-1.5 mr-1">
                 {SOCIAL_LINKS.slice(0, 3).map((item) => {
                   const Icon = item.icon;
                   return (
@@ -424,7 +427,7 @@ export function Navbar() {
                   <div className="mt-2 space-y-1">
                     {REHBER_DROPDOWN.map((it) => (
                       <Link
-                        key={it.href}
+                        key={it.label}
                         href={it.href}
                         onClick={() => {
                           setIsOpen(false);

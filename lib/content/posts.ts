@@ -1,6 +1,7 @@
 // lib/content/posts.ts
 import { POSTS_NEW } from "./posts.index";
 import type { TopicId } from "@/lib/topics/topics";
+import { publication } from "./publication";
 
 export type PostCategory =
   | "Kredi Notu"
@@ -51,6 +52,7 @@ export type Post = {
 const POSTS_LEGACY: Post[] = [];
 
 export const POSTS: Post[] = [...POSTS_LEGACY, ...POSTS_NEW];
+export const PUBLISHED_POSTS = POSTS.filter(post => publication(post).status === "published");
 
 export function getPost(slug: string) {
   return POSTS.find((p) => p.slug === slug) ?? null;

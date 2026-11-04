@@ -1,0 +1,50 @@
+name: Electric Finance release acceptance
+on:
+  push:
+    branches: ['release/electric-finance-contact-only-*']
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+concurrency:
+  group: release-acceptance-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  acceptance:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      NEXT_TELEMETRY_DISABLED: '1'
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          package-manager-cache: false
+      - name: Production build using the Render entry point
+        run: |
+          mkdir -p artifacts/release-acceptance
+          set -o pipefail
+          node scripts/render-build.mjs web 2>&1 | tee artifacts/release-acceptance/build.log
+          test -s .next/BUILD_ID
+      - name: Static checks and sequential unit tests
+        run: |
+          npm run lint
+          node --test --test-concurrency=1 tests/*.test.mjs
+      - name: Install Chromium for isolated acceptance
+        run: npx playwright install --with-deps chromium
+      - name: Contact-only HTTP, publication, browser and runtime acceptance
+        run: |
+          set -o pipefail
+          node scripts/verify-release.cjs 2>&1 | tee artifacts/release-acceptance/acceptance.log
+      - name: Preserve acceptance evidence
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: release-acceptance-${{ github.sha }}
+          path: artifacts/release-acceptance/
+          retention-days: 14
+          if-no-files-found: error

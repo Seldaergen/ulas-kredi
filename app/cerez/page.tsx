@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Çerez Politikası | Ulaş Kredi Danışmanlık",
+  ...pageMetadata("Çerez Politikası", "Kullanılan çerez türleri ve tercihler hakkında bilgilendirme.", "/cerez"),
+  title: { absolute: "Çerez Politikası | Ulaş Kredi" },
   description:
     "Çerez politikası: kullanılan çerez türleri ve tercihler hakkında bilgilendirme.",
 };

@@ -1,0 +1,118 @@
+ULAŞ KREDİ — RENDER YAYIN ÖNCESİ SON HAZIRLIK
+2026-11-01 — Üretim yayını NO-GO; iletişim odaklı sürüm kaynakları hazırlandı.
+Bu rapor önceki Render raporlarındaki bilinmeyen altyapı bilgilerini günceller.
+
+Kullanıcı tarafından doğrulanan mevcut altyapı
+Servis ulas-kredi, Starter, Frankfurt; GitHub Seldaergen/ulas-kredi;
+canlı main / 5a76973; Auto-Deploy On Commit. PostgreSQL, worker ve cron yok.
+Bu bilgiler panel API'siyle yeniden okunmadı; kullanıcı kanıtı esas alındı.
+Panelin mevcut build/start komutları verilmedi; aşağıdakiler hedef komutlardır.
+Panel, domain, Auto-Deploy, main ve canlı site üzerinde işlem yapılmadı.
+deploy/render/service-settings.example.json yeni doğrulanmış bilgileri içerir;
+Auto-Deploy taslağı da mevcut commit değerini korur. Taslak uygulanmadı.
+
+Yayınlanabilir kaynak kapsamı
+Electric Finance ana sayfa, hizmetler, süreç, hesaplayıcılar, mevcut onaylı
+rehberler, video sayfası, temalar ve mevcut doğrudan iletişim bağlantıları.
+Hizmet -> /#hesaplama -> #iletisim veya /iletisim -> telefon/WhatsApp.
+Hesaplayıcı verileri başvuruya veya WhatsApp'a otomatik taşınmaz.
+Bu kapsamın yeni production build/browser kabulü henüz tamamlanmadı.
+
+Başvuru kapalıyken düzeltilen kullanıcı akışı
+Hero #basvuru, iletişim #iletisim-form ve iç sayfa CTA'ları mevcut bağlantı
+hedeflerini koruyarak doğrudan iletişim seçeneklerine ulaştırılır. Genel CTA
+ve metinlerdeki kesin kayıt/referans vaatleri kaldırıldı; danışmanla görüşme
+ifadesi kullanılır. İletişim sayfası metadata'sı da aynı kapsama getirildi.
+Politika doğrulanmadan ve hizmet kapalıyken kişisel veri alanları gizli ve
+fieldset seviyesinde disabled; çevrimiçi kayıt kapalı mesajı gösterilir.
+Başlangıç kontrolü sürerken de alanlar kapalı ve iletişim seçenekleri görünür.
+Mevcut repo bilgileri: tel:+905416061356 / 0 541 606 13 56 ve
+https://wa.me/905416061356. Numara/adres üretilmedi; otomatik mesaj/query
+parametresine kişisel veri eklenmedi. WhatsApp dış hizmet olarak açıklanır;
+telefon/WhatsApp görüşmesi sitede kayıt veya takip numarası oluşturmaz.
+Mobil alt menüdeki Başvuru bağlantısı da aynı iletişim sayfasına gider;
+çalışmayan kayıt gönderimi yerine açık kapalı-mod bilgisi ve alternatif sunar.
+
+Backend koruması
+APPLICATION_ACCEPTING_SUBMISSIONS false/boşken politika 503 enabled:false;
+geçerli gönderim storage çağrısına ulaşmadan 503 olur. Başvuru kabulü ileride
+true olsa dahi gerçek DB ve geçerli şifreleme/retention/controller ayarları
+olmadan applicationConfig güvenli biçimde hata verir; sahte başarı yoktur.
+Yerel sentetik test bypass'ı APPLICATION_ALLOW_LOCAL=true üretimde kullanılmaz.
+DB/bildirim/saklama/hukuki koşullar doğrulanmadan kapı açılmaz. DB yokken
+dummy URL/anahtar/controller girilmez. Worker/cron oluşturulmadı.
+
+Kesinleştirilen hedef Render ayarları
+Servis/plan/bölge/repo/branch/domain ve On Commit AYNI KALIR; değiştirilmedi.
+NODE_VERSION=24.22.1; .nvmrc ve package.json engines ile aynı. Proje içinde
+.tooling/node-v24.22.1-linux-x64/bin/node gerçekten çalıştırıldı: v24.22.1.
+Build: node scripts/render-build.mjs web
+Start: node --max-old-space-size=256 node_modules/next/dist/bin/next start --hostname 0.0.0.0 --port $PORT
+Health: /api/health (liveness; DB/bildirim kabul kanıtı değildir).
+NODE_ENV=production, NEXT_TELEMETRY_DISABLED=1,
+APPLICATION_ACCEPTING_SUBMISSIONS=false, APPLICATION_ALLOW_LOCAL=false.
+Üretimde ELECTRIC_FINANCE_STAGING boş/false kalır.
+Build script gerekli bağımlılıklar, açık uygulama Prisma generate ve mevcut
+SVG'den PNG üretimi ardından next build yapar. Migration/build sırasında
+gerçek DB işlemi veya bildirim yoktur. Servis sırları build çocuk süreçlerine
+geçirilmez; child PATH çalışan pinli Node diziniyle başlar.
+
+Starter değerlendirmesi
+SSR/API için Node web service gerekir; static export uygun değildir.
+DB/worker olmadan iletişim odaklı web servisi mevcut mimariyle uyumludur.
+256 MiB V8 heap sınırı toplam RSS için 512 MiB sınırı anlamına gelmez.
+Mevcut sürümün Starter'da çalışması yeni sürümün bellek kabulü değildir.
+Bu oturumda WSL kullanılabilir RAM yaklaşık 334 MiB'ye düştü; sonradan yaklaşık
+1 GiB'ye çıksa da swap neredeyse dolu ve PSI son 60 saniye baskısı sürdü.
+Bu nedenle yeni production build ve kontrollü runtime RSS/yük ölçümü başlatılmadı.
+Starter çalışma kabulü BEKLEMEDE; başarı iddia edilmez. Render build ortamı
+ile web runtime belleği ayrı değerlendirilir; kapasite denemesi canlıda yapılmaz.
+
+Ücretsiz, yerel ve izole staging yaklaşımı (hazırlandığı hâliyle)
+Yeni Render servisi oluşturma/deploy yok; Render preview bile ayrıca deploy
+ve maliyet doğurabileceğinden bu görevde kullanılmaz. main'e push yok.
+Bellek baskısı bittikten ve yeterli boş bellek sağlandıktan sonra TEK build:
+ELECTRIC_FINANCE_STAGING=true .tooling/node-v24.22.1-linux-x64/bin/node scripts/render-build.mjs web
+Bu komut npm ci dahil ağırdır; bu oturumda çalıştırılmadı. Pinli Node ile
+sanitized build .next-staging kullanır; önceki .next ve kabul logları korunur.
+Staging HTTP yanıtlarına X-Robots-Tag: noindex,nofollow,noarchive eklenir;
+canonical üretim domaininde kalır, mevcut SEO kriterleri değiştirilmez.
+Build bittikten sonra ayrı, tek runtime (sırlar aktarılmadan):
+ELECTRIC_FINANCE_STAGING=true .tooling/node-v24.22.1-linux-x64/bin/node scripts/check.mjs .tooling/node-v24.22.1-linux-x64/bin/node --max-old-space-size=256 node_modules/next/dist/bin/next start --hostname 127.0.0.1 --port 3100
+Başvuru kapısı varsayılan false; DB/SMTP sırları ve ALLOW_LOCAL aktarılmaz.
+Yalnız loopback, noindex ve sentetik kontroller. Runtime ve tarayıcı/SEO yükünü
+gereksiz paralelleştirme. Sadece oluşturulan test sunucusunu sonunda kapat.
+RSS, başlangıç/sonraki rota istekleri, hata/yeniden başlama ve sistem belleğini
+ölç; Starter bütçesinde pay kalmadan GO verme. Tek heap limiti kapasite kanıtı değil.
+Sıralı akış: ana sayfa -> hizmet -> hesaplayıcı -> iletişim -> tel/wa hedefleri;
+kapalı form ve API 503; doğru güvenlik başlıkları/OG; 57 rehberin noindex ve
+gövde kısıtları; mobil/dark/light görünüm. Gerçek kişisel veri kullanılmaz.
+Ardından gerekli ise tek optimize SEO kontrolü, aynı staging flag ile
+scripts/check.mjs ve scripts/verify-seo.mjs üzerinden çalıştırılır. Bu betikler
+staging flag'ini açıkça aktarır; production anahtarları aktarmaz.
+Tam DB/SMTP yolculuğu bu sürümün kapalı özelliğidir; varmış gibi onaylanmaz.
+
+Bu oturumdaki küçük doğrulamalar
+Pinli Node ile application-intake ve content-publication test dosyaları PASS.
+Yeni fallback testi: her iki formda hidden/disabled alanlar, doğru tel/wa,
+otomatik kişisel veri aktarımı ve sahte başarı yokluğu: 2/2 PASS.
+Testte ilk metin eşleşmesi yazım farkı düzeltildi; son çalıştırma PASS.
+SEO assertion'ları azaltılmadı; SSR fallback ve disabled alan kontrolü eklendi.
+Değişen TSX/config/betik/test dosyalarında ESLint 0 hata/uyarı; git diff --check
+PASS. Küçük config kontrolü: normal .next, staging .next-staging/noindex ve
+taslakta mevcut On Commit ayarının korunması PASS. Bunlar runtime/build kanıtı değil.
+Önceki Paket 1–5/SEO kanıtları korunur; yeni build'in sonucu sayılmaz.
+
+Son engeller ve karar
+İletişim odaklı sürüm: yeni build, Starter bütçesinde runtime ölçümü ve son
+izole mobil/HTTP/SEO kabulü; mevcut hukuki/iletişim bilgilerinin yayıncı onayı.
+Gerçek başvuru: ek olarak kalıcı DB, anahtar kurtarma, SMTP teslimatı,
+worker/purge/alarm, gerçek controller/saklama/aktarımı ve hukuki onaylar.
+57 onaysız rehberin statüsü bu görevde değiştirilmedi; otomatik yayın yok.
+NO-GO: Starter kabulü ve son staging kanıtı yok. main push/deploy ve yeni ücretli
+servis oluşturma yapılmadı; Auto-Deploy ayarı değişmedi. Diğer projeler/WSL
+süreçlerine dokunulmadı.
+
+Kaynaklar
+https://render.com/docs/web-services
+https://render.com/docs/node-version

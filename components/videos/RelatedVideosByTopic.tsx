@@ -41,10 +41,9 @@ export default function RelatedVideosByTopic({
     return list.slice(0, limit);
   }, [videos, topicId, limit]);
 
-  const embedSrc = useMemo(() => {
-    if (!openVideo?.id) return "";
-    return `https://www.youtube-nocookie.com/embed/${openVideo.id}?autoplay=1&mute=1&playsinline=1&rel=0&modestbranding=1`;
-  }, [openVideo?.id]);
+  const embedSrc = openVideo?.id
+    ? `https://www.youtube-nocookie.com/embed/${openVideo.id}?autoplay=1&mute=1&playsinline=1&rel=0&modestbranding=1`
+    : "";
 
   if (!related.length) return null;
 

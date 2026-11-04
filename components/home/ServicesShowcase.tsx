@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import {
   Banknote,
   RefreshCcw,
@@ -21,13 +22,13 @@ const ITEMS = [
     icon: Banknote,
   },
   {
-    title: "Kredi Notu Yükseltme",
+    title: "Kredi Notu Değerlendirmesi",
     desc: "Notu etkileyen kritik noktaları analiz edip aksiyon planı çıkarma.",
     icon: LineChart,
   },
   {
     title: "Red Analizi",
-    desc: "Banka reddinin olası nedenlerini tespit edip doğru başvuru stratejisi kurma.",
+    desc: "Ret sonrası gelir, borç ve belge hazırlığını gözden geçirip bankaya sorulacak soruları belirleme.",
     icon: FileSearch,
   },
   {
@@ -81,15 +82,16 @@ export default function ServicesShowcase() {
               <div className="mt-4 h-px w-full bg-slate-200/70" />
 
               <a
-                href="#iletisim"
+                href="/iletisim#iletisim"
                 className="mt-4 inline-flex text-sm font-semibold text-primary hover:underline"
               >
-                Ücretsiz ön analiz al →
+                Danışmanla görüşün →
               </a>
             </div>
           );
         })}
       </div>
+      <p className="mt-6 text-center"><Link className="ef-text-link" href="/hizmetler#hizmet-listesi">Hizmet kapsamını ve sık sorulan soruları inceleyin →</Link></p>
     </section>
   );
 }

@@ -23,14 +23,14 @@ export const krediYapilandirmaNedir: Post =
         type: "ul",
         items: [
           "Aylık taksit tutarı düşebilir",
-          "Gecikme ve yasal takip riski azalır",
+        "Yeni plana uyulabildiği ölçüde ödeme riski yönetilebilir",
           "Toplam geri ödeme tutarı artabilir",
         ],
       },
 
       {
         type: "p",
-        text: "Yapılandırma, borcu ucuzlatmaktan çok, ödeme dengesini yeniden kurmayı hedefler. Bu nedenle toplam maliyetin artması sık görülen bir durumdur.",
+      text: "Yeni planın taksit ve toplam maliyetini mevcut sözleşmeyle karşılaştırmak gerekir. Yapılandırma imkânı, başvuru zamanı, ürün ve yürürlükteki koşullara bağlıdır; her borç için otomatik bir hak veya daha ucuz finansman değildir.",
       },
 
       {

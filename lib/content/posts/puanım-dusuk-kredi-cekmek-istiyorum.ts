@@ -5,7 +5,7 @@ export const puanımDusukKrediCekmekIstiyorum: Post =
     slug: "puanım-dusuk-kredi-cekmek-istiyorum",
     title: "Puanım Düşük, Kredi Çekmek İstiyorum",
     excerpt:
-      "Kredi notu aralıklarına göre bankaların yaklaşımı ve hangi puanda ne kadar kredi ihtimali olduğu.",
+    "Düşük kredi notunda ödeme geçmişini, borçları ve başvuru koşullarını birlikte değerlendirmek. Tek bir puan onay veya limit garantisi değildir.",
     category: "Yasal / Risk",
     topicId: "kirmizi-kalem",
     readingTime: "6 dk",
@@ -25,14 +25,14 @@ export const puanımDusukKrediCekmekIstiyorum: Post =
 
       {
         type: "h2",
-        text: "Kredi notu aralıkları ne anlama gelir?",
+      text: "Tek bir onay eşiği var mı?",
       },
       {
         type: "ul",
         items: [
-          "1300 altı: Düşük risk – kredi ihtimali oldukça sınırlı",
-          "1300–1500 arası: Orta risk – düşük tutarlı ürünler mümkün olabilir",
-          "1500–1900 arası: Görece güçlü profil – limitler ve seçenekler artar",
+        "Kredi notu, banka değerlendirmesindeki girdilerden biridir; tek başına karar değildir.",
+        "Bu rehber herkes için geçerli bir puan barajı veya puana göre kredi tutarı yayımlamaz.",
+        "Kredi koşullarını ilgili bankadan, toplam maliyeti sözleşme öncesi bilgi formundan öğrenin.",
         ],
       },
 
@@ -42,7 +42,7 @@ export const puanımDusukKrediCekmekIstiyorum: Post =
       },
       {
         type: "p",
-        text: "Bankalar kredi limitlerini büyük ölçüde kredi notu aralığına göre belirler. Ancak gelir durumu, mevcut borçlar ve son dönem ödeme davranışı bu limitleri yukarı veya aşağı çekebilir. Yani puan bir kapı açar, ama içerideki tabloyu davranışlar belirler.",
+      text: "Findeks, bankaların kredi notunu kendi iç değerlendirmeleriyle birlikte kullandığını açıklar. Gelir, mevcut yükümlülükler ve ürün koşulları da değerlendirmeye girebilir. Aynı not, aynı limit veya aynı sonuç anlamına gelmez.",
       },
 
       {
@@ -74,13 +74,13 @@ export const puanımDusukKrediCekmekIstiyorum: Post =
       },
       {
         type: "p",
-        text: "Puan düşükken aynı anda birçok bankaya başvurmak. Bu davranış puanı daha da baskılar ve toparlanma süresini uzatır.",
+      text: "Başvuru yapmakla yeni bir kredili ürün kullanmayı karıştırmamak gerekir. Findeks açıklamasına göre başvuru ve ret tek başına kredi notunu düşürmez. Bununla birlikte ödenemeyecek yeni borç almak bütçeyi zorlayabilir.",
       },
 
       {
         type: "callout",
         title: "Özet",
-        text: "Kredi notu düşükse önce puanı hangi aralıkta olduğunla doğru okumak gerekir. Puan yükseldikçe limit ve ürün seçenekleri de kademeli olarak artar.",
+      text: "Mevcut ödeme düzenini ve borçları incele; raporda hata varsa ilgili kuruma başvur. Bir puan artışı için belirli süre, yeni limit veya kredi onayı garanti edilemez.",
       },
     ],
   }

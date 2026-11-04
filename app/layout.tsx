@@ -1,8 +1,8 @@
 import type React from "react";
 import type { Metadata, Viewport } from "next";
-import Script from "next/script";
 import { Manrope } from "next/font/google";
 import "./globals.css";
+import { AppearanceProvider } from "@/components/theme-controls";
 
 // Global shell bileşenleri
 import { Navbar } from "@/components/navbar";
@@ -40,13 +40,6 @@ export const metadata: Metadata = {
 
   metadataBase: new URL("https://ulaskredi.com.tr"),
 
-  alternates: {
-    canonical: "https://ulaskredi.com.tr",
-    languages: {
-      "tr-TR": "https://ulaskredi.com.tr",
-    },
-  },
-
   robots: {
     index: true,
     follow: true,
@@ -68,7 +61,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/og-image.jpg",
+        url: "/electric-finance-og.png",
         width: 1200,
         height: 630,
         alt: "Ulaş Kredi Danışmanlık",
@@ -81,7 +74,7 @@ export const metadata: Metadata = {
     title: "Ulaş Kredi Danışmanlık",
     description:
       "Türkiye geneli kredi danışmanlığı. Kredi notu ve limit artırma.",
-    images: ["/og-image.jpg"],
+    images: ["/electric-finance-og.png"],
   },
 
   icons: {
@@ -134,107 +127,19 @@ export default function RootLayout({
     telephone: "+905416061356",
   };
 
-  const faqJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: [
-      {
-        "@type": "Question",
-        name: "Kredi notu kaç olmalı?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "Kredi değerlendirmesinde tek ölçüt puan değildir. Kredi notunun yanında gelir durumu, mevcut borçlar, başvuru yoğunluğu ve banka politikaları da birlikte değerlendirilir.",
-        },
-      },
-      {
-        "@type": "Question",
-        name: "Kredi notu nasıl yükseltilir?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "Kredi notunu yükseltmek için düzenli ödeme alışkanlığı, kontrollü kart kullanımı, düşük borç-limit oranı ve doğru başvuru planı önemlidir.",
-        },
-      },
-      {
-        "@type": "Question",
-        name: "Kredi başvurusu neden reddedilir?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "Kredi başvuruları; düşük finansal uygunluk, yüksek mevcut borç, yetersiz gelir uyumu, yoğun başvuru geçmişi veya banka kriterlerine uyumsuzluk nedeniyle reddedilebilir.",
-        },
-      },
-      {
-        "@type": "Question",
-        name: "Kredi kartı limiti nasıl artırılır?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "Limit artışı için gelir durumu, ödeme düzeni, mevcut limit kullanımı ve bankanın iç değerlendirme kriterleri birlikte etkili olur.",
-        },
-      },
-      {
-        "@type": "Question",
-        name: "Borç kapatma mı yapılandırma mı daha mantıklı?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "Bu karar mevcut borç yüküne, aylık ödeme gücüne, toplam maliyete ve nakit akışına göre değişir. Her durum için tek bir doğru çözüm yoktur.",
-        },
-      },
-      {
-        "@type": "Question",
-        name: "Kredi yapılandırma kredi notunu etkiler mi?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "Yapılandırmanın etkisi kişinin ödeme düzenine, mevcut risk durumuna ve sonrasındaki finansal davranışına göre değişebilir.",
-        },
-      },
-      {
-        "@type": "Question",
-        name: "Gelir belgesi olmadan kredi alınır mı?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "Kredi değerlendirmesinde gelir beyanı ve gelir doğrulaması önemli bir unsurdur. Hangi belgelerin geçerli olduğu çalışma biçimine göre değişebilir.",
-        },
-      },
-      {
-        "@type": "Question",
-        name: "Aynı anda kaç bankaya başvuru yapılmalı?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "Kontrolsüz ve art arda yapılan çoklu başvurular olumsuz algı yaratabilir. Başvuru sürecinin planlı ve profilinize uygun yürütülmesi daha sağlıklıdır.",
-        },
-      },
-    ],
-  };
+
 
   return (
     <html lang="tr" suppressHydrationWarning className={manrope.variable}>
       <body className="min-h-screen bg-slate-50 text-slate-900 font-sans antialiased">
-        {/* Google Analytics */}
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-YQNQGKTLJ8"
-          strategy="afterInteractive"
-        />
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-YQNQGKTLJ8');
-          `}
-        </Script>
+        <AppearanceProvider>
+        {/* Analytics remains disabled until the consent flow and provider review are approved. */}
 
         {/* Structured Data / JSON-LD — Business */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify(businessJsonLd),
-          }}
-        />
-
-        {/* Structured Data / JSON-LD — FAQ */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(faqJsonLd),
           }}
         />
 
@@ -277,6 +182,7 @@ export default function RootLayout({
           {/* Floating action */}
           <FloatingAction />
         </div>
+        </AppearanceProvider>
       </body>
     </html>
   );

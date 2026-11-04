@@ -1,0 +1,113 @@
+ULAŞ KREDİ — PAKET 6 / PRODUCTION READINESS
+2026-11-01 — NO-GO for production; local preparation completed.
+
+Read-only infrastructure findings
+Live DNS: apex A 216.24.57.1; NS dns1/dns2.turhost.com;
+www CNAME ulas-kredi.onrender.com. Render target inferred from public DNS;
+hosting account, plan, deployment commit and access controls not inspected.
+HTTPS GET / and /api/health returned 200. /api/application-policy and
+/robots.txt returned 404. Current deployment does not expose the new policy
+route; public health response is liveness only, not DB/SMTP readiness.
+Live headers did not include HSTS, CSP or X-Content-Type-Options on these
+requests. No DNS/hosting/account configuration was modified.
+MX is priority 0 to ulaskredi.com.tr itself (the web apex); no SPF record was
+observed in apex TXT and _dmarc TXT was absent. This does not prove inbox or
+SMTP availability. DKIM cannot be established without provider/selector.
+No mail was sent. Registrar identity, expiry/renewal and mailbox ownership
+require account evidence. www canonical redirect still needs verification.
+
+Local configuration evidence
+No local .env files and no required APPLICATION_* service secrets were present
+in this session. Production environment variables cannot be inferred from
+local absence; hosting account evidence is required.
+Shell Node is 22.22.1, whereas .nvmrc requires 24.22.1; installed 24.19.0 also
+does not match. No runtime/dependency install was attempted.
+
+Journey and data handling
+Visitor -> /hizmetler -> /#hesaplama -> #iletisim -> shared ApplicationForm
+-> /api/applications -> PostgreSQL transaction -> reference -> outbox worker.
+Services now directly links to the existing calculator anchor. Calculator
+inputs remain client-side, assumptions are labelled and results are not bank
+approvals. Application form requests only approved fields, not calculator data.
+applicationConfig fails closed if controller/retention/keys/DB are absent.
+Missing local storage returns 503, never false success; targeted synthetic
+contact tests pass. Existing package5 integration-final.log proves real local
+PostgreSQL/SMTP/Chromium transactions, retry, persistence and privacy scenarios.
+These were not rerun or represented as successful production delivery.
+PII fields are AES-256-GCM encrypted; abuse/idempotency summaries use a separate
+HMAC key. Application/event/outbox are committed atomically. Worker mail contains
+only reference, not name/phone/note; TLS is required for external SMTP.
+Email delivery is asynchronous and may be duplicated after a crash. An SMTP
+failure does not delete the application. Queue retries/DEAD need monitoring.
+Management uses authorized OS CLI, with masked default output and audit events;
+no authenticated web administration exists. Retention requires scheduled purge,
+repeat batches when moreMayRemain, monitoring and a separate backup disposal plan.
+
+Safe changes made locally
+1. Added explicit services-to-calculator link.
+2. Removed unconditional Google Analytics loading pending consent mechanism
+   and provider/legal review. No replacement analytics service was enabled.
+   Third-party video embeds/images still require provider/privacy review.
+3. Added nosniff and strict-origin-when-cross-origin response headers, and
+   disabled X-Powered-By in Next configuration. HSTS/CSP need the real hosting
+   and resource policy; not guessed or advertised as implemented.
+4. Added scripts/production-preflight.mjs: offline, read-only environment
+   syntax checks, fixed field-name errors, no values or raw exceptions.
+   Requires exact Node version, distinct keys, explicit DB verify-full TLS,
+   controller/retention, non-local SMTP and safe local-mode/proxy settings.
+   Its PASS is configuration syntax only, never production authorization.
+   It does not prove key entropy, DB roles, TLS connectivity or legal approval.
+5. Added blank .env.production.example inventory; actual .env* files are
+   ignored except this explicitly safe example. No keys were generated/saved.
+6. Added targeted preflight failure/sanitization checks.
+
+Verification
+Targeted sequential, sanitized Node tests: application validation, calculators,
+contact fail-closed, content publication and production preflight; five files
+PASS, exit 0. No production DB/SMTP or real customer data used.
+ESLint on the five changed code files PASS (zero warnings); git diff --check
+PASS. Focused JSX syntax and Next security-header configuration checks PASS.
+git check-ignore confirms actual .env.production ignored and example visible.
+Offline preflight on current environment correctly BLOCKED with fixed field
+names for missing configuration and Node mismatch. Package 1–5 artifacts kept.
+No heavy build/browser/full SEO regression was started. Therefore new headers,
+analytics removal and link still require a fresh production build and focused
+browser/HTTP checks in an isolated configured staging environment before release.
+Observed memory pressure avg10/avg60 was zero, available RAM about 1.5 GiB
+after the small checks. No other project/process was stopped or modified.
+
+Required owner decisions/evidence
+Confirm domain/hosting control, Render account/plan and approved deployment
+target, canonical apex/www policy and renewal responsibility.
+Confirm actual controller legal name/contact/address, processing legal basis,
+retention, recipients/transfers and reviewed KVKK/privacy/cookie texts.
+Current brand label/contact and generic legal text are not legal identity proof.
+Choose/confirm DB and email providers, regions, budget, notification recipient
+and verified sender. Confirm operator authentication and escalation owner.
+Approve key custody/recovery, least-privilege roles, encrypted backups, tested
+restore, retention/backup erasure, worker/purge frequency and alert thresholds.
+Confirm ingress rewrites X-Forwarded-For before setting trusted hop count.
+Do not paste secrets into chat or Git; inject via service secret management.
+
+Cost-bearing work (not purchased or enabled)
+Hosting capacity/worker or scheduled jobs, managed PostgreSQL and backups,
+transactional email/mailbox, monitoring/alerts, domain renewal and legal review.
+Existing plan coverage and pricing are unknown; get provider quotes/limits
+before accepting cost. No new paid service is assumed necessary without review.
+
+Release gates
+Provision/configure approved services, review additive application migrations
+only (legacy migration chain may drop Question), validate backup/restore before
+applying anything, configure separate least-privilege runtimes and secret store.
+Run offline preflight separately with appropriate runtime secret inventories;
+full inventory check belongs in a restricted operator context, not the web.
+Then build once in isolated staging, verify journey with synthetic applications,
+confirmed durable record, reference-only SMTP inbox receipt, retry, purge,
+no PII/secrets in responses/logs and required security/canonical/TLS behavior.
+Authorize production release separately; no deploy has been performed here.
+Keep all 57 unapproved guide bodies withheld/noindex; publication status was
+not changed. Existing live indexation transition needs Search Console/editorial
+review before release, not automatic publishing or bulk deletion.
+
+NO-GO: production services, legal identity, operations and final staging proof
+are unverified. No commit/push/deploy, destructive Git action or WSL restart.

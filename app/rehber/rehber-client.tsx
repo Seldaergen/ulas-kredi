@@ -2,12 +2,11 @@
 
 import Link from "next/link";
 import { useMemo } from "react";
-import { useSearchParams } from "next/navigation";
 
-import { POSTS } from "@/lib/content/posts";
+import { PUBLISHED_POSTS as POSTS } from "@/lib/content/posts";
 import { getTopicById, type TopicId, TOPICS } from "@/lib/topics/topics";
 
-import TopReads from "@/components/rehber/TopReads";
+import { PageHeader, ConversionPanel } from "@/components/inner-page";
 import RehberCard from "@/components/rehber/RehberCard";
 
 function safeText(x: unknown) {
@@ -19,10 +18,9 @@ function isTopicId(x: string | null): x is TopicId {
   return (TOPICS as any[]).some((t) => t?.id === x);
 }
 
-export default function RehberClient() {
-  const sp = useSearchParams();
-  const q = (sp.get("q") || "").trim().toLowerCase();
-  const topicParam = sp.get("topic");
+export default function RehberClient({ query = "", topic = null }: { query?: string; topic?: string | null }) {
+  const q = query.trim().toLocaleLowerCase("tr-TR");
+  const topicParam = topic;
   const activeTopicId = isTopicId(topicParam) ? (topicParam as TopicId) : null;
   const activeTopic = activeTopicId ? getTopicById(activeTopicId) : null;
 
@@ -36,8 +34,8 @@ export default function RehberClient() {
     if (!q) return byTopic;
 
     return byTopic.filter((p) => {
-      const title = safeText((p as any).title).toLowerCase();
-      const excerpt = safeText((p as any).excerpt).toLowerCase();
+      const title = safeText((p as any).title).toLocaleLowerCase("tr-TR");
+      const excerpt = safeText((p as any).excerpt).toLocaleLowerCase("tr-TR");
       return title.includes(q) || excerpt.includes(q);
     });
   }, [q, activeTopicId]);
@@ -56,69 +54,23 @@ export default function RehberClient() {
     return out;
   }, [items]);
 
-  const showTopReads = !q && !activeTopicId;
+
 
   const clearHref = "/rehber";
   const clearSearchHref = activeTopicId
     ? `/rehber?topic=${encodeURIComponent(activeTopicId)}`
     : "/rehber";
 
-  return (
-    <section className="mx-auto w-full max-w-6xl px-4 py-10 md:py-12">
-      <div className="rounded-2xl border bg-white/70 p-6 shadow-sm backdrop-blur">
-        <div className="flex flex-col gap-2">
-          <h1 className="text-2xl font-semibold tracking-tight">Kredi Rehberi</h1>
-
-          <p className="text-sm text-slate-600">
-            Kredi notu, limit, başvuru stratejisi ve bankacılık süreçleri için güncel,
-            sade ve güvenilir rehberler.
-          </p>
-
-          {activeTopic ? (
-            <div className="mt-2 flex flex-wrap items-center gap-2 text-sm">
-              <span className="rounded-full border border-slate-200 bg-white px-3 py-1 font-semibold text-slate-900">
-                Konu: {activeTopic.title}
-              </span>
-
-              <Link href={clearHref} className="text-cyan-700 hover:underline">
-                Tüm rehberler
-              </Link>
-            </div>
-          ) : null}
-
-          {q ? (
-            <div className="mt-1 text-sm text-slate-700">
-              Arama: <span className="font-medium">{q}</span>{" "}
-              <Link href={clearSearchHref} className="ml-2 text-cyan-700 hover:underline">
-                Temizle
-              </Link>
-            </div>
-          ) : null}
-        </div>
-
-        {showTopReads ? <TopReads /> : null}
-
-        <div className="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {uniqueItems.map((p: any) => (
-            <RehberCard key={p.slug} post={p} />
-          ))}
-        </div>
-
-        {uniqueItems.length === 0 ? (
-          <div className="mt-6 rounded-xl border bg-white/70 p-4 text-sm text-slate-700">
-            İçerik bulunamadı.
-            {activeTopic ? (
-              <>
-                {" "}
-                <Link href={clearHref} className="font-semibold text-cyan-700 hover:underline">
-                  Tüm rehberlere dön
-                </Link>
-                .
-              </>
-            ) : null}
-          </div>
-        ) : null}
-      </div>
-    </section>
-  );
+  const categories = TOPICS.filter(t => POSTS.some(post => post.topicId === t.id));
+  return <section className="ef-inner ef-guide-directory"><div className="ef-wrap">
+    <PageHeader eyebrow={activeTopic ? "KONU REHBERİ / " + activeTopic.title : "KREDİ REHBERİ"} title={activeTopic ? activeTopic.title + " hakkında doğru sorular." : "Bilgiyle daha bilinçli kararlar."} description="Kredi notu, bütçe ve başvuru sürecini kaynaklarıyla birlikte anlamlandırın. Rehberler genel bilgilendirmedir; kişisel değerlendirme yerine geçmez." action="Durumunuzu birlikte değerlendirelim" />
+    <div className="ef-guide-tools">
+      <form action="/rehber" method="get" role="search"><label htmlFor="guide-query">Rehberlerde ara</label><div><input key={query+"-"+activeTopicId} id="guide-query" name="q" defaultValue={query} placeholder="Örn. banka iç skoru" />{activeTopicId && <input type="hidden" name="topic" value={activeTopicId}/>}<button type="submit" className="ef-button">Ara</button></div></form>
+      <nav aria-label="Rehber konuları"><Link href="/rehber" aria-current={!activeTopicId ? "page" : undefined}>Tüm rehberler</Link>{categories.map(t => <Link key={t.id} href={"/rehber?topic="+t.id} aria-current={activeTopicId===t.id ? "page" : undefined}>{t.title}</Link>)}</nav>
+    </div>
+    <div className="ef-results-heading"><h2>{activeTopic?.title ?? "Yayımdaki rehberler"}</h2><span>{uniqueItems.length} rehber{q ? " · Arama: "+q : ""}</span>{q&&<Link href={clearSearchHref}>Aramayı temizle</Link>}</div>
+    <div className="ef-guide-grid">{uniqueItems.map(p=><RehberCard key={p.slug} post={p}/>)}</div>
+    {uniqueItems.length===0&&<div className="ef-empty"><h2>Bu aramada rehber bulunamadı.</h2><p>Farklı bir kelime deneyin veya konulara göz atın.</p><Link href={clearHref} className="ef-text-link">Tüm rehberlere dön →</Link></div>}
+    <ConversionPanel title="Okuduklarınızı kendi durumunuzla birleştirelim." description="Okuduğunuz rehberin konusunu ve yanıtını bulamadığınız soruyu telefon veya WhatsApp görüşmesinde belirtin. Birlikte hazırlık adımlarını değerlendirelim."/>
+  </div></section>;
 }
