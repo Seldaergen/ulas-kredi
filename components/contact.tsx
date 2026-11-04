@@ -29,12 +29,12 @@ const MAIL_HREF = `mailto:${EMAIL}`;
 /*                                   PAGE                                     */
 /* -------------------------------------------------------------------------- */
 
-export function Contact() {
+export function Contact({ embedded = false }: { embedded?: boolean }) {
 
   return (
     <section id="iletisim" className="ef-inner ef-contact-page">
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <PageHeader eyebrow="İLETİŞİM" title="İlk adım: sizi anlayalım." description="Kredi notu, başvuru hazırlığı veya borç planlaması: görüşmede destek istediğiniz konuyu ve sorularınızı belirtin. Telefon veya WhatsApp üzerinden iletişime geçin." action="İletişim seçeneklerine geçin" href="#iletisim-form" />
+        <PageHeader headingLevel={embedded ? 2 : 1} eyebrow="İLETİŞİM" title="İlk adım: sizi anlayalım." description="Kredi notu, başvuru hazırlığı veya borç planlaması: görüşmede destek istediğiniz konuyu ve sorularınızı belirtin. Telefon veya WhatsApp üzerinden iletişime geçin." action="İletişim seçeneklerine geçin" href="#iletisim-form" />
         <div className="ef-contact-grid">
           {/* LEFT – INFO */}
           <div className="ef-contact-info space-y-6">

@@ -40,7 +40,7 @@ const get=(p,options={})=>fetch(origin+p,{signal:AbortSignal.timeout(15000),...o
    await page.waitForFunction(t=>document.documentElement.dataset.theme===t,theme);
    await page.evaluate(()=>document.fonts.ready);assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),`overflow ${name}/${width}/${theme}`);
    if(name==='calculators'){
-    await page.getByLabel('Kredi tutarı (₺)',{exact:true}).fill('1200');await page.getByLabel('Varsayımsal aylık faiz (%)',{exact:true}).fill('0');await page.getByLabel('Vade (ay)',{exact:true}).fill('12');assert.match(await page.getByTestId('monthly-payment').innerText(),/100,00/);await page.locator('#hesaplama').scrollIntoViewIfNeeded();
+    await page.getByLabel('Kredi tutarı (₺)',{exact:true}).fill('1200');await page.getByLabel('Varsayımsal aylık faiz (%)',{exact:true}).fill('0');await page.getByLabel('Vade (ay)',{exact:true}).fill('12');assert.match(await page.getByTestId('monthly-payment').innerText(),/100,00/);await page.getByLabel('Kredi tutarı (₺)',{exact:true}).fill('2400');assert.match(await page.getByTestId('monthly-payment').innerText(),/200,00/);await page.getByLabel('Kredi tutarı (₺)',{exact:true}).fill('');assert.equal(await page.getByTestId('monthly-payment').count(),0);await page.getByLabel('Kredi tutarı (₺)',{exact:true}).fill('1200');await page.locator('#hesaplama').scrollIntoViewIfNeeded();
     assert.equal(await page.locator('#hesaplama a[href="/rehber/kredi-maliyeti-toplam-geri-odeme-nasil-bakilir"]').count(),1);
    }
    if(name==='home'||name==='contact'){
@@ -48,10 +48,11 @@ const get=(p,options={})=>fetch(origin+p,{signal:AbortSignal.timeout(15000),...o
     assert.equal(await form.locator('fieldset[hidden][disabled]').count(),1);assert.ok(await form.locator('button[type="submit"]').isDisabled());
     assert.equal(await form.locator('a[href="tel:+905416061356"]').count(),1);assert.equal(await form.locator('a[href="https://wa.me/905416061356"]').count(),1);
    }
+   if(name==='home'){assert.equal(await page.locator('h1').count(),1);assert.match(await page.locator('h1').innerText(),/Yüksek Limitli Kredi Hedefinize/);assert.equal(await page.locator('iframe,.ef-guide-card,.ef-top-note').count(),0);}
    if(name==='guides')assert.equal(await page.locator('.ef-guide-card').count(),8);
    if(name==='contact')assert.equal(await page.locator('.ef-contact-info a[href="https://wa.me/905416061356"]').count(),1);
    await page.screenshot({path:path.join(output,`${name}-${width}-${theme}.png`),animations:'disabled'});
-   if(name==='home'){await page.locator('.ef-hero-copy a.ef-button').click();assert.equal(new URL(page.url()).hash,'#basvuru');await page.locator('#basvuru [data-application-contact-fallback]').waitFor();}
+   if(name==='home'){await page.locator('.cro-hero-copy .cro-primary').click();assert.equal(new URL(page.url()).hash,'#iletisim');await page.locator('#basvuru [data-application-contact-fallback]').waitFor();}
    if(name==='services'){await page.locator('[data-inner-cta]').first().click();await page.locator('#iletisim').waitFor();}
    if(name==='calculators'){await page.locator('#hesaplama [data-inner-cta]').first().click();assert.equal(new URL(page.url()).hash,'#iletisim');}
   }

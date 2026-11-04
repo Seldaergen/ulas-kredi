@@ -3,17 +3,17 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: { absolute: "Ulaş Kredi Danışmanlık | Türkiye Geneli Kredi Danışmanlığı" },
+  title: { absolute: "Yüksek Limitli Kredi Danışmanlığı | Ulaş Kredi" },
   description:
-    "Kredi başvurusu öncesi kredi notu, borç ve bütçe planlaması için danışmanlık. Taksitinizi hesaplayın, rehberleri inceleyin; telefon veya WhatsApp ile görüşün.",
+    "Yüksek limitli kredi hedefiniz için gelir, borç ve finansal profilinizi birlikte değerlendirin. Başvuru hazırlığı için telefon veya WhatsApp ile görüşün.",
   alternates: {
     canonical: "https://ulaskredi.com.tr",
   },
   openGraph: {
     images: [{ url: "https://ulaskredi.com.tr/electric-finance-og.png", width: 1200, height: 630 }],
-    title: "Ulaş Kredi Danışmanlık | Türkiye Geneli Kredi Danışmanlığı",
+    title: "Yüksek Limitli Kredi Danışmanlığı | Ulaş Kredi",
     description:
-      "İstanbul merkezli, Türkiye genelinde kredi danışmanlığı hizmetleri.",
+      "Yüksek limitli kredi hedefiniz için finansal profil ve başvuru hazırlığı danışmanlığı. Nihai karar finans kuruluşuna aittir.",
     url: "https://ulaskredi.com.tr",
     type: "website",
   },
@@ -25,28 +25,20 @@ export const metadata: Metadata = {
       "Kredi notu, bütçe ve başvuru hazırlığı için danışmanlık.",
   },
 };
+import Link from "next/link";
 import HeroSection from "@/components/home/HeroSection";
-import QuickActions from "@/components/home/QuickActions";
-import VideoSection from "@/components/home/VideoSection";
-import FeaturedContent from "@/components/home/FeaturedContent";
-import ServicesShowcase from "@/components/home/ServicesShowcase";
 import CalculatorsSection from "@/components/home/CalculatorsSection";
 import TrustSection from "@/components/home/TrustSection";
-import FaqOptimized from "@/components/home/FaqOptimized";
 import { Contact } from "@/components/contact";
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-transparent text-slate-900">
+    <main className="cro-home">
       <HeroSection />
-      <QuickActions />
-      <FeaturedContent />
-      <VideoSection />
-      <ServicesShowcase />
-      <CalculatorsSection />
       <TrustSection />
-      <FaqOptimized />
-      <Contact />
+      <div id="basvuru"><Contact embedded /></div>
+      <CalculatorsSection />
+      <section className="ef-wrap cro-guide-link" aria-label="Kredi rehberi"><p>Karar öncesi bilgiye yer açın.</p><Link href="/rehber">Kaynaklı kredi rehberlerini inceleyin ↗</Link></section>
     </main>
   );
 }

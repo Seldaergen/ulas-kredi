@@ -157,7 +157,7 @@ export function Navbar() {
 
                   <div className="mt-2 flex items-center justify-between gap-2 rounded-xl bg-slate-50 px-3 py-2 ring-1 ring-black/5">
                     <div className="text-[12px] font-semibold text-slate-700">
-                      Hızlı destek:
+                      İletişim:
                       <span className="ml-1 text-slate-500 font-medium">WhatsApp</span>
                     </div>
                     <a
@@ -245,7 +245,7 @@ export function Navbar() {
                     Ulaş Kredi <span className="hidden sm:inline">Danışmanlık</span>
                   </div>
                   <div className="hidden sm:block text-[11px] font-medium text-slate-500">
-                    Ücretsiz ön analiz • Hızlı süreç
+                    Yüksek limitli kredi danışmanlığı
                   </div>
                 </div>
               </Link>
@@ -485,7 +485,7 @@ export function Navbar() {
                     )}
                   >
                     <FaWhatsapp className="h-4 w-4" />
-                    WhatsApp’tan Ücretsiz Ön Analiz
+                    WhatsApp’tan danışmanla görüşün
                   </Button>
                 </a>
               </div>

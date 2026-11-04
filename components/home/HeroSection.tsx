@@ -1,36 +1,34 @@
 import Link from "next/link";
-import { ArrowUpRight, ShieldCheck, Wallet, Layers3, ScanLine, ListChecks, FileCheck2, MessagesSquare, ArrowDown } from "lucide-react";
-import { ApplicationForm } from "@/components/application-form";
+import { ArrowDown, ArrowUpRight, Phone } from "lucide-react";
 
-function AssessmentScene() {
-  return <div className="ef-assessment-scene" role="img" aria-label="Temsili danışmanlık süreci: gelir ve yükümlülükler, finansal durum değerlendirmesi, başvuru planı">
-    <div className="ef-scene-caption"><span>DANIŞMANLIK HARİTASI</span><span>TEMSİLİ SÜREÇ</span></div>
-    <div className="ef-scene-inputs">
-      <div className="ef-scene-tile"><span className="ef-scene-icon"><Wallet size={21}/></span><div><b>Gelir yapınız</b><span>Düzenli gelir ve bütçe</span></div><span className="ef-signal" aria-hidden="true"/></div>
-      <div className="ef-scene-tile"><span className="ef-scene-icon"><Layers3 size={21}/></span><div><b>Yükümlülükleriniz</b><span>Mevcut ödemeler ve ihtiyaçlar</span></div><span className="ef-signal" aria-hidden="true"/></div>
-    </div>
-    <div className="ef-scene-bridge" aria-hidden="true"><i/><i/><span/></div>
-    <div className="ef-assessment-core"><span className="ef-core-icon"><ScanLine size={28}/></span><div><small>BİRLİKTE ANLAMLANDIRIYORUZ</small><strong>Finansal durum<br/>değerlendirmesi</strong></div><MessagesSquare className="ef-core-chat" size={25}/></div>
-    <div className="ef-scene-down" aria-hidden="true"><ArrowDown size={18}/><span/></div>
-    <div className="ef-scene-plan"><div className="ef-plan-title"><ListChecks size={21}/><b>Başvuru yol haritanız</b><span>Size özel yaklaşım</span></div><div className="ef-plan-steps"><span><FileCheck2 size={15}/> Hazırlık</span><span><ListChecks size={15}/> Planlama</span><span><MessagesSquare size={15}/> Danışman takibi</span></div></div>
-    <p className="ef-scene-disclaimer">Temsili süreç şemasıdır. Skor, limit veya kredi onayı tahmini üretmez.</p>
-  </div>;
-}
 export default function HeroSection() {
-  return <section id="hero" className="ef-hero ef-hero-v41"><div className="ef-wrap">
-    <div className="ef-intro-grid">
-      <div className="ef-hero-copy">
-        <p className="ef-eyebrow"><span className="ef-dot"/> KREDİ DANIŞMANLIĞI</p>
-        <h1>Kredi kararınıza<br/><span>net bir yol haritası.</span></h1>
-        <p className="ef-lead">Kredi notunuzu, mevcut borçlarınızı ve hedef taksitinizi birlikte ele alalım. Bankaya başvurmadan önce belge hazırlığını ve soracağınız soruları netleştirelim.</p>
-        <div className="ef-actions"><a className="ef-button" href="#basvuru">Danışmanla görüşün <ArrowUpRight size={20}/></a><Link className="ef-text-link ef-hero-explore" href="/nasil-calisir">Süreci keşfedin <ArrowUpRight size={16}/></Link></div>
-        <div className="ef-assurances"><span><ShieldCheck size={17}/> Ön ödemesiz süreç</span><Link href="/rehber" className="ef-text-link">Rehberi incele <ArrowUpRight size={15}/></Link></div>
+  return (
+    <section id="hero" className="cro-hero">
+      <div className="ef-wrap cro-hero-grid">
+        <div className="cro-hero-copy">
+          <p className="cro-kicker"><span /> YÜKSEK LİMİTLİ KREDİ DANIŞMANLIĞI</p>
+          <h1>Yüksek Limitli Kredi Hedefinize <span>Stratejik Danışmanlık</span></h1>
+          <p className="cro-lead">Gelir durumunuzu, mevcut borçlarınızı ve finansal profilinizi birlikte değerlendiriyoruz. Yüksek limitli kredi hedefiniz için başvuru hazırlığını ve izlenebilecek adımları planlamanıza yardımcı oluyoruz.</p>
+          <div className="cro-actions">
+            <a href="#iletisim" className="cro-primary">Yüksek Limit Danışmanlığı Al <ArrowUpRight size={19} aria-hidden="true" /></a>
+            <a href="tel:+905416061356" className="cro-phone"><Phone size={17} aria-hidden="true" /> 0 541 606 13 56</a>
+          </div>
+          <p className="cro-boundary">Banka değiliz. Kredi onayı, limit artışı veya belirli bir tutar garanti edilmez. Nihai karar ilgili finans kuruluşuna aittir.</p>
+          <a href="#danismanlik-sureci" className="cro-explore">Önce nasıl çalıştığımızı inceleyin <ArrowDown size={16} aria-hidden="true" /></a>
+        </div>
+        <div className="cro-dossier" aria-label="Danışmanlık kapsamı: finansal profil, başvuru hazırlığı ve yol haritası">
+          <div className="cro-dossier-top"><span>ULAŞ KREDİ</span><span>DANIŞMANLIK / 01</span></div>
+          <div className="cro-orbit" aria-hidden="true"><div className="cro-orbit-ring" /><div className="cro-orbit-ring" /><div className="cro-orbit-core">UK<span>STRATEJİ & HAZIRLIK</span></div><i /></div>
+          <div className="cro-dossier-title"><span>HEDEFİNİZE GİDEN YOL</span><strong>Önce finansal tablo.<br />Sonra başvuru planı.</strong></div>
+          <ol className="cro-dossier-steps">
+            <li><span>01</span><div><b>Finansal profil</b><small>Gelir, mevcut borçlar ve bütçe</small></div><ArrowUpRight size={16} aria-hidden="true" /></li>
+            <li><span>02</span><div><b>Başvuru hazırlığı</b><small>Belgeler ve değerlendirme soruları</small></div><ArrowUpRight size={16} aria-hidden="true" /></li>
+            <li><span>03</span><div><b>İzlenebilecek adımlar</b><small>Hedefinize göre danışmanlık kapsamı</small></div><ArrowUpRight size={16} aria-hidden="true" /></li>
+          </ol>
+          <p>Bir sonuç tahmini değil, danışmanlık yaklaşımımızdır.</p>
+        </div>
       </div>
-      <AssessmentScene/>
-    </div>
-    <div className="ef-hero-application-grid">
-      <div className="ef-application-intro"><p className="ef-eyebrow">BİRLİKTE, ADIM ADIM</p><h2>Önce sizi anlayalım.<br/><span>Sonra yolu planlayalım.</span></h2><p>Gelir, mevcut borçlar ve başvuru amacınız bir bütün. Danışmanlık sürecinde bu tabloyu ele alır, başvuru hazırlığını ve izlenecek adımları birlikte değerlendiririz.</p><ul><li><span>01</span> Finansal durumunuzu konuşalım.</li><li><span>02</span> Hazırlık ve başvuru adımlarını planlayalım.</li><li><span>03</span> Danışmanlık sürecini birlikte izleyelim.</li></ul><p className="ef-application-caveat">Danışmanlık bir banka kararı değildir. Kredi onayı, skor artışı veya belirli bir limit garanti edilmez.</p><a href="#hesaplama" className="ef-text-link">Bütçenizi önce hesaplayın <ArrowUpRight size={16}/></a></div>
-      <div id="basvuru" className="ef-application"><p className="ef-eyebrow">İLK ADIMI ATIN</p><h2>Birlikte değerlendirelim.</h2><p className="ef-form-intro">Telefon veya WhatsApp üzerinden görüşelim. Çevrimiçi kayıt hizmetinin durumu aşağıda gösterilir.</p><ApplicationForm channel="HERO_FORM"/></div>
-    </div>
-  </div></section>;
+      <div className="ef-wrap cro-hero-foot"><span>HEDEFİNİZİ NETLEŞTİRİN.</span><Link href="/hizmetler">Danışmanlık kapsamını inceleyin <ArrowUpRight size={15} aria-hidden="true" /></Link><span>KONTROLLÜ · ŞEFFAF · ADIM ADIM</span></div>
+    </section>
+  );
 }

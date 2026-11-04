@@ -39,7 +39,9 @@ test('existing static routes and essential contact destinations remain', () => {
   }
   const contact = read('components/contact.tsx');
   assert.ok(contact.includes('ApplicationForm channel="CONTACT_FORM"'));
-  assert.ok(read('components/home/HeroSection.tsx').includes('ApplicationForm channel="HERO_FORM"'));
+  assert.ok(read('components/home/HeroSection.tsx').includes('Yüksek Limit Danışmanlığı Al'));
+  assert.ok(read('app/page.tsx').includes('<Contact embedded />'));
+  assert.ok(!read('components/home/HeroSection.tsx').includes('<ApplicationForm'));
   for (const marker of ['905416061356', 'info@ulaskredi.com.tr', 'https://wa.me/', 'tel:+']) assert.ok(contact.includes(marker));
 });
 
