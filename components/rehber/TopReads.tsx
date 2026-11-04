@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useMemo, useState } from "react";
 import { ArrowUpRight, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { POSTS } from "@/lib/content/posts";
+import { PUBLISHED_POSTS as POSTS } from "@/lib/content/posts";
 import { getTopicById, type TopicId } from "@/lib/topics/topics";
 
 function safeText(x: unknown) {

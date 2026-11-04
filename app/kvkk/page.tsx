@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "KVKK Aydınlatma Metni | Ulaş Kredi Danışmanlık",
+  ...pageMetadata("KVKK Aydınlatma Metni", "Kişisel veri işleme amaçları, aktarım, saklama ve haklar hakkında aydınlatma metni.", "/kvkk"),
+  title: { absolute: "KVKK Aydınlatma Metni | Ulaş Kredi" },
   description:
     "KVKK kapsamında aydınlatma metni. Kişisel veri işleme amaçları, aktarım, saklama ve haklar.",
 };
@@ -58,9 +60,11 @@ export default function KvkkPage() {
 
         <Section title="2) İşlenen Kişisel Veriler">
           <ul className="list-disc pl-5">
-            <li>İletişim bilgileri (ad-soyad, telefon, e-posta)</li>
+            <li>Başvuru formunda ad-soyad, cep telefonu, talep konusu ve isteğe bağlı kısa not</li>
+            <li>Başvuru referansı, danışmanlık takip durumu, bildirim denemeleri ve işlem tarihçesi</li>
+            <li>Aydınlatma metninin sürümü ve okunduğuna ilişkin seçimin zamanı; kötüye kullanımı sınırlamak için süreli, anahtarlı özetler</li>
             <li>
-              Mesaj içeriği (kredi talebinize ilişkin sizin paylaştığınız bilgiler)
+              Kimlik numarası, banka şifresi, kart/hesap veya özel nitelikli veri istenmez. Not alanına bu bilgileri yazmayın.
             </li>
             <li>
               İletişim kayıtları (talebinizin takibi için görüşme/mesajlaşma
@@ -76,7 +80,7 @@ export default function KvkkPage() {
           <ul className="list-disc pl-5">
             <li>Ön analiz ve danışmanlık hizmeti sunulması</li>
             <li>Taleplerin yanıtlanması ve süreç bilgilendirmesi</li>
-            <li>Hizmet kalitesinin geliştirilmesi</li>
+            <li>Başvurunun kalıcı kaydı, yanıtlanması ve güvenli operasyonel takibi</li>
             <li>Mevzuattan doğan yükümlülüklerin yerine getirilmesi</li>
           </ul>
           <p>
@@ -84,6 +88,7 @@ export default function KvkkPage() {
             <em>sözleşmenin kurulması/ifası</em>, <em>meşru menfaat</em> ve{" "}
             <em>hukuki yükümlülük</em> olabilir.
           </p>
+          <p>Aydınlatma metninin okunduğuna ilişkin seçim pazarlama için açık rıza değildir. Bu başvuru akışı pazarlama izni toplamaz; ayrı amaçlar ve gerekiyorsa açık rıza ayrıca değerlendirilmelidir.</p>
         </Section>
 
         <Section title="4) Aktarım ve Saklama">
@@ -93,9 +98,9 @@ export default function KvkkPage() {
             paylaşılabilir.
           </p>
           <p>
-            Veriler, amaç için gerekli süreyle saklanır; mevzuat veya olası
-            uyuşmazlık süreleri kapsamında daha uzun saklama gerekebilir.
+            Yayıncı, kayıt hizmetini etkinleştirmeden önce veri sorumlusunu ve saklama süresini belirler; bu bilgiler gönderimden önce formda gösterilir. Kişisel alanlar şifreli saklanır. Süre dolumunda veya yetkili silme talebinde kişisel alanların ve eşleştirme özetlerinin kaldırılması için yerel yönetim işlemi çalıştırılır. Yedeklerin saklama ve imhası da veri sorumlusunun sorumluluğundadır.
           </p>
+          <p>Yetkiliye gönderilen bildirim e-postası yalnız başvuru referansını taşır; ad, telefon veya not e-postaya eklenmez. WhatsApp ayrı, isteğe bağlı bir dış kanaldır; form verisi otomatik olarak WhatsApp’a aktarılmaz. Barındırma ve e-posta sağlayıcılarının yurt içi/yurt dışı aktarım koşulları üretime geçmeden değerlendirilmelidir.</p>
         </Section>
 
         <Section title="5) KVKK Kapsamındaki Haklarınız">

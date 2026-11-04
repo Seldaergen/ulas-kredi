@@ -8,12 +8,15 @@ node_modules
 
 # next.js
 /.next
+/.next-staging
 /out
 
 # env
 .env
 .env.local
 .env.*.local
+/.env*
+!/.env.production.example
 
 # logs
 npm-debug.log*
@@ -23,3 +26,9 @@ yarn-error.log*
 # OS
 .DS_Store
 Thumbs.db
+
+# Isolated runtime and verification outputs
+/.tooling/
+/.npm-cache/
+/artifacts/
+*.tsbuildinfo

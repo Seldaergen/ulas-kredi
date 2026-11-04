@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { ChevronDown, MessageCircle, Shield, Clock, BadgeCheck, ArrowRight } from "lucide-react";
 
-const WHATSAPP_URL = "https://wa.me/90XXXXXXXXXX"; // TODO: kendi numaranı yaz (örn: https://wa.me/905416061356)
+const WHATSAPP_URL = "https://wa.me/905416061356";
 
 const FAQS = [
   {
@@ -13,7 +13,7 @@ const FAQS = [
   },
   {
     q: "Kredi notum düşükse yine de başvurmalı mıyım?",
-    a: "Rastgele başvuru çoğu zaman puanı daha da düşürebilir. Önce neden düşük olduğunu analiz edip doğru adımlarla başvuru stratejisi belirlemek daha sağlıklı olur.",
+    a: "Findeks açıklamasına göre kredi başvurusu tek başına kredi notunu düşürmez. Bununla birlikte yeni bir borcun bütçenize uygunluğunu değerlendirmeniz gerekir; kredi kararı bankaya aittir.",
     icon: Shield,
   },
   {
@@ -23,7 +23,7 @@ const FAQS = [
   },
   {
     q: "Ne kadar sürede dönüş alırım?",
-    a: "Genellikle aynı gün içinde ön değerlendirme yapılır. Durumun karmaşıklığına göre 24–48 saat içinde net aksiyon planı çıkar.",
+    a: "Dönüş süresi talebin kapsamına ve iletişim yoğunluğuna göre değişir. Kesin bir süre veya kredi sonucu taahhüt edilmez.",
     icon: Clock,
   },
   {

@@ -54,7 +54,7 @@ export function FloatingAction() {
     <div
       ref={wrapRef}
       className={cn(
-        "fixed right-4 z-80 flex flex-col items-end gap-2.5 translate-z-0",
+        "hidden sm:flex fixed right-4 z-80 flex-col items-end gap-2.5 translate-z-0",
         bottomOffset
       )}
     >

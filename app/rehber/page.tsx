@@ -4,18 +4,20 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Kredi Rehberi",
   description:
-    "Kredi notu, limit artırma, başvuru reddi ve yapılandırma hakkında kapsamlı rehberler. Bankacılık sistemini anlayarak daha doğru adım atın.",
+    "Kredi notu, banka iç skoru, kredi maliyeti ve yapılandırma hakkında kaynaklı rehberler. Başvuru öncesi sorularınızı ve toplam geri ödemeyi netleştirin.",
   alternates: {
     canonical: "https://ulaskredi.com.tr/rehber",
   },
   openGraph: {
+    images: [{ url: "https://ulaskredi.com.tr/electric-finance-og.png", width: 1200, height: 630 }],
     title: "Kredi Rehberi | Ulaş Kredi",
     description:
-      "Kredi notu, limit artırma, başvuru reddi ve yapılandırma hakkında kapsamlı rehberler.",
+      "Kredi notu, banka iç skoru, toplam kredi maliyeti ve yapılandırma hakkında kaynaklı açıklamalar.",
     url: "https://ulaskredi.com.tr/rehber",
     type: "website",
   },
   twitter: {
+    images: ["https://ulaskredi.com.tr/electric-finance-og.png"],
     card: "summary_large_image",
     title: "Kredi Rehberi | Ulaş Kredi",
     description:
@@ -24,31 +26,13 @@ export const metadata: Metadata = {
 };
 
 
-import { Suspense } from "react";
 import RehberClient from "./rehber-client";
 
-export default function RehberPage() {
+export default async function RehberPage({ searchParams }: { searchParams: Promise<{ q?: string | string[]; topic?: string | string[] }> }) {
+  const params = await searchParams;
   return (
     <main className="min-h-screen bg-transparent text-slate-900">
-      <Suspense
-        fallback={
-          <section className="mx-auto w-full max-w-6xl px-4 py-10 md:py-12">
-            <div className="rounded-2xl border bg-white/70 p-6 shadow-sm backdrop-blur">
-              <div className="h-6 w-48 animate-pulse rounded bg-slate-200" />
-              <div className="mt-4 grid gap-3 md:grid-cols-2">
-                {Array.from({ length: 6 }).map((_, i) => (
-                  <div
-                    key={i}
-                    className="h-28 animate-pulse rounded-xl bg-slate-200/70"
-                  />
-                ))}
-              </div>
-            </div>
-          </section>
-        }
-      >
-        <RehberClient />
-      </Suspense>
+      <RehberClient query={typeof params.q === "string" ? params.q : ""} topic={typeof params.topic === "string" ? params.topic : null} />
     </main>
   );
 }

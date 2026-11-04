@@ -4,7 +4,7 @@ export const eDevletKrediNotuDogruMu: Post = {
   slug: "e-devlet-kredi-notu-dogru-mu",
   title: "E-Devlet Kredi Notu Doğru mu? (Bankalar Aynı Skoru mu Görür?)",
   excerpt:
-    "E-Devlet’te gördüğün kredi notu genellikle doğrudur, ancak bankaların gördüğü tek veri bu değildir. Asıl karar, ek risk sinyallerine göre verilir.",
+    "e-Devlet üzerinden alınan TBB Risk Merkezi Raporu ile Findeks Kredi Notu aynı ürün değildir. Raporu bir kredi onayı veya kredi notu gibi yorumlamayın.",
 
   category: "Bilgilendirme",
   topicId: "kredi-notu",
@@ -12,20 +12,20 @@ export const eDevletKrediNotuDogruMu: Post = {
   date: "2025-12-15",
   coverImage: "/content/edevlet.jpg",
   icon: "info",
-  views: 6210,
+  views: 0,
 
   intro:
-    "Kısa cevap: E-Devlet’te gördüğün kredi notu yanlış değildir ama eksiktir. Bankalar sadece bu skora bakmaz; daha detaylı verilerle karar verir.",
+    "Kısa cevap: e-Devlet, TBB Risk Merkezi Raporu başvuru hizmeti sunar. Bu rapor Findeks Kredi Notu değildir. İki hizmetin kapsamını ayırmak gerekir.",
 
   criticalPoints: [
-    "E-Devlet kredi notu genelde doğrudur ama tek başına yeterli değildir",
+    "TBB Risk Merkezi Raporu, Findeks Kredi Notu değildir",
     "Bankalar ek olarak kendi iç skorlarını kullanır",
     "Güncellenme süresi farklı olabilir",
     "Aynı notla farklı sonuçlar alınabilir",
   ],
 
   highlight:
-    "Gördüğün skor doğru olabilir, ama bankanın gördüğü resim daha büyüktür.",
+    "Risk raporu, kredi notu ve kredi onayı farklı kavramlardır.",
 
   content: [
     {
@@ -35,12 +35,12 @@ export const eDevletKrediNotuDogruMu: Post = {
     {
       type: "p",
       text:
-        "E-Devlet üzerinden görülen kredi notu genellikle doğru ve resmi veriye dayanır. Ancak bu skor, bankaların karar verirken kullandığı verinin tamamını yansıtmaz.",
+        "e-Devlet’teki TBB hizmeti bir Risk Merkezi Raporu başvurusudur. Bu rapor, Findeks’in sunduğu kredi notuyla karıştırılmamalıdır.",
     },
     {
       type: "p",
       text:
-        "Yani gördüğün sayı doğru olabilir, ama eksik bir resim sunar.",
+        "Rapordaki borç veya limit tutarları bir kredi puanı değildir. Alanları raporun kendi açıklamalarıyla birlikte okuyun.",
     },
 
     {
@@ -69,7 +69,7 @@ export const eDevletKrediNotuDogruMu: Post = {
     {
       type: "p",
       text:
-        "Farklı platformlar kredi notunu farklı zamanlarda günceller. Bu nedenle E-Devlet’te gördüğün skor ile bankanın gördüğü skor arasında küçük farklar olabilir.",
+        "Raporların kapsamı ve veri bildirim tarihleri farklı olabilir. Risk Merkezi Raporu ile Findeks Kredi Notu’nu aynı skorun farklı tarihteki kopyaları gibi karşılaştırmayın; rapordaki tarihleri ve açıklamaları kontrol edin.",
     },
 
     {
@@ -126,7 +126,7 @@ export const eDevletKrediNotuDogruMu: Post = {
       type: "callout",
       title: "Sonuç",
       text:
-        "E-Devlet kredi notu doğrudur ama tek başına yeterli değildir. Bankalar daha geniş bir veri setiyle karar verir. Bu yüzden sadece skora değil, tüm finansal davranışına odaklanmak gerekir.",
+        "TBB Risk Merkezi Raporu ile Findeks Kredi Notu farklı hizmetlerdir. Her ikisi de bankanın kredi onayı yerine geçmez. Yanlış veya eksik kayıt için raporu düzenleyen kurumun itiraz kanalını kullanın.",
     },
   ],
 };

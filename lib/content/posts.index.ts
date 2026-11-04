@@ -1,4 +1,5 @@
 import { krediYapilandirmaNeZamanMantik } from "./posts/kredi-yapilandirma-ne-zaman-mantik";
+import { bankaIcSkorNedir } from "./posts/banka-ic-skor-nedir";
 // lib/content/posts.index.ts
 import { krediNotu1300AltindaNeYapmali } from "./posts/kredi-notu-1300-altinda-ne-yapmali";
 import { eDevletKrediNotuDogruMu } from "./posts/e-devlet-kredi-notu-dogru-mu";
@@ -65,6 +66,7 @@ import { krediDerinligiNedir } from "./posts/kredi-derinligi-nedir";
 import { krediPuanini30Gunde300PuanArtirmakMumkunMu } from "./posts/kredi-puanini-30-gunde-300-puan-artirmak-mumkun-mu";
 
 export const POSTS_NEW = [
+  bankaIcSkorNedir,
   krediNotu1300AltindaNeYapmali,
   eDevletKrediNotuDogruMu,
   krediNotuKacOlmali,

@@ -4,8 +4,8 @@ import { ShieldCheck, Users, Banknote, Clock, Star, CheckCircle2, Info, ArrowRig
 
 const METRICS = [
   {
-    title: "4.200+",
-    desc: "Başarılı başvuru deneyimi",
+    title: "Ön değerlendirme",
+    desc: "Gelir ve borç tablosunu anlama",
     icon: Users,
   },
   {
@@ -14,8 +14,8 @@ const METRICS = [
     icon: ShieldCheck,
   },
   {
-    title: "24–48 saat",
-    desc: "Ortalama dönüş süresi",
+    title: "İletişim",
+    desc: "Dönüş süresi talebe göre değişir",
     icon: Clock,
   },
   {
@@ -42,19 +42,19 @@ const HOW_WE_WORK = [
 
 const TESTIMONIALS = [
   {
-    name: "A.K.",
-    city: "İstanbul",
-    text: "Defalarca red almıştım. Bu kez neyi yanlış yaptığımı anladım ve doğru adımla onay aldım.",
+    name: "Başvuru hazırlığı",
+    city: "Bilgilendirme",
+    text: "Başvuru öncesinde gelir, mevcut borçlar ve istenen belgeler birlikte incelenmelidir.",
   },
   {
-    name: "M.D.",
-    city: "Ankara",
-    text: "‘Başvur’ demediler; önce plan çıkardık. Zaman kazandım.",
+    name: "Bütçe kontrolü",
+    city: "Bilgilendirme",
+    text: "Yeni bir taksitin düzenli giderlerle birlikte karşılanıp karşılanamayacağını değerlendirin.",
   },
   {
-    name: "S.Y.",
-    city: "İzmir",
-    text: "Ücretsiz ön analiz gerçekten işe yarıyor. Gereksiz başvurudan kurtuldum.",
+    name: "Karar yetkisi",
+    city: "Bilgilendirme",
+    text: "Danışmanlık bir kredi onayı değildir; nihai karar ilgili finans kuruluşuna aittir.",
   },
 ];
 

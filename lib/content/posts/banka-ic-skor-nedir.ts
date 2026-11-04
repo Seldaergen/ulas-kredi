@@ -4,7 +4,7 @@ export const bankaIcSkorNedir: Post = {
   slug: "banka-ic-skor-nedir",
   title: "Banka İç Skoru Nedir? (Kredi Notundan Daha Önemli Olabilir mi?)",
   excerpt:
-    "Kredi notu tek başına yeterli değildir. Bankalar kendi iç skorlarını kullanır ve çoğu zaman kararları bu skor belirler.",
+    "Bankalar Findeks Kredi Notu’nu kendi iç değerlendirmeleriyle birlikte kullanır. Bu rehber bankaya ait gizli modelin nasıl çalıştığını veya sonucu garanti etmez.",
 
   category: "Bilgilendirme",
   topicId: "banka",
@@ -13,17 +13,17 @@ export const bankaIcSkorNedir: Post = {
   icon: "info",
 
   intro:
-    "Kısa cevap: Kredi notu herkes için aynıdır, ama banka iç skoru her bankada farklıdır. Ve çoğu zaman kredi kararını belirleyen şey bu iç skordur.",
+    "Kısa cevap: Findeks Kredi Notu ile bankanın kendi değerlendirmesi aynı şey değildir. Findeks, notun bankaların iç değerlendirme setleriyle birlikte kullanıldığını belirtir; modellerin ağırlıkları bankadan bankaya değişebilir.",
 
   criticalPoints: [
     "Kredi notu ortak, iç skor bankaya özeldir",
     "Aynı kişi farklı bankalarda farklı sonuç alabilir",
-    "İç skor davranışa göre hızlı değişebilir",
-    "Doğru banka seçimi sonucu tamamen değiştirebilir",
+    "İç değerlendirme yöntemleri kamuya açık olmayabilir",
+    "Hiçbir danışmanlık belirli bir banka sonucunu garanti edemez",
   ],
 
   highlight:
-    "Kredi notu seni sisteme sokar, iç skor ise sonucu belirler.",
+    "Kredi notu bir girdidir; bankanın kredi kararıyla aynı şey değildir.",
 
   content: [
     {
@@ -93,12 +93,12 @@ export const bankaIcSkorNedir: Post = {
     {
       type: "p",
       text:
-        "Bu durumun nedeni iç skordur. Bir bankada aktif müşteri olan biri, o bankada daha güçlü görünürken başka bir bankada daha zayıf değerlendirilebilir.",
+        "Farklı sonuçların nedeni tek başına dışarıdan görülen puanla belirlenemez. Ürün koşulları, mevcut yükümlülükler ve bankanın kendi değerlendirmesi farklı olabilir.",
     },
     {
       type: "p",
       text:
-        "Yani problem çoğu zaman kredi notu değil, yanlış bankaya başvurmaktır.",
+        "Bir ret kararının nedenini yalnızca banka seçimine bağlamak doğru değildir; ilgili bankanın açıklaması ve dosyanın bütünü değerlendirilmelidir.",
     },
 
     {
@@ -118,7 +118,7 @@ export const bankaIcSkorNedir: Post = {
     {
       type: "p",
       text:
-        "İç skor dışarıdan direkt görülmez ama doğru davranışlarla güçlendirilebilir.",
+        "Bankanın iç modelinin ağırlıkları kamuya açık olmayabilir. Belirli bir işlemin iç skoru artıracağını vaat etmek yerine, ödeme ve gelir bilgilerinizi bankayla netleştirin.",
     },
     {
       type: "ul",

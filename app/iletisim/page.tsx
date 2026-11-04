@@ -3,24 +3,26 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "İletişim",
+  title: "Kredi Danışmanlığı İletişim: Telefon ve WhatsApp",
   description:
-    "Ücretsiz ön analiz için bizimle iletişime geçin. WhatsApp veya iletişim kanalları üzerinden hızlı dönüş alın.",
+    "Kredi notu, başvuru hazırlığı ve borç planlaması sorularınızı Ulaş Kredi ile görüşün. Telefon: 0 541 606 13 56. WhatsApp üzerinden de iletişime geçebilirsiniz.",
   alternates: {
     canonical: "https://ulaskredi.com.tr/iletisim",
   },
   openGraph: {
+    images: [{ url: "https://ulaskredi.com.tr/electric-finance-og.png", width: 1200, height: 630 }],
     title: "İletişim | Ulaş Kredi",
     description:
-      "Ücretsiz ön analiz için WhatsApp üzerinden hızlıca iletişime geçin.",
+      "Kredi danışmanlığı için telefon ve WhatsApp üzerinden bizimle görüşün.",
     url: "https://ulaskredi.com.tr/iletisim",
     type: "website",
   },
   twitter: {
+    images: ["https://ulaskredi.com.tr/electric-finance-og.png"],
     card: "summary_large_image",
     title: "İletişim | Ulaş Kredi",
     description:
-      "WhatsApp ve iletişim kanalları üzerinden hızlı dönüş alın.",
+      "Kredi danışmanlığı hakkında telefon ve WhatsApp üzerinden iletişime geçin.",
   },
 };
 import { Contact } from "@/components/contact";

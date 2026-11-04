@@ -1,53 +1,13 @@
 "use client";
 
+import Link from "next/link";
+import { PUBLISHED_POSTS } from "@/lib/content/posts";
 import { ArrowUpRight, Flame, Shield, TrendingDown, Wallet, AlertTriangle } from "lucide-react";
 
-const POSTS = [
-  {
-    title: "Kredi notu düşük olanların yaptığı 7 büyük hata",
-    excerpt: "Başvuru yapmadan önce bu hataları düzeltmek kredi onay ihtimalini ciddi artırır.",
-    tag: "Kredi Notu",
-    icon: TrendingDown,
-    href: "/rehber/kredi-notu-hatalar",
-    hot: true,
-  },
-  {
-    title: "Bankaların sana söylemediği kredi gerçeği",
-    excerpt: "Aynı gelirle biri onay alırken diğeri neden red alıyor? Sistem nasıl çalışıyor?",
-    tag: "Banka Stratejisi",
-    icon: Shield,
-    href: "/rehber/bankalarin-soylemedigi",
-    hot: true,
-  },
-  {
-    title: "Kredi başvurusu yapmadan önce 5 dakikalık kontrol listesi",
-    excerpt: "Bu mini kontrol listesiyle gereksiz başvuruları ve puan düşüşünü önle.",
-    tag: "Check-List",
-    icon: AlertTriangle,
-    href: "/rehber/basvuru-oncesi-kontrol",
-  },
-  {
-    title: "Kredi kartı limitin kredi notunu nasıl etkiler?",
-    excerpt: "Limit mi önemli, kullanım oranı mı? Basit ama çoğu kişinin yanlış bildiği konu.",
-    tag: "Kredi Kartı",
-    icon: Wallet,
-    href: "/rehber/kredi-karti-limit-etkisi",
-  },
-  {
-    title: "Red aldıysan hemen pes etme: red analiziyle doğru yol",
-    excerpt: "Red nedenini anlamadan tekrar başvurmak aynı sonucu getirir. Doğru stratejiyi kur.",
-    tag: "Red Analizi",
-    icon: Shield,
-    href: "/rehber/red-analizi",
-  },
-  {
-    title: "Kredi notu nasıl hızlı toparlanır? (Gerçekçi senaryo)",
-    excerpt: "Bir gecede mucize yok; ama 30–60 günde toparlayan doğru hamleler var.",
-    tag: "İyileştirme",
-    icon: Flame,
-    href: "/rehber/kredi-notu-toparlanma",
-  },
-];
+const POSTS = PUBLISHED_POSTS.slice(0, 6).map(post => ({
+  title: post.title, excerpt: post.excerpt, tag: post.category, icon: Shield,
+  href: `/rehber/${post.slug}`, hot: false,
+}));
 
 function TagPill({ children }: { children: React.ReactNode }) {
   return (
@@ -125,12 +85,12 @@ export default function GuideTeaser() {
       </div>
 
       <div className="mt-10 flex justify-center">
-        <a
+        <Link
           href="/rehber"
           className="inline-flex items-center justify-center rounded-xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:shadow-md"
         >
           Tüm rehberi gör
-        </a>
+        </Link>
       </div>
     </section>
   );

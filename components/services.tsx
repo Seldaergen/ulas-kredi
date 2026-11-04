@@ -1,8 +1,7 @@
 "use client";
 
-import Image from "next/image";
+import { PageHeader } from "@/components/inner-page";
 import Link from "next/link";
-import type React from "react";
 import {
   Banknote,
   Home,
@@ -12,12 +11,8 @@ import {
   ShieldCheck,
   BadgeCheck,
   CheckCircle2,
-  ArrowRight,
-  PhoneCall,
-  MessageCircle,
   ClipboardCheck,
   Timer,
-  Sparkles,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -125,7 +120,7 @@ const services = [
     title: "İhtiyaç Kredisi Danışmanlığı",
     description:
       "Hedef tutar/vade planı, başvuru stratejisi ve evrak hazırlığı konusunda rehberlik sunarız.",
-    bullets: ["Hedef belirleme", "Başvuru sırası", "Evrak/checklist"],
+    bullets: ["Hedef belirleme", "Başvuru sırası", "Belge kontrol listesi"],
     imageSrc: "/illustrations/ihtiyac.webp",
   },
   {
@@ -134,7 +129,7 @@ const services = [
     tag: "Konut",
     title: "Konut Kredisi Danışmanlığı",
     description:
-      "Uygun hedef planı, başvuru adımları ve süreç rehberliği ile daha kontrollü ilerlersiniz.",
+      "Konut için ayırabileceğiniz bütçeyi, vade seçeneklerini ve bankaya sunulacak belgeleri birlikte ele alırız.",
     bullets: ["Vade-tutar planı", "Süreç rehberliği", "Hata azaltma"],
     imageSrc: "/illustrations/konut.webp",
   },
@@ -144,8 +139,8 @@ const services = [
     tag: "Araç",
     title: "Araç Kredisi Danışmanlığı",
     description:
-      "Araç alımlarında doğru hedef ve doğru zamanlama ile başvuru planınızı kurarız.",
-    bullets: ["Doğru hedef", "Doğru zaman", "Doğru başvuru"],
+      "Araç bütçenizi ve aylık ödeme hedefinizi netleştirir, başvuru öncesi belge hazırlığını planlarız.",
+    bullets: ["Araç bütçesi", "Taksit senaryosu", "Belge hazırlığı"],
     imageSrc: "/illustrations/arac.webp",
   },
   {
@@ -154,7 +149,7 @@ const services = [
     tag: "Not & Limit",
     title: "Kredi Notu & Limit İyileştirme Planı",
     description:
-      "Etkileyen faktörleri analiz eder, 30/60/90 günlük uygulanabilir bir plan hazırlarız.",
+      "Etkileyen faktörleri ve ödeme düzenini birlikte değerlendirir, takip edilebilir bir hazırlık planı oluştururuz.",
     bullets: ["Analiz", "Plan", "Takip"],
     imageSrc: "/illustrations/not-limit.webp",
   },
@@ -173,7 +168,7 @@ const services = [
 const trust = [
   {
     icon: BadgeCheck,
-    title: "15+ Yıl Tecrübe",
+    title: "Süreç Rehberliği",
     desc: "Gerçekçi hedef, uygulanabilir strateji, sahaya dayalı yaklaşım.",
     color: "text-sky-700 bg-sky-100",
   },
@@ -208,11 +203,11 @@ const faqs = [
   },
   {
     q: "Hangi bilgiler gerekli?",
-    a: "Minimum bilgiyle ilerleriz. Hangi verilerin gerekli olduğunu ilk görüşmede birlikte netleştiririz.",
+    a: "İlk görüşmede ihtiyaç kredisi, konut, taşıt veya mevcut borçlarınızla ilgili talep konunuzu ve sorularınızı belirtin. Kimlik belgesi, kart bilgisi veya banka şifresi göndermeyin.",
   },
   {
-    q: "Kimler daha çok fayda görür?",
-    a: "Kredi notu/limit belirsizliği yaşayanlar, doğru bankayı seçemeyenler ve temiz bir başvuru planı kurmak isteyenler.",
+    q: "Borç yapılandırma konusunda destek alabilir miyim?",
+    a: "Mevcut taksitlerinizi ve bütçenizi birlikte değerlendirip bankanıza soracağınız vade, toplam maliyet ve ödeme koşullarını netleştirebiliriz. Yapılandırma kararı ve koşulları bankanıza aittir.",
   },
 ] as const;
 
@@ -234,7 +229,6 @@ function FAQJsonLd() {
   return (
     <script
       type="application/ld+json"
-      // eslint-disable-next-line react/no-danger
       dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
     />
   );
@@ -255,78 +249,16 @@ function SmallStat({ k, v }: { k: string; v: string }) {
 
 export function Services() {
   return (
-    <section className="py-10 sm:py-14">
+    <section className="ef-inner ef-services-page">
       <FAQJsonLd />
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* HERO */}
-        <div className="relative overflow-hidden rounded-3xl border bg-white/80 p-6 shadow-sm backdrop-blur sm:p-10">
-          <div className="pointer-events-none absolute -inset-24 bg-[radial-gradient(circle_at_15%_20%,rgba(56,189,248,0.18),transparent_60%)]" />
-          <div className="pointer-events-none absolute -inset-24 bg-[radial-gradient(circle_at_80%_70%,rgba(99,102,241,0.10),transparent_55%)]" />
-
-          <p className="text-xs font-semibold tracking-wide text-primary/90">
-            KREDİ DANIŞMANLIĞI HİZMETLERİ
-          </p>
-
-          <h1 className="mt-2 text-balance text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-            Kurumsal, güvenli ve planlı kredi danışmanlığı.
-          </h1>
-
-          <p className="mt-4 max-w-3xl text-pretty text-sm leading-relaxed text-muted-foreground sm:text-base">
-            Ulaş Kredi; kredi notu, limit ve başvuru sürecinizi anlaşılır hale getirir.
-            Kredi kararı bankaya aittir; biz analiz ve rehberlik ile hatalı adımları
-            azaltmaya odaklanırız.
-          </p>
-
-          <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
-            <a
-              href={PHONE}
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow-sm transition hover:opacity-95"
-            >
-              <PhoneCall className="h-4 w-4" />
-              Hemen Ara
-            </a>
-
-            <a
-              href={WHATSAPP}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 rounded-full border bg-white px-5 py-3 text-sm font-semibold text-foreground shadow-sm transition hover:shadow-md"
-            >
-              <MessageCircle className="h-4 w-4" />
-              WhatsApp’tan Yaz
-            </a>
-
-            <Link
-              href="/iletisim"
-              className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-200 bg-white/60 px-5 py-3 text-sm font-semibold text-foreground transition hover:bg-white"
-            >
-              Ücretsiz Ön Analiz <ArrowRight className="h-4 w-4" />
-            </Link>
-          </div>
-
-          <div className="mt-6 grid gap-3 sm:grid-cols-3">
-            {["15+ yıl tecrübe", "Şeffaf yaklaşım", "Analiz + rehberlik"].map((t) => (
-              <div
-                key={t}
-                className="flex items-center gap-2 rounded-2xl border bg-white/70 px-4 py-3 text-sm font-medium text-slate-700"
-              >
-                <CheckCircle2 className="h-4 w-4 text-emerald-600" />
-                {t}
-              </div>
-            ))}
-          </div>
-
-          <p className="mt-5 text-xs text-muted-foreground">
-            Not: Kredi onayı ve nihai karar bankaya aittir. Bu sayfa danışmanlık/bilgilendirme amaçlıdır.
-          </p>
-        </div>
-
+        <PageHeader eyebrow="HİZMETLERİMİZ" title="Kredi başvurusu öncesi danışmanlık." description="Kredi notu, gelir ve mevcut yükümlülüklerinizi birlikte anlamlandırın. İhtiyacınıza göre danışmanlık konusunu seçin; başvuru hazırlığını ve sonraki adımları konuşalım." steps={["İhtiyacınıza uygun hizmeti inceleyin.","Sorularınızı ve talep konunuzu netleştirin.","Telefon veya WhatsApp üzerinden danışmanla görüşün."]} />
         {/* SERVICES */}
-        <div className="mt-12">
+        <div className="mt-12" id="hizmet-listesi">
           <SectionTitle
             eyebrow="HİZMETLER"
-            title="Konuya göre uzman destek"
+            title="Hangi konuda desteğe ihtiyacınız var?"
             desc="Her hizmet için ayrı yaklaşım: analiz + plan + süreç rehberliği."
           />
 
@@ -347,49 +279,9 @@ export function Services() {
                     )}
                   />
 
-                  <div className="relative h-36 w-full overflow-hidden">
-                    <Image
-                      src={s.imageSrc}
-                      alt={s.title}
-                      fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    />
-                    <div className="absolute inset-0 bg-linear-to-t from-black/20 via-black/0 to-black/0" />
-                  </div>
+                  <div className="ef-service-art" aria-hidden="true"><Icon size={42} strokeWidth={1}/><span>{s.tag}</span></div>
 
-                  <CardHeader>
-                    <div className="flex items-start justify-between gap-3">
-                      <div className="flex items-center gap-3">
-                        <span
-                          className={cn(
-                            "flex h-11 w-11 items-center justify-center rounded-2xl shadow-sm",
-                            st.icon
-                          )}
-                        >
-                          <Icon className="h-5 w-5" />
-                        </span>
-
-                        <div>
-                          <span
-                            className={cn(
-                              "inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-semibold ring-1",
-                              st.chip
-                            )}
-                          >
-                            {s.tag}
-                          </span>
-
-                          <CardTitle className="mt-2 text-lg">{s.title}</CardTitle>
-                        </div>
-                      </div>
-
-                      <span className="inline-flex items-center gap-1 rounded-full bg-slate-50 px-2.5 py-1 text-[11px] font-semibold text-slate-700 ring-1 ring-slate-200">
-                        <Sparkles className="h-3.5 w-3.5" />
-                        Planlı
-                      </span>
-                    </div>
-                  </CardHeader>
+                  <CardHeader><CardTitle>{s.title}</CardTitle></CardHeader>
 
                   <CardContent>
                     <p className="text-sm leading-relaxed text-muted-foreground">
@@ -441,7 +333,7 @@ export function Services() {
           />
 
           <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            <SmallStat k="15+ yıl" v="Saha tecrübesi" />
+            <SmallStat k="Rehberlik" v="Başvuru hazırlığı" />
             <SmallStat k="Net plan" v="Adım adım yol haritası" />
             <SmallStat k="Şeffaf süreç" v="Doğru beklenti yönetimi" />
             <SmallStat k="Hızlı ön analiz" v="Kısa sürede netleşme" />
@@ -511,7 +403,7 @@ export function Services() {
               <div className="w-full rounded-2xl border bg-slate-50 p-5 sm:w-90">
                 <p className="text-sm font-bold text-slate-900">Ücretsiz Ön Analiz</p>
                 <p className="mt-1 text-sm text-slate-600">
-                  10 dakikada durumunu netleştirelim. Sonra sana uygun yol haritasını çıkaralım.
+                  Durumunuzu birlikte değerlendirelim. Hazırlık ve sonraki adımları konuşalım.
                 </p>
 
                 <div className="mt-4 flex flex-col gap-2">
@@ -519,7 +411,7 @@ export function Services() {
                     href="/iletisim"
                     className="inline-flex items-center justify-center rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition hover:opacity-95"
                   >
-                    Formu doldur
+                    İletişim seçeneklerini görün
                   </Link>
 
                   <a
@@ -559,7 +451,7 @@ export function Services() {
               },
               {
                 t: "2) Strateji & hazırlık",
-                d: "Evrak/checklist ve başvuru sırası planını birlikte oluştururuz.",
+                d: "Belge kontrol listesi ve başvuru sırası planını birlikte oluştururuz.",
               },
               {
                 t: "3) Süreç rehberliği",
@@ -596,7 +488,7 @@ export function Services() {
         <div className="mt-12 overflow-hidden rounded-3xl border bg-slate-900 p-7 text-white shadow-sm sm:p-10">
           <p className="text-xs font-semibold tracking-wide text-white/80">ÜCRETSİZ ÖN ANALİZ</p>
           <h3 className="mt-2 text-2xl font-bold sm:text-3xl">
-            10 dakikada yol haritası: doğru hedef, doğru sıra, doğru adım.
+            Başvuru hazırlığını ve sonraki adımları birlikte değerlendirelim.
           </h3>
           <p className="mt-3 max-w-2xl text-sm leading-relaxed text-white/80">
             Kısa bir ön değerlendirme ile durumunuzu netleştirelim. Sonra size uygun stratejiyi adım adım çıkaralım.
@@ -607,7 +499,7 @@ export function Services() {
               href="/iletisim"
               className="inline-flex items-center justify-center rounded-full bg-white px-5 py-3 text-sm font-semibold text-slate-900 shadow-sm transition hover:opacity-95"
             >
-              Ücretsiz ön analiz formu
+              Danışmanla görüşün
             </Link>
             <a
               href={WHATSAPP}

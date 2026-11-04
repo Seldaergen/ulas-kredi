@@ -1,0 +1,32 @@
+ULAŞ KREDİ — KONTROLLÜ DOĞRULAMA / 2026-11-04
+Karar: Güncel staging ve Starter kabulü beklemede; yayın NO-GO.
+
+Git: electric-finance/bootstrap, HEAD 5a76973. Başlangıçta 82 değişmiş/yeni
+dosya girdisi vardı; mevcut kod ve kayıtlar korundu. git diff --check PASS.
+Önceki kabul raporları ve Paket 5 çıkış kayıtları incelendi: build, test,
+integration, routes, SEO ve visual başarılı. Bunlar güncel kabul sayılmadı.
+
+Kaynaklar: 3580 MiB toplam RAM; ilk ölçüm 1267 MiB kullanılabilir,
+swap yaklaşık 1/1024 MiB. Son ölçüm 1630 MiB kullanılabilir,
+swap yaklaşık 1/1024 MiB; PSI some/full avg10=0.02, avg60=0.11.
+Swap rahatlamış olsa da diğer proje için güvenli build payı doğrulanamadı.
+Production build, Chromium, tam SEO ve runtime yük ölçümü başlatılmadı.
+Süreç görünürlüğü sandbox ile sınırlı: codex ve kontrol komutları görüldü;
+host/diğer proje süreç envanteri çıkarılamadı. Hiçbir süreç durdurulmadı.
+
+Pinli Node 24.22.1, temizlenmiş environment, 256 MiB heap ve tek test
+eşzamanlılığıyla üç dosya PASS (6.65 saniye): application-intake,
+application-contact-fallback, content-publication. Sentetik/mock kontroller:
+kapalı API 503, storage çağrısı yok; iki formda kişisel veri alanları
+gizli/disabled; tel:+905416061356 ve https://wa.me/905416061356 korunuyor;
+65 rehberden 8 yayımlanmış, 57 onaysız rehberin noindex kısıtı korunuyor.
+Bu sonuçlar HTTP veya mobil/masaüstü dark/light tarayıcı kabulü değildir.
+.next-staging/BUILD_ID yok; güncel build başarısı iddia edilmez.
+
+Yayın engelleri: güncel build ve izole staging kabulü, tarayıcı kontrolleri,
+Starter için gerçek runtime idle/peak RSS ve yayıncı bilgi/metin onayları.
+Gerçek başvuru DB/worker/cron ve operasyon/hukuki kabul olmadan kapalı kalır.
+Sonraki adım: diğer projenin kaynak ihtiyacıyla birlikte yeterli RAM payı
+sağlandığında render-prelaunch-final.txt içindeki tek sıralı staging planı:
+build -> HTTP/kapalı mod/iletişim -> mobil/masaüstü dark/light -> runtime RSS.
+Commit/push/deploy, ücretli servis, Render değişikliği, WSL restart yok.

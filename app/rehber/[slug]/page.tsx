@@ -3,31 +3,29 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { POSTS, getPost, type Post } from "@/lib/content/posts";
+import { POSTS, PUBLISHED_POSTS, getPost, type Post } from "@/lib/content/posts";
+import { publication } from "@/lib/content/publication";
+import { absoluteUrl, SITE_ORIGIN } from "@/lib/seo";
 import { getTopicById, type TopicId } from "@/lib/topics/topics";
-import CoverImageClient from "@/components/rehber/CoverImageClient";
+import { GuideArtwork, ConversionPanel } from "@/components/inner-page";
 
 /* -------------------------------------------------------------------------- */
 /*                                  HELPERS                                   */
 /* -------------------------------------------------------------------------- */
 
+// Static rendering can supply an encoded segment; content slugs stay unchanged.
+function getRoutePost(slug: string) {
+  const direct = getPost(slug);
+  if (direct) return direct;
+  try {
+    return getPost(decodeURIComponent(slug));
+  } catch {
+    return null;
+  }
+}
+
 function getSiteUrl() {
-  const env = process.env.SITE_URL?.trim();
-  if (env) return env.replace(/\/+$/, "");
-  return "https://ulaskredi.com.tr";
-}
-
-function absoluteUrl(path: string) {
-  const base = getSiteUrl();
-  if (!path) return base;
-  if (path.startsWith("http://") || path.startsWith("https://")) return path;
-  return `${base}${path.startsWith("/") ? "" : "/"}${path}`;
-}
-
-function coverImagePath(post: Post) {
-  const p = post.coverImage?.trim();
-  if (p) return p.startsWith("/") ? p : `/${p}`;
-  return `/content/${post.slug}.jpg`;
+  return SITE_ORIGIN;
 }
 
 function fmtDateTR(iso: string) {
@@ -47,8 +45,8 @@ function videosHrefByTopic(topicId: TopicId) {
   return `/videolar?topic=${encodeURIComponent(topicId)}`;
 }
 
-function qaHrefByTopic(topicId: TopicId) {
-  return `/soru-cevap?topic=${encodeURIComponent(topicId)}`;
+function serviceHrefByTopic() {
+  return "/hizmetler#hizmet-listesi";
 }
 
 function rehberHrefByTopic(topicId: TopicId) {
@@ -57,7 +55,7 @@ function rehberHrefByTopic(topicId: TopicId) {
 
 function buildJsonLd(post: Post) {
   const url = absoluteUrl(`/rehber/${post.slug}`);
-  const image = absoluteUrl(coverImagePath(post));
+  const image = absoluteUrl("/electric-finance-og.png");
 
   return {
     "@context": "https://schema.org",
@@ -70,7 +68,8 @@ function buildJsonLd(post: Post) {
     description: post.excerpt,
     image: [image],
     datePublished: post.date,
-    dateModified: post.date,
+    dateModified: publication(post).modified,
+    citation: publication(post).sources.map(source => source.url),
     inLanguage: "tr-TR",
     articleSection: post.category,
     author: {
@@ -106,7 +105,7 @@ function RenderContent({ post }: { post: Post }) {
       {blocks.map((b, idx) => {
         if (b.type === "h2") {
           return (
-            <h2 key={idx} className="mt-8 text-slate-900">
+            <h2 id={"section-"+idx} key={idx} className="mt-8 text-slate-900">
               {b.text}
             </h2>
           );
@@ -159,12 +158,20 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const post = getPost(slug);
+  const post = getRoutePost(slug);
 
   if (!post) return {};
 
   const url = absoluteUrl(`/rehber/${post.slug}`);
-  const image = absoluteUrl(coverImagePath(post));
+  const image = absoluteUrl("/electric-finance-og.png");
+  const review = publication(post);
+  if (review.status !== "published") return {
+    title: `İçerik incelemede: ${post.title}`,
+    description: review.reason,
+    alternates: { canonical: url },
+    robots: { index: false, follow: true },
+    openGraph: { title: "İçerik incelemede", description: review.reason ?? "Kaynak kontrolü sürüyor.", url, type: "website", images: [absoluteUrl("/electric-finance-og.png")] },
+  };
 
   return {
     title: post.title,
@@ -207,31 +214,41 @@ export default async function RehberDetayPage({
 }) {
   const { slug } = await params;
 
-  const post = getPost(slug);
+  const post = getRoutePost(slug);
   if (!post) notFound();
 
+  const review = publication(post);
+  if (review.status !== "published") return <main className="mx-auto max-w-3xl px-4 py-10">
+    <h1>{post.title}</h1>
+    <h2>İçerik kaynak kontrolünde</h2>
+    <p>{review.reason} Doğrulanmamış eski açıklamalar bu sayfada yayımlanmıyor. URL korunmuştur.</p>
+    <p><Link href="/rehber">Kaynak kontrolü yapılan rehberleri inceleyin</Link> veya <Link href="/hizmetler">hizmetlerimiz hakkında bilgi alın</Link>.</p>
+    <p><Link href="/iletisim#iletisim">Ön değerlendirme için iletişime geçin</Link>. Nihai kredi kararı bankaya aittir.</p>
+  </main>;
+
   const topic = getTopicById(post.topicId);
-  const related = POSTS.filter(
+  const related = PUBLISHED_POSTS.filter(
     (p) => p.slug !== post.slug && p.topicId === post.topicId,
   ).slice(0, 4);
 
   return (
-    <main className="mx-auto max-w-3xl px-4 py-10">
+    <main className="ef-article">
       {/* Structured Data / JSON-LD */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(buildJsonLd(post)),
+            __html: JSON.stringify(buildJsonLd(post)).replace(/</g, "\\u003c"),
         }}
       />
 
       {/* HEADER */}
-      <header>
+      <header className="ef-article-header"><nav aria-label="İçerik yolu"><Link href="/rehber">Kredi rehberi</Link><span>/</span><Link href={rehberHrefByTopic(post.topicId)}>{topic?.title ?? "Rehber"}</Link></nav>
         <h1 className="text-3xl font-extrabold">{post.title}</h1>
         <p className="mt-3 text-slate-600">{post.excerpt}</p>
 
         <div className="mt-4 text-sm text-slate-500">
           <span>{fmtDateTR(post.date)}</span>
+          <span> • Kaynak kontrolü: {fmtDateTR(review.sourceCheckedAt!)} • Yayıncı: Ulaş Kredi</span>
           {topic && (
             <>
               <span className="mx-2">•</span>
@@ -253,25 +270,9 @@ export default async function RehberDetayPage({
         </div>
       )}
 
-      {/* COVER */}
-      <div className="mt-6 h-64 w-full overflow-hidden rounded-2xl">
-        <CoverImageClient
-          slug={post.slug}
-          coverImage={post.coverImage}
-          topicId={post.topicId}
-          alt={`${post.title} - Ulaş Kredi Rehberi`}
-          className="h-full"
-          priority
-        />
-      </div>
-
-      {/* CTA */}
-      <div className="mt-6 rounded-xl border p-4">
-        <p className="font-semibold">Durumuna özel analiz ister misin?</p>
-        <Link href="/iletisim" className="mt-2 inline-block text-blue-600">
-          İletişime geç →
-        </Link>
-      </div>
+      <GuideArtwork label={topic?.title ?? "Kredi rehberi"} />
+      <nav className="ef-reading-map" aria-label="Bu rehberde"><span className="ef-eyebrow">BU REHBERDE</span>{post.content.map((block,idx)=>block.type==="h2" ? <a key={idx} href={"#section-"+idx}>{block.text}</a> : null)}</nav>
+      <Link data-inner-cta className="ef-text-link" href="/iletisim#iletisim">Bu konuyu kendi durumunuzla değerlendirin →</Link>
 
       {/* CRITICAL POINTS */}
       {post.criticalPoints?.length ? (
@@ -292,6 +293,16 @@ export default async function RehberDetayPage({
         <RenderContent post={post} />
       </article>
 
+      <section className="mt-8">
+        <h2>Kaynaklar ve kapsam</h2>
+        <ul>{review.sources.map(source => <li key={source.url}><a href={source.url} rel="noreferrer" target="_blank">{source.title}</a></li>)}</ul>
+        <p>Bu rehber genel bilgilendirmedir; güncel faiz, kesin limit veya onay süresi taahhüt etmez. Bankanın sözleşme öncesi bilgi formunu ve yürürlükteki düzenlemeleri kontrol edin.</p>
+        <p>Güncelleme sorumluluğu: {review.updateResponsibility}.</p>
+        <Link href="/hizmetler#hizmet-listesi">Danışmanlık kapsamını ve hazırlık adımlarını inceleyin</Link>
+      </section>
+
+      <p className="mt-4"><Link className="ef-text-link" href="/#hesaplama">Kendi varsayımlarınızla taksit ve bütçe hesabı yapın →</Link></p>
+      <ConversionPanel title="Bilgiyi bir sonraki adıma dönüştürün." description="Sorularınızı danışmanla görüşün. Kredi kararı ilgili bankanın değerlendirmesine bağlıdır." />
       {/* HIGHLIGHT */}
       {post.highlight && (
         <div className="mt-8 rounded-xl bg-black p-4 text-center text-white">
@@ -319,10 +330,10 @@ export default async function RehberDetayPage({
               Videolar
             </Link>
             <Link
-              href={qaHrefByTopic(post.topicId)}
+              href={serviceHrefByTopic()}
               className="rounded-full border px-4 py-2 hover:bg-white"
             >
-              Soru - cevap
+              Danışmanlık hizmetleri
             </Link>
           </div>
         </section>

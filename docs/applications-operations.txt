@@ -1,0 +1,128 @@
+ULAŞ KREDİ — BAŞVURU İŞLETİMİ (PAKET 3)
+
+Kapsam ve sınır
+Form -> JSON API -> PostgreSQL transaction -> referans -> bağımsız bildirim kuyruğu.
+Bu sistem kredi tahsisi/onayı vermez. Üretim bağlantısı veya deploy yapılmamıştır.
+Paket 2'deki 57 inceleme/noindex kaydı değiştirilmemiştir. Search Console kanıtı
+ve yayıncı değerlendirmesi olmadan bu değişiklik üretime onaylı sayılmaz.
+
+Gerekli çalışma ortamı: .nvmrc içindeki Node 24.22.1; npm ci; prisma generate
+--config prisma.applications.config.ts. Kurulum çıktıları ve gizli değişkenler
+istemciye, Git'e veya hata günlüklerine yazılmamalıdır.
+
+Sunucuda gerekli değişkenler (örnekler değer/kimlik bilgisi değildir):
+APPLICATION_ACCEPTING_SUBMISSIONS: üretimde varsayılan kapalı; yalnız DB,
+  anahtarlar, bildirim, saklama ve hukuki/staging doğrulamaları tamamlandıktan
+  sonra açıkça true yapılır. false/boşken politika ucu ve geçerli başvurular 503
+  döner; worker ve yetkili saklama işlemleri devam edebilir. Bu operasyonel
+  onay bayrağı hizmetlerin çalıştığını kendiliğinden kanıtlamaz. Yerel sentetik
+  testler APPLICATION_ALLOW_LOCAL=true ile bu kapıyı aşar; üretimde yasaktır.
+APPLICATION_DATABASE_URL: başvurulara ayrılmış PostgreSQL bağlantısı.
+  Eski DATABASE_URL'ye geri dönüş yoktur. Dış veritabanında TLS doğrulamasını
+  kapatmayın. Web, worker ve yönetim süreçlerine ayrı en-az-yetkili DB rolleri
+  verilmesi ve ağ erişiminin sınırlandırılması üretim sorumluluğudur.
+APPLICATION_ENCRYPTION_KEY: kriptografik rastgele 32 baytlık, 64 hex karakter.
+APPLICATION_ABUSE_KEY: ayrı, aynı uzunlukta rastgele anahtar.
+  Anahtarları gizli değişken kasasında saklayın. Şifreleme anahtarı değiştirilirse
+  eski kayıtlar okunamaz; kontrollü yeniden şifreleme/anahtar geçişi olmadan
+  anahtarı değiştirmeyin. Yedek ve anahtar kurtarma ayrı korunmalıdır.
+APPLICATION_DATA_OWNER: formda yayımlanacak gerçek veri sorumlusu unvanı.
+APPLICATION_RETENTION_DAYS: yayıncının hukuki/operasyonel incelemeyle belirlediği
+  1..365 günlük süre. Bu teknik aralık ve testlerdeki 30 gün bir hukuki öneri
+  değildir. Süre ve sorumlu tanımlanmadan kayıt hizmeti açılmaz.
+APPLICATION_TRUSTED_PROXY_HOPS: varsayılan 0. Yalnız güvenilir giriş katmanı
+  X-Forwarded-For'u temizleyip yeniden yazıyorsa doğru hop sayısını ayarlayın.
+  Aksi halde başlıklara güvenilmez, atfedilemeyen ağ için ortak kota uygulanır.
+APPLICATION_ALLOW_LOCAL: üretimde false/boş. true yalnız loopback test Origin'i
+  ve loopback SMTP için kullanılır; dış SMTP TLS denetimini gevşetmez.
+
+Bildirim worker'ının ek değişkenleri:
+APPLICATION_SMTP_HOST, APPLICATION_SMTP_PORT, APPLICATION_SMTP_USER,
+APPLICATION_SMTP_PASS, APPLICATION_NOTIFICATION_TO, APPLICATION_NOTIFICATION_FROM.
+Alıcı müşterinin adresi değildir; yetkilendirilmiş operasyon adresidir.
+465'te TLS, diğer dış SMTP portlarında STARTTLS zorunludur. Sertifika doğrulaması
+kapatılmaz. Mesaj yalnız başvuru referansını taşır; ad/telefon/not e-postalanmaz.
+Sağlayıcının yurt dışı aktarım ve saklama koşulları ayrıca değerlendirilmelidir.
+
+Migration
+npm run applications:migrate
+Bu komut yalnız prisma/application-migrations dizinindeki eklemeli SQL'i kullanır.
+Eski prisma/migrations zincirinde Question tablosunu silen eski bir adım vardır;
+bu zincir başvuru kurulumu için çalıştırılmaz. Üretim migration'ı burada uygulanmadı.
+Migration ve yedek geri dönüş planı üretime geçişte ayrıca gözden geçirilmelidir.
+
+Operasyon
+Güvenli web yönetici oturumu mevcut olmadığından yönetim HTTP endpoint'i yoktur.
+CLI erişimi işletim sistemi hesabı, sunucu erişimi ve gizli değişkenlere erişimle
+yetkilendirilir. APPLICATION_OPERATOR_ID kişisel veri içermeyen bir operatör
+takma adı olmalıdır (3..64 harf/rakam/nokta/tire/altçizgi). Takma ad tek başına
+kimlik doğrulama değildir; OS erişim kontrolü zorunludur.
+
+npm run applications:admin -- list
+npm run applications:admin -- show UK-REFERANS
+npm run applications:admin -- show UK-REFERANS --reveal
+npm run applications:admin -- status UK-REFERANS CONTACT_PENDING --confirm UK-REFERANS
+npm run applications:admin -- retry UK-REFERANS --confirm UK-REFERANS
+npm run applications:admin -- erase UK-REFERANS --confirm UK-REFERANS
+npm run applications:admin -- purge-expired --confirm-expiry-policy
+
+UK-REFERANS yerine gerçek UK- ve 32 hex karakterlik referans yazılır.
+list kişisel alanları göstermez; show varsayılan olarak maskeler; --reveal
+yalnız yetkili ihtiyaç halinde kullanılmalıdır ve erişim olayı kaydedilir.
+--reveal çıktısını ortak günlük sistemine yönlendirmeyin.
+NEW -> CONTACT_PENDING -> CONTACTED -> IN_REVIEW -> CLOSED.
+İnceleme sırasında CONTACT_PENDING/CONTACTED'e dönüş ve önceki aşamalardan
+CLOSED'e geçiş mümkündür. CLOSED'dan otomatik yeniden açma yoktur.
+Başvuru durumu bildirim gönderildi diye değişmez; hiçbir durum banka kararı değildir.
+
+npm run applications:worker -- 10
+Bu komutu ayrı işçi/zamanlayıcı düzenli çalıştırmalıdır. API e-posta göndermez.
+Kuyruk ve ilk olay başvuru ile aynı transaction içinde kaydedilir.
+İşçi satır kilidi, SKIP LOCKED ve 120 saniyelik lease kullanır. SMTP zaman aşımı
+20 saniyedir. Başarısız deneme yeniden denenebilir; 5 otomatik deneme sonrasında
+DEAD olur. Yetkili CLI toplam 10 denemeye kadar kontrollü ek deneme açabilir.
+Çöken işçinin STARTED denemesi lease dolunca UNKNOWN olur. Sabit Message-ID
+izlenebilirlik sağlar; SMTP için exactly-once garantisi değildir. SMTP kabulü
+ile DB teyidi arasında çökme olursa mükerrer e-posta ihtimali vardır; başvuru
+kopyalanmaz. PENDING/RETRY/DEAD, kuyruk yaşı ve worker çalışması izlenmelidir.
+
+Saklama ve silme
+Yayıncı günlük purge-expired çalışmasını zamanlamalı, izlemeli ve hatasını ele
+almalıdır; bu depoda bir üretim cron kurulmamıştır. Her çağrı en çok 100 kayıt
+işler; moreMayRemain true ise sonraki parti gerekir. Süresi geçen/silinen kayıt
+için bildirim gönderilmez. Silme kişisel şifreli alanları ve eşleştirme özetlerini
+kaldırır, işi iptal eder; rastgele referans ve kişisel veri içermeyen sınırlı
+işlem tarihçesi kalır. Bu işlem tüm yedekleri otomatik silmez. Yedek imhası,
+hak talepleri ve tutulan sınırlı metadata'nın süresi veri sorumlusuna aittir.
+Geçici kötüye kullanım özetleri de bu işlemle süreleri dolunca kaldırılır.
+
+Tekrarlanan gönderim ve kötüye kullanım
+Aynı UUID Idempotency-Key + aynı normalize edilmiş veri aynı referansı döndürür;
+farklı veriyle aynı anahtar 409'dur. İstemci belirsiz ağ/DB yanıtında anahtarı
+korur; başarıda kişisel form alanlarını temizler. Sayfa kapatılırsa bellek içi
+anahtar kaybolur. Yeni anahtar yeni başvuru sayılabilir; telefon/gün kotası 3,
+ağ/dakika kotası 30'dur. Kota PostgreSQL'de tutulur ve yeniden başlatmada korunur.
+Silinmiş kişisel kaydın eski eşleştirme anahtarı tutulmaz. Honeypot 202 + ok:false
+döndürür; kayıt veya sahte referans üretmez. Şema, 4 KiB sınırı, Origin denetimi
+ve kalıcı kotalar koruma katmanlarıdır; dağıtık bot saldırısına karşı yayıncının
+giriş katmanı sınırlaması/gerekirse CAPTCHA gereksinimi ayrıca değerlendirilmelidir.
+
+Test
+npm test
+npm run build
+npm run test:applications
+npm run verify:routes
+npm run verify:seo
+Entegrasyon testi gerçek PostgreSQL'i yalnız 127.0.0.1'e bağlar, sentetik veri ve
+geçici anahtar üretir, ayrı SMTP ve mobil/masaüstü Chromium kullanır. Test DB
+dosyaları artifacts/package3 altında korunur; servisler finally içinde kapanır.
+Chromium kurulumu proje içindeki .tooling/playwright dizinine yapılır.
+İlk kurulumda gerekli komut: PLAYWRIGHT_BROWSERS_PATH=.tooling/playwright
+node node_modules/playwright/cli.js install chromium --only-shell
+
+Üretim öncesi tamamlanması gerekenler
+Gerçek veri sorumlusu, hukuki sebep ve aydınlatma metni onayı; sağlayıcı/aktarım
+değerlendirmesi; saklama, yedek/imha ve anahtar yönetimi; DB rolleri/ağ/TLS;
+yetkili alıcı ve SMTP; worker/retention zamanlayıcısı ve alarm; OS operatör erişimi;
+güvenilir proxy başlıkları ve kötüye kullanım kapasitesi. Gerçek üretim uçtan uca
+teslimatı bu testlerin geçtiği varsayılarak tamamlanmış sayılmaz.

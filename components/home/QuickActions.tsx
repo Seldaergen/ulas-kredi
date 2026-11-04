@@ -140,10 +140,10 @@ export default function QuickActions() {
           </Link>
 
           <Link
-            href="/soru-cevap"
+            href="/nasil-calisir"
             className="inline-flex h-11 w-full items-center justify-center rounded-xl border border-slate-200 bg-white px-4 text-base font-semibold text-slate-900 shadow-sm transition hover:shadow-md"
           >
-            Soru–Cevap’a bak
+            Sürecin nasıl çalıştığını öğren
           </Link>
         </div>
       </div>

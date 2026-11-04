@@ -2,7 +2,15 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import React, { useEffect, useMemo, useRef, useState, useCallback } from "react";
+import React, { useEffect, useMemo, useRef, useState, useCallback, useSyncExternalStore } from "react";
+
+function subscribeMotion(callback: () => void) {
+  const media = window.matchMedia?.("(prefers-reduced-motion: reduce)");
+  if (!media) return () => {};
+  media.addEventListener("change", callback);
+  return () => media.removeEventListener("change", callback);
+}
+const motionSnapshot = () => window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
 
 type ShortVideo = {
   id: string;
@@ -22,11 +30,13 @@ export default function VideoSectionClient({
   youtubeShortsUrl: string;
   secondsPerVideo?: number;
 }) {
-  const safeVideos = Array.isArray(videos) ? videos.filter(Boolean) : [];
-  const playlist = safeVideos.slice(0, 12);
+  const playlist = useMemo(
+    () => (Array.isArray(videos) ? videos.filter(Boolean).slice(0, 12) : []),
+    [videos]
+  );
 
   // vitrin: ilk 5
-  const featured = playlist.slice(0, Math.min(5, playlist.length));
+  const featured = useMemo(() => playlist.slice(0, 5), [playlist]);
   const nextList = playlist.slice(featured.length, featured.length + 3);
 
   const per = Math.max(6, Math.min(20, secondsPerVideo)); // güvenli aralık
@@ -34,6 +44,7 @@ export default function VideoSectionClient({
 
   const [mode, setMode] = useState<"player" | "vitrin">("vitrin");
   const [paused, setPaused] = useState(false);
+  const reducedMotion = useSyncExternalStore(subscribeMotion, motionSnapshot, () => false);
 
   // vitrin index
   const [activeIndex, setActiveIndex] = useState(0);
@@ -45,6 +56,19 @@ export default function VideoSectionClient({
 
   // progress (0..1)
   const [progress, setProgress] = useState(0);
+  const [animationInputs, setAnimationInputs] = useState({ mode, paused, count: featured.length, per });
+
+  // Reset derived animation state before painting a new playback context.
+  if (animationInputs.mode !== mode || animationInputs.paused !== paused ||
+      animationInputs.count !== featured.length || animationInputs.per !== per) {
+    setAnimationInputs({ mode, paused, count: featured.length, per });
+    setProgress(0);
+  }
+
+  const vitrinId = featured[activeIndex]?.id;
+  if (mode === "vitrin" && vitrinId && activeId !== vitrinId) {
+    setActiveId(vitrinId);
+  }
 
   // raf timer
   const rafRef = useRef<number | null>(null);
@@ -65,13 +89,12 @@ export default function VideoSectionClient({
     return featured[activeIndex] ?? featured[0] ?? playlist[0];
   }, [hasVideos, mode, playlist, activeId, featured, activeIndex]);
 
-  const embedSrc = useMemo(() => {
-    if (!activeVideo?.id) return "";
-    return `https://www.youtube-nocookie.com/embed/${activeVideo.id}?autoplay=1&mute=1&playsinline=1&rel=0&modestbranding=1`;
-  }, [activeVideo?.id]);
+  const embedSrc = activeVideo?.id
+    ? `https://www.youtube-nocookie.com/embed/${activeVideo.id}?autoplay=1&mute=1&playsinline=1&rel=0&modestbranding=1`
+    : "";
 
   const stopRaf = useCallback(() => {
-    if (rafRef.current) {
+    if (rafRef.current !== null) {
       cancelAnimationFrame(rafRef.current);
       rafRef.current = null;
     }
@@ -93,16 +116,9 @@ export default function VideoSectionClient({
     setActiveIndex((i) => (i - 1 + featured.length) % featured.length);
   }, [featured.length]);
 
-  // vitrin index değişince activeId senkron (vitrin modunda)
-  useEffect(() => {
-    if (mode !== "vitrin") return;
-    const v = featured[activeIndex];
-    if (v?.id) setActiveId(v.id);
-  }, [activeIndex, featured, mode]);
-
   // progress loop (vitrin modunda + paused değilken)
   const tick = useCallback(
-    (now: number) => {
+    function frame(now: number) {
       if (mode !== "vitrin" || paused || !featured.length) return;
 
       const start = startedAtRef.current || now;
@@ -115,7 +131,7 @@ export default function VideoSectionClient({
         nextFeatured();
       }
 
-      rafRef.current = requestAnimationFrame(tick);
+      rafRef.current = requestAnimationFrame(frame);
     },
     [mode, paused, featured.length, per, nextFeatured, resetProgress]
   );
@@ -124,19 +140,17 @@ export default function VideoSectionClient({
     stopRaf();
 
     // player’da otomatik/progress yok
-    if (mode === "player") {
-      setProgress(0);
-      return;
-    }
+    if (mode === "player" || reducedMotion) return;
 
     // vitrin: başlat
-    resetProgress();
+    startedAtRef.current = performance.now();
+    pausedAtRef.current = 0;
     if (!paused && featured.length) {
       rafRef.current = requestAnimationFrame(tick);
     }
 
     return () => stopRaf();
-  }, [mode, paused, featured.length, tick, resetProgress, stopRaf]);
+  }, [mode, paused, featured.length, tick, stopRaf, reducedMotion]);
 
   const enterPlayer = useCallback(
     (id: string) => {
