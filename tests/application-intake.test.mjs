@@ -10,7 +10,7 @@ const { GET } = require('../app/api/application-policy/route.ts');
 const { applicationConfig } = require('../lib/applications/config.ts');
 const { APPLICATION_PRIVACY_VERSION } = require('../lib/applications/validation.ts');
 
-test('production intake stays closed with complete config until explicit approval; local fixtures still work', async () => {
+test('non-production intake requires explicit flags; local fixtures still work', async () => {
   const fixture = {
     APPLICATION_DATABASE_URL: 'postgresql://fixture:fixture@db.invalid/app?sslmode=verify-full',
     APPLICATION_ENCRYPTION_KEY: 'a'.repeat(64), APPLICATION_ABUSE_KEY: 'b'.repeat(64),

@@ -30,6 +30,8 @@ jobs:
           set -o pipefail
           node scripts/render-build.mjs web 2>&1 | tee artifacts/release-acceptance/build.log
           test -s .next/BUILD_ID
+      - name: Production dependency security gate
+        run: npm audit --omit=dev --audit-level=high
       - name: Static checks and sequential unit tests
         run: |
           npm run lint
@@ -40,6 +42,10 @@ jobs:
         run: |
           set -o pipefail
           node scripts/verify-release.cjs 2>&1 | tee artifacts/release-acceptance/acceptance.log
+      - name: Full SEO and internal-link acceptance
+        run: |
+          set -o pipefail
+          npm run verify:seo 2>&1 | tee artifacts/release-acceptance/seo.log
       - name: Preserve acceptance evidence
         if: always()
         uses: actions/upload-artifact@v7
