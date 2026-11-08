@@ -15,7 +15,12 @@ export function Navbar() {
  const active=(href:string)=>href==="/" ? pathname==="/" : !href.includes("?") && (pathname===href || pathname.startsWith(href+"/"));
  const close=()=>{setMobile(false);setGuide(false);};
  useEffect(()=>{const outside=(e:PointerEvent)=>{if(!root.current?.contains(e.target as Node))close();};document.addEventListener("pointerdown",outside);return()=>{document.removeEventListener("pointerdown",outside);if(timer.current)clearTimeout(timer.current);};},[]);
- useEffect(()=>{close();},[pathname]);
+ const [previousPathname,setPreviousPathname]=useState(pathname);
+ if(previousPathname!==pathname){
+  setPreviousPathname(pathname);
+  setMobile(false);
+  setGuide(false);
+ }
  const openOnHover=(e:React.PointerEvent)=>{if(e.pointerType!=="mouse")return;if(timer.current)clearTimeout(timer.current);setGuide(true);};
  const leave=(e:React.PointerEvent)=>{if(e.pointerType!=="mouse" || mobile)return;timer.current=setTimeout(()=>{if(!root.current?.querySelector(".uk-guide-menu")?.contains(document.activeElement))setGuide(false);},180);};
  function keys(e:React.KeyboardEvent) {
