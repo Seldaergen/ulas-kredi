@@ -4,8 +4,10 @@ import createMDX from "@next/mdx";
 /** @type {import('next').NextConfig} */
 const baseConfig = {
   // Local production-mode staging keeps the last accepted .next output intact.
-  distDir: process.env.ELECTRIC_FINANCE_STAGING === "true" ? ".next-staging" : ".next",
+  distDir: process.env.ELECTRIC_FINANCE_STAGING === "true" ? (process.env.ELECTRIC_FINANCE_DIST_DIR || ".next-staging") : ".next",
+  ...(process.env.ELECTRIC_FINANCE_STAGING === "true" ? { devIndicators: false } : {}),
   poweredByHeader: false,
+  experimental: { cpus: 1, webpackMemoryOptimizations: true },
   async headers() {
     return [{ source: "/:path*", headers: [
       { key: "X-Content-Type-Options", value: "nosniff" },

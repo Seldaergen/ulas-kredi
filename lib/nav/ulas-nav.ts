@@ -72,5 +72,5 @@ export const MOBILE_BOTTOM_ITEMS: {
   { href: "/", label: "Ana Sayfa", icon: Home },
   { href: "/rehber", label: "Rehber", icon: BookOpen },
   { href: "/nasil-calisir", label: "Süreç", icon: Route },
-  { href: "/iletisim", label: "Başvuru", icon: PhoneCall },
+  { href: "/iletisim", label: "İletişim", icon: PhoneCall },
 ];

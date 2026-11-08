@@ -2,6 +2,8 @@
 
 import { PageHeader } from "@/components/inner-page";
 import Link from "next/link";
+import { AdvisoryImage } from "@/components/home/AdvisoryImage";
+import { AdvisoryIcon } from "@/components/brand/advisory-icon";
 import {
   Banknote,
   Home,
@@ -279,7 +281,7 @@ export function Services() {
                     )}
                   />
 
-                  <div className="ef-service-art" aria-hidden="true"><Icon size={42} strokeWidth={1}/><span>{s.tag}</span></div>
+                  <div className="uk-service-cover" data-service={s.tag}><AdvisoryImage name={s.tag === "Konut" || s.tag === "Araç" ? "service-home-vehicle" : s.tag === "Not & Limit" ? "process-analysis" : s.tag === "Yüksek Limit" ? "service-high-limit" : "process-discovery"} alt={`${s.tag} danışmanlığını anlatan planlama görseli`} sizes="(max-width:767px) calc(100vw - 36px), 400px"/><AdvisoryIcon kind={s.tag === "Konut" || s.tag === "Araç" ? "home" : s.tag === "Not & Limit" ? "analysis" : "profile"} size={44}/></div>
 
                   <CardHeader><CardTitle>{s.title}</CardTitle></CardHeader>
 
@@ -302,7 +304,7 @@ export function Services() {
                         href="/iletisim"
                         className="inline-flex flex-1 items-center justify-center rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-sm transition hover:opacity-95"
                       >
-                        Ücretsiz ön analiz
+                        Danışmanla görüşün
                       </Link>
                       <a
                         href={WHATSAPP}
@@ -366,73 +368,7 @@ export function Services() {
             })}
           </div>
 
-          {/* persuasion band */}
-          <div className="mt-8 overflow-hidden rounded-3xl border bg-white p-6 shadow-sm sm:p-8">
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-              <div className="max-w-2xl">
-                <p className="text-xs font-semibold tracking-wide text-primary/90">
-                  NEDEN ULAŞ KREDİ?
-                </p>
-                <h3 className="mt-2 text-xl font-bold text-slate-900 sm:text-2xl">
-                  Kredi sürecini anlaşılır hale getirip, hatalı adımları azaltmaya odaklanırız.
-                </h3>
-                <p className="mt-3 text-sm leading-relaxed text-slate-600">
-                  Banka kararı bankaya aittir. Biz; hedef belirleme, evrak hazırlığı ve
-                  başvuru stratejisiyle daha kontrollü bir süreç yürütmenize yardımcı oluruz.
-                </p>
 
-                <ul className="mt-4 grid gap-2 sm:grid-cols-2">
-                  {[
-                    "Kısa ön değerlendirme",
-                    "Uygulanabilir başvuru planı",
-                    "Şeffaf bilgilendirme",
-                    "Danışmanlık çerçevesinde süreç rehberliği",
-                  ].map((t) => (
-                    <li key={t} className="flex items-start gap-2 text-sm text-slate-700">
-                      <CheckCircle2 className="mt-0.5 h-4 w-4 text-emerald-600" />
-                      <span>{t}</span>
-                    </li>
-                  ))}
-                </ul>
-
-                <p className="mt-4 text-xs text-slate-500">
-                  Not: Kredi onayı ve nihai karar bankaya aittir. Bu içerik danışmanlık/bilgilendirme amaçlıdır.
-                </p>
-              </div>
-
-              <div className="w-full rounded-2xl border bg-slate-50 p-5 sm:w-90">
-                <p className="text-sm font-bold text-slate-900">Ücretsiz Ön Analiz</p>
-                <p className="mt-1 text-sm text-slate-600">
-                  Durumunuzu birlikte değerlendirelim. Hazırlık ve sonraki adımları konuşalım.
-                </p>
-
-                <div className="mt-4 flex flex-col gap-2">
-                  <Link
-                    href="/iletisim"
-                    className="inline-flex items-center justify-center rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition hover:opacity-95"
-                  >
-                    İletişim seçeneklerini görün
-                  </Link>
-
-                  <a
-                    href={WHATSAPP}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center rounded-full border bg-white px-4 py-2.5 text-sm font-semibold text-slate-900 shadow-sm transition hover:shadow-md"
-                  >
-                    WhatsApp’tan yaz
-                  </a>
-
-                  <a
-                    href={PHONE}
-                    className="inline-flex items-center justify-center rounded-full border bg-white px-4 py-2.5 text-sm font-semibold text-slate-900 shadow-sm transition hover:shadow-md"
-                  >
-                    Hemen ara: {PHONE_DISPLAY}
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
 
         {/* HOW IT WORKS */}

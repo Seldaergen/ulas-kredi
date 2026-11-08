@@ -1,167 +1,26 @@
-"use client";
-
-import { ShieldCheck, Users, Banknote, Clock, Star, CheckCircle2, Info, ArrowRight } from "lucide-react";
-
-const METRICS = [
-  {
-    title: "Ön değerlendirme",
-    desc: "Gelir ve borç tablosunu anlama",
-    icon: Users,
-  },
-  {
-    title: "Ücretsiz",
-    desc: "Ön analiz & yol haritası",
-    icon: ShieldCheck,
-  },
-  {
-    title: "İletişim",
-    desc: "Dönüş süresi talebe göre değişir",
-    icon: Clock,
-  },
-  {
-    title: "Şeffaf",
-    desc: "Adım adım açıklama",
-    icon: Banknote,
-  },
+import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
+import { AdvisoryImage } from "./AdvisoryImage";
+import { AdvisoryIcon } from "@/components/brand/advisory-icon";
+const needs = [
+  {id:"ihtiyac-ihtiyac",number:"01",icon:"profile" as const,image:"service-high-limit" as const,title:"Yüksek tutarlı ihtiyaçlar",audience:"Yüksek tutarlı kredi hedefiniz için finansal profil ve başvuru hazırlığı.",topics:"Gelir yapısı · Vade · Toplam maliyet",href:"/rehber/kredi-maliyeti-toplam-geri-odeme-nasil-bakilir",label:"Toplam maliyet rehberi"},
+  {id:"ihtiyac-konut",number:"02",icon:"home" as const,image:"service-home-vehicle" as const,title:"Konut ve taşıt hazırlığı",audience:"Konut veya taşıt alımı öncesinde bütçe ve finansman seçeneklerinin incelenmesi.",topics:"Bütçe · Taksit senaryosu · Belgeler",href:"/#hesaplama",label:"Taksit ve bütçe hesabı"},
+  {id:"ihtiyac-borc",number:"03",icon:"calendar" as const,image:"service-debt-plan" as const,title:"Borç ve taksit planlaması",audience:"Mevcut ödemeleriniz ve yapılandırma seçenekleri için birlikte değerlendirme.",topics:"Mevcut ödemeler · Koşullar · Maliyet",href:"/rehber/kredi-yapilandirma-nedir",label:"Yapılandırma rehberi"},
+  {id:"ihtiyac-ret",number:"04",icon:"preparation" as const,image:"service-after-rejection" as const,title:"Ret sonrası yeni hazırlık",audience:"Ret sonrasında finansal profilin ve yeni başvuruya hazırlığın değerlendirilmesi.",topics:"Finansal profil · Eksikler · Hazırlık",href:"/rehber/banka-ic-skor-nedir",label:"Banka değerlendirmesini anlayın"},
 ];
-
-const HOW_WE_WORK = [
-  {
-    title: "Rastgele başvuru yok",
-    text: "Önce profilini okuruz, sonra en doğru stratejiyi çıkarırız.",
-  },
-  {
-    title: "Hedef: ret riskini azaltmak",
-    text: "Gereksiz başvurular kredi profilini yıpratabilir. Planla ilerleriz.",
-  },
-  {
-    title: "Net, yazılı yol haritası",
-    text: "Ne yapılacak, neden yapılacak, ne beklenmeli — hepsi açık.",
-  },
-];
-
-const TESTIMONIALS = [
-  {
-    name: "Başvuru hazırlığı",
-    city: "Bilgilendirme",
-    text: "Başvuru öncesinde gelir, mevcut borçlar ve istenen belgeler birlikte incelenmelidir.",
-  },
-  {
-    name: "Bütçe kontrolü",
-    city: "Bilgilendirme",
-    text: "Yeni bir taksitin düzenli giderlerle birlikte karşılanıp karşılanamayacağını değerlendirin.",
-  },
-  {
-    name: "Karar yetkisi",
-    city: "Bilgilendirme",
-    text: "Danışmanlık bir kredi onayı değildir; nihai karar ilgili finans kuruluşuna aittir.",
-  },
-];
-
-function Pill({ children }: { children: React.ReactNode }) {
-  return (
-    <span className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary ring-1 ring-primary/20">
-      <Star size={14} />
-      {children}
-    </span>
-  );
-}
-
 export default function TrustSection() {
-  return (
-    <section className="relative mx-auto max-w-6xl px-4 py-16">
-      <div className="mx-auto mb-10 max-w-3xl text-center">
-        <p className="text-sm font-semibold tracking-wide text-primary/90">NEDEN ULAŞ KREDİ?</p>
-        <h2 className="mt-2 text-3xl font-bold text-slate-900 md:text-4xl">
-          Banka değiliz — sizin tarafınızdayız
-        </h2>
-        <p className="mt-3 text-slate-600">
-          Amacımız “başvuruyu çoğaltmak” değil; doğru adımı seçip ret riskini azaltmak.
-        </p>
-
-        <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
-          <Pill>Ücretsiz ön analiz</Pill>
-          <Pill>Şeffaf süreç</Pill>
-          <Pill>Adım adım yol haritası</Pill>
-        </div>
-      </div>
-
-      {/* METRICS */}
-      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-        {METRICS.map((m, i) => {
-          const Icon = m.icon;
-          return (
-            <div
-              key={i}
-              className="rounded-2xl border border-slate-200 bg-white/80 p-6 text-center backdrop-blur
-                         shadow-sm transition hover:shadow-md"
-            >
-              <div className="mx-auto mb-3 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                <Icon size={22} />
-              </div>
-              <div className="text-2xl font-bold text-slate-900">{m.title}</div>
-              <p className="mt-1 text-sm text-slate-600">{m.desc}</p>
-            </div>
-          );
-        })}
-      </div>
-
-      {/* HOW WE WORK (otorite bloğu) */}
-      <div className="mt-10 rounded-2xl border border-slate-200 bg-white/80 p-6 backdrop-blur shadow-sm">
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <h3 className="text-lg font-semibold text-slate-900">Nasıl çalışıyoruz?</h3>
-            <p className="mt-1 text-sm text-slate-600">
-              Kısa cevap: önce analiz, sonra strateji, en son başvuru.
-            </p>
-          </div>
-          <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
-            <CheckCircle2 size={22} />
-          </div>
-        </div>
-
-        <div className="mt-5 grid gap-4 md:grid-cols-3">
-          {HOW_WE_WORK.map((x, i) => (
-            <div key={i} className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
-              <p className="text-sm font-semibold text-slate-900">{x.title}</p>
-              <p className="mt-2 text-sm leading-relaxed text-slate-700">{x.text}</p>
-            </div>
-          ))}
-        </div>
-
-        <p className="mt-5 flex items-center gap-2 text-xs text-slate-600">
-          <Info size={14} />
-          Bilgilendirme: Son karar bankaya aittir. Biz süreçte doğru stratejiyi kurmaya yardımcı oluruz.
-        </p>
-      </div>
-
-      {/* TESTIMONIALS */}
-      <div className="mt-12 grid gap-4 md:grid-cols-3">
-        {TESTIMONIALS.map((t, i) => (
-          <div
-            key={i}
-            className="rounded-2xl border border-slate-200 bg-white/80 p-6 backdrop-blur shadow-sm"
-          >
-            <p className="text-sm leading-relaxed text-slate-700">“{t.text}”</p>
-            <div className="mt-4 text-sm font-semibold text-slate-900">
-              {t.name} · <span className="font-normal text-slate-600">{t.city}</span>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* CTA */}
-      <div className="mx-auto mt-10 max-w-3xl text-center">
-        <a
-          href="#iletisim"
-          className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-slate-900 px-5 text-sm font-semibold text-white shadow-sm transition hover:shadow-md"
-        >
-          Ücretsiz ön analiz al <ArrowRight size={16} />
-        </a>
-        <p className="mt-3 text-xs text-slate-600">
-          Kısa bilgiyle başla — sana uygun yol haritasını birlikte çıkaralım.
-        </p>
-      </div>
-    </section>
-  );
+ return <>
+  <section id="finansman-ihtiyaci" className="ef-wrap cro-needs" aria-labelledby="cro-needs-title">
+   <div className="cro-section-heading"><p className="cro-kicker">SİZİN İÇİN DOĞRU BAŞLANGIÇ</p><h2 id="cro-needs-title">Hedefiniz ne olursa olsun,<br /><span>birlikte planlayalım.</span></h2><p>Finansman ihtiyacınıza göre finansal değerlendirme, seçeneklerin incelenmesi, başvuru hazırlığı ve süreç danışmanlığı sunuyoruz.</p></div>
+   <div className="cro-needs-grid">{needs.map(need=><article key={need.id} id={need.id}><div className="cro-service-media"><AdvisoryImage name={need.image} alt={`${need.title} için temsili planlama görseli`} sizes="(max-width: 767px) calc(100vw - 76px), (max-width: 1100px) 42vw, 550px" /><span className="cro-need-visual"><AdvisoryIcon kind={need.icon} size={48} label={need.title} /></span></div><div className="cro-need-heading"><h3>{need.title}</h3></div><p>{need.audience}</p><div><Link href={need.href}>{need.label} <ArrowUpRight size={16} aria-hidden="true" /></Link></div></article>)}</div>
+   <p className="cro-image-note">Görseller hizmet konularını anlatır; gerçek ekip, müşteri veya finansal işlemleri göstermez.</p>
+  </section>
+  <section id="danismanlik-sureci" className="cro-process"><div className="ef-wrap">
+   <div className="cro-process-heading"><div><p className="cro-kicker">ÜÇ ADIMDA DANIŞMANLIK</p><h2>Önce değerlendiriyoruz.<br />Sonra birlikte ilerliyoruz.</h2></div><Link className="cro-text-action" href="/nasil-calisir">Sürecin kapsamını inceleyin <ArrowUpRight size={16} aria-hidden="true" /></Link></div>
+   <ol className="cro-process-grid"><li><AdvisoryImage name="process-discovery" alt="İhtiyacın anlaşılmasını betimleyen temsili dosya hazırlığı" sizes="(max-width: 767px) calc(100vw - 36px), 380px" /><div className="cro-step-heading"><span>01</span><AdvisoryIcon kind="discovery" label="İhtiyacı anlama" size={44}/></div><h3>Finansal durumunuzu değerlendiriyoruz</h3><p>Finansman ihtiyacınızı, gelirinizi ve mevcut yükümlülüklerinizi birlikte ele alıyoruz.</p></li><li><AdvisoryImage name="process-analysis" alt="Finansman seçeneklerinin incelenmesini betimleyen temsili analiz sahnesi" sizes="(max-width: 767px) calc(100vw - 36px), 380px" /><div className="cro-step-heading"><span>02</span><AdvisoryIcon kind="analysis" label="Seçenekleri değerlendirme" size={44}/></div><h3>Seçenekleri ve hazırlığı planlıyoruz</h3><p>Finansman seçeneklerini değerlendiriyor, başvuru hazırlığını ve izlenebilecek adımları netleştiriyoruz.</p></li><li><AdvisoryImage name="process-next-steps" alt="Sonraki adımların görüşülmesini betimleyen temsili danışmanlık sahnesi" sizes="(max-width: 767px) calc(100vw - 36px), 380px" /><div className="cro-step-heading"><span>03</span><AdvisoryIcon kind="steps" label="Süreç danışmanlığı" size={44}/></div><h3>Süreçte danışmanlık sunuyoruz</h3><p>Belirlenen hizmet kapsamında hazırlık ve süreç takibinde yanınızda oluyoruz. Kapsam ve varsa ücret baştan açıklanır.</p></li></ol>
+  </div></section>
+  <section className="ef-wrap cro-trust" aria-labelledby="cro-trust-title"><div className="cro-section-heading"><p className="cro-kicker">GÜVEN, AÇIKLIKTAN BAŞLAR</p><h2 id="cro-trust-title">Ne sunduğumuz da,<br /><span>sınırlarımız da açık.</span></h2><p>Hizmet kapsamını, verilerinizin nasıl ele alındığını ve bilgilerimizin kaynaklarını inceleyebilirsiniz.</p></div>
+   <div className="cro-principles cro-trust-lines"><article><span>KAPSAM</span><h3>Danışmanlık. Kredi tahsisi değil.</h3><p>Banka değiliz. Kredi kararı, limit, faiz ve koşullar ilgili finans kuruluşunun değerlendirmesine bağlıdır.</p><Link href="/yasal-uyari">Hizmetin sınırları ↗</Link></article><article><span>GİZLİLİK</span><h3>Kontrol sizde kalır.</h3><p>Kimlik belgesi, kart veya banka şifresi istemiyoruz. Web sitesinde çevrimiçi başvuru kaydı kabul edilmiyor.</p><Link href="/gizlilik">Gizlilik açıklamaları ↗</Link></article><article><span>KAYNAKLAR</span><h3>Bilgiyi kaynağıyla okuyun.</h3><p>Yayımdaki rehberlerde kaynakları ve kontrol tarihini görebilir, genel bilgi ile kişisel değerlendirmeyi ayırabilirsiniz.</p><Link href="/rehber">Kaynaklı rehberler ↗</Link></article></div>
+  </section>
+ </>;
 }

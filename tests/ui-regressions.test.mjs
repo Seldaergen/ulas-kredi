@@ -182,47 +182,34 @@ test('featured selection and related-video modal retain selected IDs across rere
   assert.equal(view.container.querySelector('iframe'), null);
 });
 
-test('video URL filters follow navigation while keeping pending local search edits and modal selection', async () => {
-  const node = () => React.createElement(modules.Videos, { initialVideos: fixtures });
-  const view = await mount(node());
-  const input = () => view.container.querySelector('input');
-  const setValue = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set;
-  await act(() => { setValue.call(input(), 'Fixture 2'); input().dispatchEvent(new window.Event('input', { bubbles: true })); });
-  assert.equal(input().value, 'Fixture 2');
-  assert.equal(replacements.at(-1), '?q=Fixture+2');
-  await view.render(node());
-  assert.equal(input().value, 'Fixture 2');
-  search = 'q=Fixture&topic=kredi-notu&shorts=1'; await view.render(node());
-  assert.equal(input().value, 'Fixture');
-  assert.equal(view.container.querySelector('select').value, 'kredi-notu');
-  await click(view.container.querySelector('[aria-label="Site içinde izle"]'));
-  assert.ok(view.container.querySelector('iframe'));
-  search = 'q=Fixture&topic=kredi-limiti'; await view.render(node());
-  assert.equal(view.container.querySelector('select').value, 'kredi-limiti');
-  assert.ok(view.container.querySelector('iframe'));
-  await click(view.container.querySelector('[aria-label="Kapat"]'));
-  await click(button(view.container, 'Temizle'));
-  assert.equal(input().value, ''); assert.equal(view.container.querySelector('select').value, '');
-  search = 'q=Fixture&topic=not-a-topic'; await view.render(node());
-  assert.equal(view.container.querySelector('select').value, '');
+test('video directory follows topic navigation, preserves local search, and rejects invalid IDs', async () => {
+  const validFixtures=fixtures.map((v,i)=>({...v,id:`testVideo${i}x`}));
+  const node=()=>React.createElement(modules.Videos,{initialVideos:[...validFixtures,{id:'v1',title:'Invalid fixture',tag:'Genel'}]});
+  const view=await mount(node());
+  assert.equal(view.container.querySelectorAll('.uk-video-card').length,8);
+  const input=()=>view.container.querySelector('input');
+  const setValue=Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype,'value').set;
+  await act(()=>{setValue.call(input(),'Fixture 2');input().dispatchEvent(new window.Event('input',{bubbles:true}));});
+  assert.equal(view.container.querySelectorAll('.uk-video-card').length,1);
+  await view.render(node());assert.equal(input().value,'Fixture 2');
+  search='topic=kredi-notu';await view.render(node());
+  assert.equal(input().value,'');assert.equal(view.container.querySelectorAll('.uk-video-card').length,4);
+  search='topic=invalid';await view.render(node());
+  assert.equal(view.container.querySelector('select').value,'');
+  assert.equal(view.container.querySelectorAll('.uk-video-card').length,8);
+  assert.equal(view.container.querySelector('iframe'),null);
 });
 
-test('navbar preserves same-route menu state, closes on navigation and Escape, and keeps delayed dropdown close', async () => {
-  const view = await mount(React.createElement(modules.Navbar));
-  const menu = () => view.container.querySelector('[aria-controls="mobile-nav"]');
-  await click(menu()); assert.equal(menu().getAttribute('aria-expanded'), 'true');
-  await view.render(React.createElement(modules.Navbar)); assert.equal(menu().getAttribute('aria-expanded'), 'true');
-  pathname = '/rehber'; await view.render(React.createElement(modules.Navbar));
-  assert.equal(menu().getAttribute('aria-expanded'), 'false');
-  await click(menu());
-  await act(() => window.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'Escape' })));
-  assert.equal(menu().getAttribute('aria-expanded'), 'false');
-  const dropdown = view.container.querySelector('[aria-haspopup="menu"]');
-  await act(() => dropdown.parentElement.dispatchEvent(new window.MouseEvent('mouseover', { bubbles: true })));
-  assert.equal(dropdown.getAttribute('aria-expanded'), 'true');
-  await act(() => dropdown.parentElement.dispatchEvent(new window.MouseEvent('mouseout', { bubbles: true })));
-  await act(() => new Promise(resolve => setTimeout(resolve, 150)));
-  assert.equal(dropdown.getAttribute('aria-expanded'), 'false');
+test('navbar keeps disclosure state until route change, Escape, or an outside press', async () => {
+ const view=await mount(React.createElement(modules.Navbar));
+ const menu=()=>view.container.querySelector('[aria-controls="mobile-nav"]');
+ await click(menu());assert.equal(menu().getAttribute('aria-expanded'),'true');
+ await view.render(React.createElement(modules.Navbar));assert.equal(menu().getAttribute('aria-expanded'),'true');
+ pathname='/rehber';await view.render(React.createElement(modules.Navbar));assert.equal(menu().getAttribute('aria-expanded'),'false');
+ await click(menu());await act(()=>menu().dispatchEvent(new window.KeyboardEvent('keydown',{key:'Escape',bubbles:true})));assert.equal(menu().getAttribute('aria-expanded'),'false');
+ const dropdown=view.container.querySelector('.uk-guide-trigger');await click(dropdown);assert.equal(dropdown.getAttribute('aria-expanded'),'true');
+ assert.equal(view.container.querySelectorAll('.uk-guide-menu a').length,10);
+ await act(()=>document.body.dispatchEvent(new window.Event('pointerdown',{bubbles:true})));assert.equal(dropdown.getAttribute('aria-expanded'),'false');
 });
 
 test('both mobile hooks preserve SSR false, breakpoint updates and subscription cleanup', async () => {

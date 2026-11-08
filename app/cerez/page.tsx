@@ -53,11 +53,11 @@ export default function CookiesPage() {
         <Box title="2) Kullanım Amaçları">
           <ul className="list-disc pl-5">
             <li>Zorunlu çerezler (siteyi çalışır tutar)</li>
-            <li>Performans/analitik (siteyi iyileştirmeye yardımcı olur)</li>
+            <li>Tema tercihi tarayıcınızda yerel olarak saklanır.</li>
+            <li>YouTube oynatıcıları yalnız video penceresindeki izninizden sonra yüklenir. Küçük görseller sitemizden sunulur.</li>
           </ul>
           <p className="text-xs text-slate-500">
-            Analitik kullanımınız varsa (örn. Vercel Analytics), bu başlık
-            yeterlidir. İleride daha ayrıntılı yönetim paneli eklenebilir.
+            Analitik izleme şu anda kapalıdır. Video izni her video için ayrıca verilir; “YouTube iznini geri al” düğmesi veya video penceresini kapatmak oynatıcıyı kaldırır.
           </p>
         </Box>
 

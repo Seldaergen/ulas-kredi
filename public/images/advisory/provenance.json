@@ -1,0 +1,158 @@
+{
+  "source": "ulas-kredi-visual-kit-v1.zip",
+  "description": "AI-generated conceptual editorial imagery; not actual Ulaş Kredi staff, customers, offices or transactions.",
+  "assets": [
+    {
+      "file": "hero-advisory.webp",
+      "width": 1672,
+      "height": 941,
+      "bytes": 155576,
+      "sha256": "e6b318d60e3c380dd649fe11f8c05cf6057a720282c1c8d875812872174e20ab",
+      "variants": [
+        {
+          "file": "hero-advisory-480.webp",
+          "width": 480,
+          "bytes": 28640
+        },
+        {
+          "file": "hero-advisory-800.webp",
+          "width": 800,
+          "bytes": 57234
+        }
+      ]
+    },
+    {
+      "file": "process-analysis.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 174658,
+      "sha256": "50ac0b462566117fac8ed5466829eefdc2553e5645d5781ba332adfd5e3832ca",
+      "variants": [
+        {
+          "file": "process-analysis-480.webp",
+          "width": 480,
+          "bytes": 38444
+        },
+        {
+          "file": "process-analysis-800.webp",
+          "width": 800,
+          "bytes": 78948
+        }
+      ]
+    },
+    {
+      "file": "process-discovery.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 162402,
+      "sha256": "097ce12716c9ca47687c4d8b5140aab06c28cd874176c73422b8b0014a8fea05",
+      "variants": [
+        {
+          "file": "process-discovery-480.webp",
+          "width": 480,
+          "bytes": 33050
+        },
+        {
+          "file": "process-discovery-800.webp",
+          "width": 800,
+          "bytes": 69710
+        }
+      ]
+    },
+    {
+      "file": "process-next-steps.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 148476,
+      "sha256": "cd8039feb8f57ea514c945fb2c64b527d9d5f45fbb7953b7f010cab526f8a1d4",
+      "variants": [
+        {
+          "file": "process-next-steps-480.webp",
+          "width": 480,
+          "bytes": 36914
+        },
+        {
+          "file": "process-next-steps-800.webp",
+          "width": 800,
+          "bytes": 70290
+        }
+      ]
+    },
+    {
+      "file": "service-after-rejection.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 156268,
+      "sha256": "b832eea412bc01987c657854667aa5fa0d7e14ce1deaea47b7475598c797d7ff",
+      "variants": [
+        {
+          "file": "service-after-rejection-480.webp",
+          "width": 480,
+          "bytes": 35582
+        },
+        {
+          "file": "service-after-rejection-800.webp",
+          "width": 800,
+          "bytes": 72852
+        }
+      ]
+    },
+    {
+      "file": "service-debt-plan.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 220866,
+      "sha256": "9a931d199e89894995893e60ee42e8352912405de90b88e17246a4fd11b72efc",
+      "variants": [
+        {
+          "file": "service-debt-plan-480.webp",
+          "width": 480,
+          "bytes": 40314
+        },
+        {
+          "file": "service-debt-plan-800.webp",
+          "width": 800,
+          "bytes": 91130
+        }
+      ]
+    },
+    {
+      "file": "service-high-limit.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 171162,
+      "sha256": "89307dd940e500e598f9d2b773487637e6bb3b4e0f9ab31353b18cfb755f279e",
+      "variants": [
+        {
+          "file": "service-high-limit-480.webp",
+          "width": 480,
+          "bytes": 41576
+        },
+        {
+          "file": "service-high-limit-800.webp",
+          "width": 800,
+          "bytes": 84234
+        }
+      ]
+    },
+    {
+      "file": "service-home-vehicle.webp",
+      "width": 1254,
+      "height": 1254,
+      "bytes": 202706,
+      "sha256": "1df6ad77c6a188a73a62e0b872d193dd562e0a811101527e32b7abda65351aa8",
+      "variants": [
+        {
+          "file": "service-home-vehicle-480.webp",
+          "width": 480,
+          "bytes": 42376
+        },
+        {
+          "file": "service-home-vehicle-800.webp",
+          "width": 800,
+          "bytes": 90916
+        }
+      ]
+    }
+  ]
+}

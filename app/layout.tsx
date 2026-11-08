@@ -11,8 +11,8 @@ import { MobileBottomBar } from "@/components/mobile-bottom-bar";
 import { FloatingAction } from "@/components/floating-contact";
 
 // Banner / Ticker
-import TopTicker from "@/components/top-ticker";
-import FinanceBanner from "@/components/finance-banner";
+
+
 
 /* -------------------------------------------------------------------------- */
 /*                                FONT SETUP                                  */
@@ -162,13 +162,13 @@ export default function RootLayout({
           />
 
           {/* Top ticker */}
-          <TopTicker />
+
 
           {/* Global Navbar */}
           <Navbar />
 
           {/* Finance banner */}
-          <FinanceBanner />
+
 
           {/* Page content */}
           <main className="min-h-[calc(100vh-1px)]">{children}</main>
