@@ -1,12 +1,16 @@
 "use client";
 import Link from "next/link";
-import { useState, useId } from "react";
+import { useState, useId, useEffect } from "react";
 import { ArrowUpRight, Calculator } from "lucide-react";
 import { loanPayment, monthlyBudget } from "@/lib/calculators";
 const money=(value:number)=>new Intl.NumberFormat("tr-TR",{style:"currency",currency:"TRY",maximumFractionDigits:2}).format(value);
 const parse=(value:string)=>value.trim()===""?NaN:Number(value.replace(",","."));
 export default function CalculatorsSection() {
  const prefix=useId();
+ useEffect(()=>{
+  const reveal=()=>{if(window.location.hash==="#hesaplama")document.getElementById("hesaplama")?.closest("details")?.setAttribute("open", "");};
+  reveal();window.addEventListener("hashchange",reveal);return()=>window.removeEventListener("hashchange",reveal);
+ },[]);
  const [amount,setAmount]=useState("200000"),[rate,setRate]=useState("3.49"),[months,setMonths]=useState("24"),[income,setIncome]=useState("35000"),[debt,setDebt]=useState("3000");
  const result=loanPayment(parse(amount),parse(rate),parse(months));
  const budget=monthlyBudget(parse(income),parse(debt));

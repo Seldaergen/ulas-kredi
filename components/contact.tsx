@@ -30,6 +30,7 @@ const MAIL_HREF = `mailto:${EMAIL}`;
 /* -------------------------------------------------------------------------- */
 
 export function Contact({ embedded = false }: { embedded?: boolean }) {
+  if (embedded) return <section id="iletisim" className="cro-contact-band"><div className="ef-wrap cro-contact-layout"><div><p className="cro-kicker">İLK ADIM İLETİŞİM</p><h2>Yüksek limitli kredi hedefinizi<br />birlikte planlayalım.</h2><p>Ücretsiz ön görüşmede ihtiyacınızı ve size uygun danışmanlık kapsamını netleştirelim.</p><ol className="cro-first-call"><li><strong>İhtiyacınızı konuşalım.</strong><span>Hedefiniz, geliriniz ve mevcut ödemeleriniz hakkında genel bilgilerle başlayalım.</span></li><li><strong>Telefon veya WhatsApp ile ulaşın.</strong><span>Arayabilir veya görüşmek istediğiniz konuyu mesajla iletebilirsiniz. Kimlik, kart ya da banka şifresi paylaşmayın.</span></li><li><strong>Sonraki adımı birlikte belirleyelim.</strong><span>Devam etmek isterseniz değerlendirme ve başvuru hazırlığının kapsamı, varsa ücreti ile birlikte açıklanır. Ön görüşme kredi başvurusu veya onay değildir.</span></li></ol><a href="/hizmetler">Hizmet kapsamını inceleyin ↗</a></div><div className="cro-contact-panel"><ApplicationForm channel="CONTACT_FORM" /></div></div></section>;
 
   return (
     <section id="iletisim" className="ef-inner ef-contact-page">

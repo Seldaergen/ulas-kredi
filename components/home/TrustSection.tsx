@@ -1,20 +1,26 @@
+import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
-
+import { AdvisoryImage } from "./AdvisoryImage";
+import { AdvisoryIcon } from "@/components/brand/advisory-icon";
+const needs = [
+  {id:"ihtiyac-ihtiyac",number:"01",icon:"profile" as const,image:"service-high-limit" as const,title:"Yüksek tutarlı ihtiyaçlar",audience:"Yüksek tutarlı kredi hedefiniz için finansal profil ve başvuru hazırlığı.",topics:"Gelir yapısı · Vade · Toplam maliyet",href:"/rehber/kredi-maliyeti-toplam-geri-odeme-nasil-bakilir",label:"Toplam maliyet rehberi"},
+  {id:"ihtiyac-konut",number:"02",icon:"home" as const,image:"service-home-vehicle" as const,title:"Konut ve taşıt hazırlığı",audience:"Konut veya taşıt alımı öncesinde bütçe ve finansman seçeneklerinin incelenmesi.",topics:"Bütçe · Taksit senaryosu · Belgeler",href:"/#hesaplama",label:"Taksit ve bütçe hesabı"},
+  {id:"ihtiyac-borc",number:"03",icon:"calendar" as const,image:"service-debt-plan" as const,title:"Borç ve taksit planlaması",audience:"Mevcut ödemeleriniz ve yapılandırma seçenekleri için birlikte değerlendirme.",topics:"Mevcut ödemeler · Koşullar · Maliyet",href:"/rehber/kredi-yapilandirma-nedir",label:"Yapılandırma rehberi"},
+  {id:"ihtiyac-ret",number:"04",icon:"preparation" as const,image:"service-after-rejection" as const,title:"Ret sonrası yeni hazırlık",audience:"Ret sonrasında finansal profilin ve yeni başvuruya hazırlığın değerlendirilmesi.",topics:"Finansal profil · Eksikler · Hazırlık",href:"/rehber/banka-ic-skor-nedir",label:"Banka değerlendirmesini anlayın"},
+];
 export default function TrustSection() {
-  return <>
-    <section className="ef-wrap cro-trust" aria-labelledby="cro-trust-title">
-      <div className="cro-section-heading"><p className="cro-kicker">NET KAPSAM. DOĞRU BEKLENTİ.</p><h2 id="cro-trust-title">Hedef büyük.<br /><span>Hazırlık net olmalı.</span></h2><p>Danışmanlık, finans kuruluşunun kararının yerini almaz. Bizim odağımız, başvuru öncesi tabloyu anlamanıza ve hazırlık adımlarını planlamanıza yardımcı olmaktır.</p></div>
-      <div className="cro-principles">
-        <article><span>01 / KAPSAM</span><h3>Ücretsiz ön görüşme</h3><p>Talep konunuzu ve danışmanlık kapsamını netleştiririz. Bu aşama detaylı dosya analizi, banka işlemi veya kredi başvurusu içermez. Sonraki hizmetlerin kapsamı ve varsa ücreti, başlamadan önce ayrıca açıklanır.</p></article>
-        <article><span>02 / GİZLİLİK</span><h3>Kontrol sizde kalır</h3><p>İlk görüşmede hedefinizi ve sorularınızı konuşuruz. Kimlik belgesi, kart bilgisi ve banka şifresi istemiyoruz. Hesaplayıcıya girdiğiniz tutarlar otomatik olarak bize veya WhatsApp’a aktarılmaz.</p></article>
-        <article><span>03 / KARAR YETKİSİ</span><h3>Vaat değil, hazırlık</h3><p>Bir banka veya kredi veren kuruluş değiliz. Kredi onayı, limit artışı, belirli bir tutar ya da işlem süresi taahhüt etmiyoruz. Karar ve koşullar ilgili finans kuruluşunun değerlendirmesine bağlıdır.</p></article>
-      </div>
-    </section>
-    <section id="danismanlik-sureci" className="cro-process">
-      <div className="ef-wrap"><div className="cro-process-heading"><div><p className="cro-kicker">DANIŞMANLIK SÜRECİ</p><h2>Bir sonraki adımınız<br />belirsiz kalmasın.</h2></div><a href="https://wa.me/905416061356" target="_blank" rel="noopener noreferrer" className="cro-primary">WhatsApp’tan görüşün <ArrowUpRight size={18} aria-hidden="true" /></a></div>
-        <ol className="cro-process-grid"><li><span>01</span><h3>Hedefinizi konuşalım</h3><p>Telefon veya WhatsApp üzerinden talep konunuzu ve yanıtını aradığınız soruları belirtin.</p></li><li><span>02</span><h3>Kapsamı netleştirelim</h3><p>Gelir, borç ve bütçe başlıklarının hazırlık sürecindeki yerini ve danışmanlık kapsamını konuşalım.</p></li><li><span>03</span><h3>Hazırlığı planlayalım</h3><p>Birlikte ilerlemeyi seçerseniz, başvuru öncesi ele alınabilecek belgeleri ve adımları belirleyelim.</p></li></ol>
-        <p className="cro-process-note">Görüşme, sitede başvuru kaydı veya kredi başvurusu oluşturmaz. WhatsApp isteğe bağlı bir dış iletişim hizmetidir.</p>
-      </div>
-    </section>
-  </>;
+ return <>
+  <section id="finansman-ihtiyaci" className="ef-wrap cro-needs" aria-labelledby="cro-needs-title">
+   <div className="cro-section-heading"><p className="cro-kicker">SİZİN İÇİN DOĞRU BAŞLANGIÇ</p><h2 id="cro-needs-title">Hedefiniz ne olursa olsun,<br /><span>birlikte planlayalım.</span></h2><p>Finansman ihtiyacınıza göre finansal değerlendirme, seçeneklerin incelenmesi, başvuru hazırlığı ve süreç danışmanlığı sunuyoruz.</p></div>
+   <div className="cro-needs-grid">{needs.map(need=><article key={need.id} id={need.id}><div className="cro-service-media"><AdvisoryImage name={need.image} alt={`${need.title} için temsili planlama görseli`} sizes="(max-width: 767px) calc(100vw - 76px), (max-width: 1100px) 42vw, 550px" /><span className="cro-need-visual"><AdvisoryIcon kind={need.icon} size={48} label={need.title} /></span></div><div className="cro-need-heading"><h3>{need.title}</h3></div><p>{need.audience}</p><div><Link href={need.href}>{need.label} <ArrowUpRight size={16} aria-hidden="true" /></Link></div></article>)}</div>
+   <p className="cro-image-note">Görseller hizmet konularını anlatır; gerçek ekip, müşteri veya finansal işlemleri göstermez.</p>
+  </section>
+  <section id="danismanlik-sureci" className="cro-process"><div className="ef-wrap">
+   <div className="cro-process-heading"><div><p className="cro-kicker">ÜÇ ADIMDA DANIŞMANLIK</p><h2>Önce değerlendiriyoruz.<br />Sonra birlikte ilerliyoruz.</h2></div><Link className="cro-text-action" href="/nasil-calisir">Sürecin kapsamını inceleyin <ArrowUpRight size={16} aria-hidden="true" /></Link></div>
+   <ol className="cro-process-grid"><li><AdvisoryImage name="process-discovery" alt="İhtiyacın anlaşılmasını betimleyen temsili dosya hazırlığı" sizes="(max-width: 767px) calc(100vw - 36px), 380px" /><div className="cro-step-heading"><span>01</span><AdvisoryIcon kind="discovery" label="İhtiyacı anlama" size={44}/></div><h3>Finansal durumunuzu değerlendiriyoruz</h3><p>Finansman ihtiyacınızı, gelirinizi ve mevcut yükümlülüklerinizi birlikte ele alıyoruz.</p></li><li><AdvisoryImage name="process-analysis" alt="Finansman seçeneklerinin incelenmesini betimleyen temsili analiz sahnesi" sizes="(max-width: 767px) calc(100vw - 36px), 380px" /><div className="cro-step-heading"><span>02</span><AdvisoryIcon kind="analysis" label="Seçenekleri değerlendirme" size={44}/></div><h3>Seçenekleri ve hazırlığı planlıyoruz</h3><p>Finansman seçeneklerini değerlendiriyor, başvuru hazırlığını ve izlenebilecek adımları netleştiriyoruz.</p></li><li><AdvisoryImage name="process-next-steps" alt="Sonraki adımların görüşülmesini betimleyen temsili danışmanlık sahnesi" sizes="(max-width: 767px) calc(100vw - 36px), 380px" /><div className="cro-step-heading"><span>03</span><AdvisoryIcon kind="steps" label="Süreç danışmanlığı" size={44}/></div><h3>Süreçte danışmanlık sunuyoruz</h3><p>Belirlenen hizmet kapsamında hazırlık ve süreç takibinde yanınızda oluyoruz. Kapsam ve varsa ücret baştan açıklanır.</p></li></ol>
+  </div></section>
+  <section className="ef-wrap cro-trust" aria-labelledby="cro-trust-title"><div className="cro-section-heading"><p className="cro-kicker">GÜVEN, AÇIKLIKTAN BAŞLAR</p><h2 id="cro-trust-title">Ne sunduğumuz da,<br /><span>sınırlarımız da açık.</span></h2><p>Hizmet kapsamını, verilerinizin nasıl ele alındığını ve bilgilerimizin kaynaklarını inceleyebilirsiniz.</p></div>
+   <div className="cro-principles cro-trust-lines"><article><span>KAPSAM</span><h3>Danışmanlık. Kredi tahsisi değil.</h3><p>Banka değiliz. Kredi kararı, limit, faiz ve koşullar ilgili finans kuruluşunun değerlendirmesine bağlıdır.</p><Link href="/yasal-uyari">Hizmetin sınırları ↗</Link></article><article><span>GİZLİLİK</span><h3>Kontrol sizde kalır.</h3><p>Kimlik belgesi, kart veya banka şifresi istemiyoruz. Web sitesinde çevrimiçi başvuru kaydı kabul edilmiyor.</p><Link href="/gizlilik">Gizlilik açıklamaları ↗</Link></article><article><span>KAYNAKLAR</span><h3>Bilgiyi kaynağıyla okuyun.</h3><p>Yayımdaki rehberlerde kaynakları ve kontrol tarihini görebilir, genel bilgi ile kişisel değerlendirmeyi ayırabilirsiniz.</p><Link href="/rehber">Kaynaklı rehberler ↗</Link></article></div>
+  </section>
+ </>;
 }

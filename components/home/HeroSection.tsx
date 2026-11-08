@@ -1,34 +1,22 @@
-import Link from "next/link";
-import { ArrowDown, ArrowUpRight, Phone } from "lucide-react";
+import { ArrowDown, ArrowUpRight } from "lucide-react";
+import { AdvisoryImage } from "./AdvisoryImage";
+import { AdvisoryIcon } from "@/components/brand/advisory-icon";
 
 export default function HeroSection() {
-  return (
-    <section id="hero" className="cro-hero">
-      <div className="ef-wrap cro-hero-grid">
-        <div className="cro-hero-copy">
-          <p className="cro-kicker"><span /> YÜKSEK LİMİTLİ KREDİ DANIŞMANLIĞI</p>
-          <h1>Yüksek Limitli Kredi Hedefinize <span>Stratejik Danışmanlık</span></h1>
-          <p className="cro-lead">Gelir durumunuzu, mevcut borçlarınızı ve finansal profilinizi birlikte değerlendiriyoruz. Yüksek limitli kredi hedefiniz için başvuru hazırlığını ve izlenebilecek adımları planlamanıza yardımcı oluyoruz.</p>
-          <div className="cro-actions">
-            <a href="#iletisim" className="cro-primary">Yüksek Limit Danışmanlığı Al <ArrowUpRight size={19} aria-hidden="true" /></a>
-            <a href="tel:+905416061356" className="cro-phone"><Phone size={17} aria-hidden="true" /> 0 541 606 13 56</a>
-          </div>
-          <p className="cro-boundary">Banka değiliz. Kredi onayı, limit artışı veya belirli bir tutar garanti edilmez. Nihai karar ilgili finans kuruluşuna aittir.</p>
-          <a href="#danismanlik-sureci" className="cro-explore">Önce nasıl çalıştığımızı inceleyin <ArrowDown size={16} aria-hidden="true" /></a>
-        </div>
-        <div className="cro-dossier" aria-label="Danışmanlık kapsamı: finansal profil, başvuru hazırlığı ve yol haritası">
-          <div className="cro-dossier-top"><span>ULAŞ KREDİ</span><span>DANIŞMANLIK / 01</span></div>
-          <div className="cro-orbit" aria-hidden="true"><div className="cro-orbit-ring" /><div className="cro-orbit-ring" /><div className="cro-orbit-core">UK<span>STRATEJİ & HAZIRLIK</span></div><i /></div>
-          <div className="cro-dossier-title"><span>HEDEFİNİZE GİDEN YOL</span><strong>Önce finansal tablo.<br />Sonra başvuru planı.</strong></div>
-          <ol className="cro-dossier-steps">
-            <li><span>01</span><div><b>Finansal profil</b><small>Gelir, mevcut borçlar ve bütçe</small></div><ArrowUpRight size={16} aria-hidden="true" /></li>
-            <li><span>02</span><div><b>Başvuru hazırlığı</b><small>Belgeler ve değerlendirme soruları</small></div><ArrowUpRight size={16} aria-hidden="true" /></li>
-            <li><span>03</span><div><b>İzlenebilecek adımlar</b><small>Hedefinize göre danışmanlık kapsamı</small></div><ArrowUpRight size={16} aria-hidden="true" /></li>
-          </ol>
-          <p>Bir sonuç tahmini değil, danışmanlık yaklaşımımızdır.</p>
-        </div>
-      </div>
-      <div className="ef-wrap cro-hero-foot"><span>HEDEFİNİZİ NETLEŞTİRİN.</span><Link href="/hizmetler">Danışmanlık kapsamını inceleyin <ArrowUpRight size={15} aria-hidden="true" /></Link><span>KONTROLLÜ · ŞEFFAF · ADIM ADIM</span></div>
-    </section>
-  );
+ return <section id="hero" className="cro-hero">
+  <div className="ef-wrap cro-hero-grid">
+   <div className="cro-hero-copy">
+    <p className="cro-kicker"><span /> ULAŞ KREDİ / KREDİ DANIŞMANLIĞI</p>
+    <h1>Yüksek limitli kredi danışmanlığında <span>yanınızdayız.</span></h1>
+    <p className="cro-lead">Finansman ihtiyacınızı, gelir ve mevcut yükümlülüklerinizi değerlendirerek başvuru seçeneklerinizi ve sürecinizi birlikte planlıyoruz.</p>
+    <div className="cro-actions"><a href="#iletisim" className="cro-primary">Danışmanla Görüş <ArrowUpRight size={18} aria-hidden="true" /></a><a href="tel:+905416061356" className="cro-phone"><AdvisoryIcon kind="phone" size={24} /> Hemen Ara</a></div>
+    <p className="cro-hero-assurance">Finansal değerlendirme <span aria-hidden="true">·</span> Başvuru hazırlığı <span aria-hidden="true">·</span> Süreç danışmanlığı</p>
+    <p className="cro-boundary">Banka veya kredi veren kuruluş değiliz. Kredi onayı, limit, faiz veya kesin sonuç garantisi verilmez. Nihai karar ilgili finans kuruluşuna aittir.</p>
+    <a href="#finansman-ihtiyaci" className="cro-explore">Danışmanlık kapsamını keşfedin <ArrowDown size={15} aria-hidden="true" /></a>
+   </div>
+   <figure className="cro-finance-art cro-advisory-hero">
+    <div className="cro-photo-stage"><div className="cro-photo-layer" aria-hidden="true" /><AdvisoryImage name="hero-advisory" alt="Finansman planının birlikte incelenmesini betimleyen temsili danışmanlık sahnesi" sizes="(max-width: 767px) calc(100vw - 36px), (max-width: 1100px) 44vw, 560px" priority /></div>
+   </figure>
+  </div>
+ </section>;
 }

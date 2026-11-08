@@ -32,3 +32,6 @@ Thumbs.db
 /.npm-cache/
 /artifacts/
 *.tsbuildinfo
+
+# Isolated site-wide review build; accepted .next output stays intact.
+/.next-ux-review

@@ -1,14 +1,17 @@
 // lib/videos/server.ts
 import "server-only";
+import { VERIFIED_VIDEOS } from "./verified";
 import type { VideoItem, VideoTag } from "./types";
 import type { TopicId } from "@/lib/topics/topics";
 import { youtubeThumbUrl, youtubeWatchUrl } from "./source";
 
 export async function getVideos(limit = 30): Promise<VideoItem[]> {
+  const archive = VERIFIED_VIDEOS.slice(0, Math.max(1,limit));
+  try {
   const key = process.env.YOUTUBE_API_KEY;
   const channelId = process.env.YOUTUBE_CHANNEL_ID;
 
-  if (!key || !channelId) return [];
+  if (!key || !channelId) return archive;
 
   const safeLimit = Math.min(Math.max(limit, 1), 50);
 
@@ -21,7 +24,7 @@ export async function getVideos(limit = 30): Promise<VideoItem[]> {
   searchUrl.searchParams.set("type", "video");
 
   const searchRes = await fetch(searchUrl.toString(), { next: { revalidate: 1800 } });
-  if (!searchRes.ok) return [];
+  if (!searchRes.ok) return archive;
 
   const searchJson = await searchRes.json();
   const searchItems: any[] = Array.isArray(searchJson.items) ? searchJson.items : [];
@@ -29,25 +32,16 @@ export async function getVideos(limit = 30): Promise<VideoItem[]> {
     .map((it) => it?.id?.videoId as string | undefined)
     .filter(Boolean) as string[];
 
-  if (!ids.length) return [];
+  if (!ids.length) return archive;
 
   const videosUrl = new URL("https://www.googleapis.com/youtube/v3/videos");
   videosUrl.searchParams.set("key", key);
-  videosUrl.searchParams.set("part", "snippet,contentDetails");
+  videosUrl.searchParams.set("part", "snippet,contentDetails,status");
   videosUrl.searchParams.set("id", ids.join(","));
 
   const videosRes = await fetch(videosUrl.toString(), { next: { revalidate: 1800 } });
 
-  // duration fail olsa bile UI kırılmasın
-  if (!videosRes.ok) {
-    return ids.map((id) => ({
-      id,
-      title: "",
-      tag: "Genel",
-      href: youtubeWatchUrl(id),
-      thumb: youtubeThumbUrl(id),
-    }));
-  }
+  if (!videosRes.ok) return archive;
 
   const videosJson = await videosRes.json();
   const vItems: any[] = Array.isArray(videosJson.items) ? videosJson.items : [];
@@ -55,7 +49,7 @@ export async function getVideos(limit = 30): Promise<VideoItem[]> {
   const byId = new Map<string, any>(vItems.map((v) => [String(v?.id), v]));
   const ordered = ids.map((id) => byId.get(id)).filter(Boolean);
 
-  return ordered.map((v: any) => {
+  return ordered.filter((v:any)=>v.snippet?.channelId === channelId && v.status?.embeddable === true && v.status?.privacyStatus === "public").map((v: any) => {
     const id = String(v?.id || "");
     const title = String(v?.snippet?.title || "");
     const publishedAt = String(v?.snippet?.publishedAt || "");
@@ -73,7 +67,8 @@ export async function getVideos(limit = 30): Promise<VideoItem[]> {
     const tag = inferTagFromTitle(title);
     const topicId = topicIdFromVideoTag(tag);
 
-    const isShort = isShortByDuration(duration);
+    // Duration alone cannot establish Shorts membership.
+    const isShort = /#shorts\b/i.test(title);
 
     const item: VideoItem = {
       id,
@@ -89,6 +84,7 @@ export async function getVideos(limit = 30): Promise<VideoItem[]> {
 
     return item;
   });
+  } catch { return archive; }
 }
 
 function isoToMMSS(iso: string) {

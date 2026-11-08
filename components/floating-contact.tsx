@@ -131,7 +131,7 @@ export function FloatingAction() {
         onClick={() => setOpen((v) => !v)}
         aria-label={open ? "Menüyü kapat" : "İletişim menüsü"}
         className={cn(
-          "relative flex h-14 w-14 items-center justify-center rounded-full",
+          "uk-contact-fab relative flex h-14 w-14 items-center justify-center rounded-full",
           "bg-linear-to-br from-cyan-500/85 via-sky-500/75 to-cyan-600/85",
           "backdrop-blur-md",
           "ring-1 ring-white/30",

@@ -199,6 +199,8 @@ export function Footer() {
             </div>
           </div>
 
+          <p className="uk-agency-signature">Dijital deneyim ve altyapı: <a href="https://wint.com.tr" target="_blank" rel="noopener noreferrer">WINT</a></p>
+
           {/* Bottom */}
           <div className="mt-10 border-t border-border pt-8">
             <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">

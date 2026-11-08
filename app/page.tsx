@@ -5,7 +5,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: { absolute: "Yüksek Limitli Kredi Danışmanlığı | Ulaş Kredi" },
   description:
-    "Yüksek limitli kredi hedefiniz için gelir, borç ve finansal profilinizi birlikte değerlendirin. Başvuru hazırlığı için telefon veya WhatsApp ile görüşün.",
+    "Yüksek limitli kredi hedefiniz için finansal durumunuzu ve başvuru hazırlığını birlikte değerlendirin. Telefon veya WhatsApp üzerinden danışmanla görüşün.",
   alternates: {
     canonical: "https://ulaskredi.com.tr",
   },
@@ -28,6 +28,7 @@ export const metadata: Metadata = {
 import Link from "next/link";
 import HeroSection from "@/components/home/HeroSection";
 import CalculatorsSection from "@/components/home/CalculatorsSection";
+import FaqOptimized from "@/components/home/FaqOptimized";
 import TrustSection from "@/components/home/TrustSection";
 import { Contact } from "@/components/contact";
 
@@ -36,9 +37,10 @@ export default function Home() {
     <main className="cro-home">
       <HeroSection />
       <TrustSection />
+      <section className="ef-wrap cro-tools-section" aria-label="Finansal planlama araçları"><details className="cro-toolbox"><summary><div><span>PLANLAMA ARAÇLARI</span><h2>Taksit ve bütçenizi hesaplayın.</h2><p>Güncel oran veya kredi teklifi içermez; kendi varsayımlarınızla hesaplayın.</p></div><span className="cro-toolbox-action">Hesaplayıcıları aç <span aria-hidden="true">+</span></span></summary><CalculatorsSection /></details></section>
+      <FaqOptimized />
+      <section className="ef-wrap cro-guide-link" aria-label="Kredi rehberi"><div><p>Finansal kararlarınıza bilgiyle hazırlanın.</p><small>Genel bilgilendirme; kişisel değerlendirme veya teklif değildir.</small></div><div><Link href="/rehber">Kaynaklı kredi rehberlerini inceleyin ↗</Link><Link href="/videolar">Bilgilendirici videolar ↗</Link></div></section>
       <div id="basvuru"><Contact embedded /></div>
-      <CalculatorsSection />
-      <section className="ef-wrap cro-guide-link" aria-label="Kredi rehberi"><p>Karar öncesi bilgiye yer açın.</p><Link href="/rehber">Kaynaklı kredi rehberlerini inceleyin ↗</Link></section>
     </main>
   );
 }

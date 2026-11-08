@@ -11,6 +11,6 @@ export default async function VideosPage() {
   const videos = await getVideos();
   return <main>
     <Suspense fallback={<h1>Videolar</h1>}><VideosClient initialVideos={videos} /></Suspense>
-    <div className="ef-wrap"><ConversionPanel title="Videodaki konuyu birlikte değerlendirelim." description="Anlatılanların sizin durumunuzdaki karşılığını konuşmak için danışmanlık başvurunuzu bırakın." /></div>
+    <div className="ef-wrap"><ConversionPanel title="Videodaki konuyu birlikte değerlendirelim." description="Sorularınızı telefon veya WhatsApp üzerinden danışmanla görüşün." /></div>
   </main>;
 }

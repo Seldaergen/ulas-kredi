@@ -7,7 +7,9 @@ import { POSTS, PUBLISHED_POSTS, getPost, type Post } from "@/lib/content/posts"
 import { publication } from "@/lib/content/publication";
 import { absoluteUrl, SITE_ORIGIN } from "@/lib/seo";
 import { getTopicById, type TopicId } from "@/lib/topics/topics";
-import { GuideArtwork, ConversionPanel } from "@/components/inner-page";
+import { ConversionPanel } from "@/components/inner-page";
+
+import { GuideCover } from "@/components/rehber/GuideCover";
 
 /* -------------------------------------------------------------------------- */
 /*                                  HELPERS                                   */
@@ -270,7 +272,7 @@ export default async function RehberDetayPage({
         </div>
       )}
 
-      <GuideArtwork label={topic?.title ?? "Kredi rehberi"} />
+      <GuideCover slug={post.slug} label={topic?.title ?? "Kredi rehberi"} priority />
       <nav className="ef-reading-map" aria-label="Bu rehberde"><span className="ef-eyebrow">BU REHBERDE</span>{post.content.map((block,idx)=>block.type==="h2" ? <a key={idx} href={"#section-"+idx}>{block.text}</a> : null)}</nav>
       <Link data-inner-cta className="ef-text-link" href="/iletisim#iletisim">Bu konuyu kendi durumunuzla değerlendirin →</Link>
 

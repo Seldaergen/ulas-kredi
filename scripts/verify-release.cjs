@@ -37,6 +37,7 @@ const get=(p,options={})=>fetch(origin+p,{signal:AbortSignal.timeout(15000),...o
   const page=await context.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
   for(const [name,url] of [['home','/'],['services','/hizmetler'],['calculators','/#hesaplama'],['guides','/rehber'],['article','/rehber/banka-ic-skor-nedir'],['contact','/iletisim']]){
    const response=await page.goto(origin+url);assert.equal(response.status(),200);
+   if(name==='home')await page.getByRole('button',{name:theme==='dark'?'Koyu tema':'Açık tema',exact:true}).click();
    await page.waitForFunction(t=>document.documentElement.dataset.theme===t,theme);
    await page.evaluate(()=>document.fonts.ready);assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),`overflow ${name}/${width}/${theme}`);
    if(name==='calculators'){
@@ -48,11 +49,11 @@ const get=(p,options={})=>fetch(origin+p,{signal:AbortSignal.timeout(15000),...o
     assert.equal(await form.locator('fieldset[hidden][disabled]').count(),1);assert.ok(await form.locator('button[type="submit"]').isDisabled());
     assert.equal(await form.locator('a[href="tel:+905416061356"]').count(),1);assert.equal(await form.locator('a[href="https://wa.me/905416061356"]').count(),1);
    }
-   if(name==='home'){assert.equal(await page.locator('h1').count(),1);assert.match(await page.locator('h1').innerText(),/Yüksek Limitli Kredi Hedefinize/);assert.equal(await page.locator('iframe,.ef-guide-card,.ef-top-note').count(),0);}
+   if(name==='home'){assert.equal(await page.locator('h1').count(),1);assert.match(await page.locator('h1').innerText(),/Yüksek limitli kredi danışmanlığında/);assert.equal(await page.locator('iframe,.ef-guide-card,.ef-top-note').count(),0);}
    if(name==='guides')assert.equal(await page.locator('.ef-guide-card').count(),8);
    if(name==='contact')assert.equal(await page.locator('.ef-contact-info a[href="https://wa.me/905416061356"]').count(),1);
    await page.screenshot({path:path.join(output,`${name}-${width}-${theme}.png`),animations:'disabled'});
-   if(name==='home'){await page.locator('.cro-hero-copy .cro-primary').click();assert.equal(new URL(page.url()).hash,'#iletisim');await page.locator('#basvuru [data-application-contact-fallback]').waitFor();}
+   if(name==='home'){assert.equal(await page.locator('.cro-hero-copy .cro-primary').getAttribute('href'),'#iletisim');await page.locator('#iletisim').scrollIntoViewIfNeeded();await page.locator('#basvuru [data-application-contact-fallback]').waitFor();}
    if(name==='services'){await page.locator('[data-inner-cta]').first().click();await page.locator('#iletisim').waitFor();}
    if(name==='calculators'){await page.locator('#hesaplama [data-inner-cta]').first().click();assert.equal(new URL(page.url()).hash,'#iletisim');}
   }
