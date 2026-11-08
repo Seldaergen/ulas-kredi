@@ -19,9 +19,9 @@ function isTopicId(x: string | null): x is TopicId {
 }
 
 export default function RehberClient({ query = "", topic = null }: { query?: string; topic?: string | null }) {
-  const [visible, setVisible] = useState(6);
+  const [visible, setVisible] = useState(8);
   const [previousFilter, setPreviousFilter] = useState(query+"|"+topic);
-  if(previousFilter !== query+"|"+topic){setPreviousFilter(query+"|"+topic);setVisible(6);}
+  if(previousFilter !== query+"|"+topic){setPreviousFilter(query+"|"+topic);setVisible(8);}
   const q = query.trim().toLocaleLowerCase("tr-TR");
   const topicParam = topic;
   const activeTopicId = isTopicId(topicParam) ? (topicParam as TopicId) : null;
