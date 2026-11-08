@@ -19,7 +19,7 @@ for(const width of [1440,390])for(const theme of ['light','dark']){
   await page.evaluate(()=>scrollTo(0,0));await page.screenshot({path:`${out}/${path==='/'?'home':path.split('/').filter(Boolean).join('-')}-${width}-${theme}.png`,animations:'disabled'});
   results.push({path,width,theme,status:'PASS'});
  }
- await go('/rehber');assert.equal(await page.locator('.ef-guide-card').count(),6);await page.getByRole('button',{name:'Daha fazla rehber göster'}).click();assert.equal(await page.locator('.ef-guide-card').count(),8);
+ await go('/rehber');assert.equal(await page.locator('.ef-guide-card').count(),8);
  await page.getByLabel('Rehberlerde ara').fill('yapılandırma');await page.getByRole('button',{name:'Ara',exact:true}).click();await page.waitForURL('**/rehber?q=*');await page.locator('.ef-guide-card').first().waitFor();assert.ok((await page.locator('.ef-guide-card').count())>=1);assert.ok((await page.locator('.ef-guide-card').allTextContents()).every(s=>s.toLocaleLowerCase('tr-TR').includes('yapılandırma')));
  const topicLink=page.locator('nav[aria-label="Rehber konuları"] a').filter({hasText:'Yapılandırma'});await topicLink.click();await page.waitForURL('**/rehber?topic=*');assert.ok(page.url().includes('q='),'query preserved by category');
  await go('/videolar');assert.equal(await page.locator('.uk-video-card').count(),3);assert.equal(await page.locator('iframe').count(),0);

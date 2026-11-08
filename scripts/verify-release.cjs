@@ -37,7 +37,10 @@ const get=(p,options={})=>fetch(origin+p,{signal:AbortSignal.timeout(15000),...o
   const page=await context.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
   for(const [name,url] of [['home','/'],['services','/hizmetler'],['calculators','/#hesaplama'],['guides','/rehber'],['article','/rehber/banka-ic-skor-nedir'],['contact','/iletisim']]){
    const response=await page.goto(origin+url);assert.equal(response.status(),200);
-   if(name==='home')await page.getByRole('button',{name:theme==='dark'?'Koyu tema':'Açık tema',exact:true}).click();
+   if(name==='home'){
+    await page.getByRole('button',{name:'Görünüm seçin',exact:true}).click();
+    await page.getByRole('menuitemradio',{name:theme==='dark'?'Koyu':'Açık',exact:true}).click();
+   }
    await page.waitForFunction(t=>document.documentElement.dataset.theme===t,theme);
    await page.evaluate(()=>document.fonts.ready);assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),`overflow ${name}/${width}/${theme}`);
    if(name==='calculators'){
